@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * Home redirection to swagger api documentation
  */
-@Controller
+@Controller /* Компонент слоя управления */
 public class HomeController {
 
-    @RequestMapping("/")
+    @RequestMapping("/") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
     public String index() {
+
         return "redirect:swagger-ui.html";
+    
     }
+
 }

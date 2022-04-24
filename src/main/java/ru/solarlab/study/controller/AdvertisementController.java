@@ -17,28 +17,29 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Controller
-@RequestMapping
-@RequiredArgsConstructor
-@Tag(
+@Controller /* Компонент слоя управления */
+@RequestMapping("/v1/advertisements") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
+@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
+@Tag( /* Описание компонента */
         name = "Контроллер объявлений",
         description = "REST API для доступа к объявлениям")
 public class AdvertisementController {
 
+    // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
     private final AdvertisementService advertisementService;
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Создает объявление",
             description = "Создает новое объявление по данным из DTO")
-    @PostMapping(
-            value = "/v1/advertisements",
+    @PostMapping( /* Говорит, что этот метод должен быть вызван при запросе POST */
+            value = "/",
             produces = { "application/json" },
             consumes = { "application/json" }
 
     )
     public ResponseEntity<Integer> createAdvertisement(
-            @Parameter
-            @Valid
+            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestBody(required = false)
                     AdvertisementCreateDto dto){
 
@@ -48,17 +49,17 @@ public class AdvertisementController {
 
     }
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Обновляет объявление",
             description = "Обновляет объявление с указанным идентификатором по данным из DTO")
-    @PutMapping(
-            value = "/v1/advertisements",
+    @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
+            value = "/",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateAdvertisement(
-            @Parameter
-            @Valid
+            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestBody(required = false)
                     AdvertisementUpdateDto dto) {
 
@@ -66,18 +67,17 @@ public class AdvertisementController {
 
     }
 
-    @Operation(
-            summary = "Возвращает объявление",
-            description = "Возвращает объявление по идентефикатору")
-    @GetMapping(
-            value = "/v1/advertisements/{advertisementId}",
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Возвращает объявление по идентификатору")
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/{advertisementId}",
             produces = { "application/json" }
     )
     public ResponseEntity<AdvertisementDto> getAdvertisement(
-            @Parameter(
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
-            @PathVariable
+            @PathVariable /* Извлекает параметр, переданный в адресе запроса */
                     Integer advertisementId) {
 
         return ResponseEntity.ok(
@@ -85,18 +85,20 @@ public class AdvertisementController {
 
     }
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Возвращает коллекцию объявлений",
             description = "Возвращает коллекцию объявлений с пагинацией")
-    @GetMapping(
-            value = "/v1/advertisements",
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/",
             produces = { "application/json" }
     )
     public ResponseEntity<List<AdvertisementDto>> getAdvertisements(
-            @NotNull
-            @Parameter(description = "Количество объявлений на странице", required = true)
-            @Valid
-            @RequestParam(value = "limit", required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+                description = "Количество объявлений на странице",
+                 required = true)
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
+            @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
                     Integer limit) {
 
         return ResponseEntity.ok(
@@ -104,17 +106,17 @@ public class AdvertisementController {
 
     }
 
-    @Operation(
-            summary = "Удаляет объявление",
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Удаляет объявление по идентификатору",
             description = "Объявление из базы не удаляется, меняется только статус на Удалено")
-    @DeleteMapping(
-            value = "/v1/advertisements/{advertisementId}"
+    @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
+            value = "/{advertisementId}"
     )
     public ResponseEntity<Void> deleteAdvertisement(
-            @Parameter(
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор объявления",
-                    required=true)
-            @PathVariable("advertisementId")
+                    required = true)
+            @PathVariable("advertisementId") /* Извлекает параметр, переданный в адресе запроса */
                     Integer advertisementId) {
 
         advertisementService.deleteById(advertisementId);

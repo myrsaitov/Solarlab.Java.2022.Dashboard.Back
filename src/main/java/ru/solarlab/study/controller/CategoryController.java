@@ -17,28 +17,29 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Controller
-@RequestMapping
-@RequiredArgsConstructor
-@Tag(
+@Controller /* Компонент слоя управления */
+@RequestMapping("/v1/categories") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
+@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
+@Tag( /* Описание компонента */
         name = "Контроллер категорий",
         description = "REST API для доступа к категориям")
 public class CategoryController {
 
+    // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
     private final CategoryService categoryService;
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Создает категорию",
             description = "Создает новую категорию по данным из DTO")
-    @PostMapping(
-            value = "/v1/categories",
+    @PostMapping( /* Говорит, что этот метод должен быть вызван при запросе POST */
+            value = "/",
             produces = { "application/json" },
             consumes = { "application/json" }
 
     )
     public ResponseEntity<Integer> createCategory(
-            @Parameter
-            @Valid
+            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestBody(required = false)
                     CategoryCreateDto dto){
 
@@ -48,17 +49,17 @@ public class CategoryController {
 
     }
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Обновляет категорию",
             description = "Обновляет категорию с указанным идентификатором по данным из DTO")
-    @PutMapping(
-            value = "/v1/categories",
+    @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
+            value = "/",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateCategory(
-            @Parameter
-            @Valid
+            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestBody(required = false)
                     CategoryUpdateDto dto) {
 
@@ -66,18 +67,17 @@ public class CategoryController {
 
     }
 
-    @Operation(
-            summary = "Возвращает категорию",
-            description = "Возвращает категорию по идентефикатору")
-    @GetMapping(
-            value = "/v1/categories/{categoryId}",
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Возвращает категорию по идентификатору")
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/{categoryId}",
             produces = { "application/json" }
     )
     public ResponseEntity<CategoryDto> getCategory(
-            @Parameter(
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор категории",
                     required = true)
-            @PathVariable
+            @PathVariable /* Извлекает параметр, переданный в адресе запроса */
                     Integer categoryId) {
 
         return ResponseEntity.ok(
@@ -85,18 +85,20 @@ public class CategoryController {
 
     }
 
-    @Operation(
+    @Operation( /* Описывает возможности методов контроллера */
             summary = "Возвращает коллекцию категорий",
             description = "Возвращает коллекцию категорий с пагинацией")
-    @GetMapping(
-            value = "/v1/categories",
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/",
             produces = { "application/json" }
     )
     public ResponseEntity<List<CategoryDto>> getCategories(
-            @NotNull
-            @Parameter(description = "Количество категорий на странице", required = true)
-            @Valid
-            @RequestParam(value = "limit", required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+                description = "Количество категорий на странице",
+                required = true)
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
+            @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
                     Integer limit) {
 
         return ResponseEntity.ok(
@@ -104,17 +106,17 @@ public class CategoryController {
 
     }
 
-    @Operation(
-            summary = "Удаляет категорию",
-            description = "категория из базы не удаляется, меняется только статус на Удалено")
-    @DeleteMapping(
-            value = "/v1/categories/{categoryId}"
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Удаляет категорию по идентификатору",
+            description = "Категория из базы не удаляется, меняется только статус на Удалено")
+    @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
+            value = "/{categoryId}"
     )
     public ResponseEntity<Void> deleteCategory(
-            @Parameter(
+            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор категории",
-                    required=true)
-            @PathVariable("categoryId")
+                    required = true)
+            @PathVariable("categoryId") /* Извлекает параметр, переданный в адресе запроса */
                     Integer categoryId) {
 
         categoryService.deleteById(categoryId);

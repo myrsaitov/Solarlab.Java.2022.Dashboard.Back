@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.time.OffsetDateTime;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@Builder /* @Builder annotation produces complex builder APIs for the annotated POJO classes */
+@NoArgsConstructor /* Создаёт конструктор по умолчанию */
+@AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Schema(description = "Сущность категории")
 public class CategoryDto {
 

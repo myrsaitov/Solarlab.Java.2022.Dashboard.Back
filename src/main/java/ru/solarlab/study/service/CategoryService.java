@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Service
-@RequiredArgsConstructor
-@Data
+@Service /* Компонент бизнес уровня */
+@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
+@Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
 public class CategoryService {
 
     /**
@@ -41,7 +41,7 @@ public class CategoryService {
     }
 
     /**
-     * Возвращает категорию по идентефикатору
+     * Возвращает категорию по идентификатору
      * @param categoryId Идентификатор категории
      * @return Категория
      */
