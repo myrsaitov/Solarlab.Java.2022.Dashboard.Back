@@ -20,7 +20,7 @@ public class CategoryService {
     /**
      * Создает новую категорию по данным из DTO
      * @param dto DTO для создания категории
-     * @return
+     * @return Идентификатор нового тага
      */
     public Integer create(CategoryCreateDto dto) {
 
@@ -31,7 +31,6 @@ public class CategoryService {
     /**
      * Обновляет категорию с указанным идентификатором по данным из DTO
      * @param dto DTO для обновления категории
-     * @return
      */
     public void update(
             CategoryUpdateDto dto) {
@@ -44,7 +43,7 @@ public class CategoryService {
     /**
      * Возвращает категорию по идентефикатору
      * @param categoryId Идентификатор категории
-     * @return
+     * @return Категория
      */
     public CategoryDto getById(
             Integer categoryId) {
@@ -61,7 +60,7 @@ public class CategoryService {
     /**
      * Возвращает коллекцию категорий с пагинацией
      * @param limit количество категорий на странице
-     * @return
+     * @return Коллекция категорий
      */
     public List<CategoryDto> getCategories(
             Integer limit) {

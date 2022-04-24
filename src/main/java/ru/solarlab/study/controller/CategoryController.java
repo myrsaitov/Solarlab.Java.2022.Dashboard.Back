@@ -52,16 +52,11 @@ public class CategoryController {
             summary = "Обновляет категорию",
             description = "Обновляет категорию с указанным идентификатором по данным из DTO")
     @PutMapping(
-            value = "/v1/categories/{categoryId}",
+            value = "/v1/categories",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateCategory(
-            @Parameter(
-                    description = "Идентификатор категории",
-                    required = true)
-            @PathVariable("categoryId")
-                    Integer categoryId,
             @Parameter
             @Valid
             @RequestBody(required = false)

@@ -52,16 +52,11 @@ public class AdvertisementController {
             summary = "Обновляет объявление",
             description = "Обновляет объявление с указанным идентификатором по данным из DTO")
     @PutMapping(
-            value = "/v1/advertisements/{advertisementId}",
+            value = "/v1/advertisements",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateAdvertisement(
-            @Parameter(
-                    description = "Идентификатор объявления",
-                    required = true)
-            @PathVariable("advertisementId")
-                    Integer advertisementId,
             @Parameter
             @Valid
             @RequestBody(required = false)

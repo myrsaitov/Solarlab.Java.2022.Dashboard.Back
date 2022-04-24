@@ -23,7 +23,7 @@ public class AdvertisementService {
     /**
      * Создает новое объявление по данным из DTO
      * @param dto DTO для создания объявления
-     * @return
+     * @return Идентификатор созданного объявления
      */
     public Integer create(AdvertisementCreateDto dto) {
 
@@ -34,7 +34,6 @@ public class AdvertisementService {
     /**
      * Обновляет объявление с указанным идентификатором по данным из DTO
      * @param dto DTO для обновления объявления
-     * @return
      */
     public void update(
             AdvertisementUpdateDto dto) {
@@ -47,7 +46,7 @@ public class AdvertisementService {
     /**
      * Возвращает объявление по идентефикатору
      * @param advertisementId Идентификатор объявления
-     * @return
+     * @return Объявление
      */
     public AdvertisementDto getById(
             Integer advertisementId) {
@@ -64,7 +63,7 @@ public class AdvertisementService {
     /**
      * Возвращает коллекцию объявлений с пагинацией
      * @param limit количество объявлений на странице
-     * @return
+     * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisements(
             Integer limit) {
