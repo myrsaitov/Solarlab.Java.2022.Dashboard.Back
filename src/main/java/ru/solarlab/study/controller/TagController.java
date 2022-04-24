@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
@@ -14,6 +15,8 @@ import ru.solarlab.study.dto.TagUpdateDto;
 import ru.solarlab.study.service.TagService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -23,6 +26,7 @@ import java.util.List;
 @Tag( /* Описание компонента */
         name = "Контроллер тагов",
         description = "REST API для доступа к тагам")
+@Validated /* Действует как @Valid, но только по отношению не к одному, а к группе параметров (всех параметров всех методов класса) */
 public class TagController {
 
     // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
@@ -97,7 +101,9 @@ public class TagController {
             @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                 description = "Количество тагов на странице",
                 required = true)
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
+            @Min(0) /* Минимальное допустимое значение */
+            @Max(20) /* Максимальное допустимое значение */
+            //@Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
                     Integer limit) {
 
