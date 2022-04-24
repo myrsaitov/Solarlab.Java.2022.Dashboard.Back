@@ -5,6 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.solarlab.study.validation.CapitalLetter;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
 @Builder /* @Builder annotation produces complex builder APIs for the annotated POJO classes */
@@ -13,12 +18,16 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Сущность категории")
 public class CategoryUpdateDto {
 
+    @PositiveOrZero
     @Schema(description = "Идентификатор")
     public Integer id;
 
+    @NotBlank
+    @CapitalLetter
     @Schema(description = "Имя категории")
     public String name;
 
+    @NotNull
     @Schema(description = "Статус")
     public Status status;
 

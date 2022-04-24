@@ -5,7 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.solarlab.study.validation.CapitalLetter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.OffsetDateTime;
 
 @Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
@@ -15,24 +19,31 @@ import java.time.OffsetDateTime;
 @Schema(description = "Сущность объявления")
 public class AdvertisementDto {
 
+    @PositiveOrZero
     @Schema(description = "Идентификатор")
     public Integer id;
 
+    @NotBlank
     @Schema(description = "Дата и время создания объявления")
     public OffsetDateTime createdAt;
 
     @Schema(description = "Дата и время обновления объявления")
     public OffsetDateTime updatedAt;
 
+    @NotBlank
+    @CapitalLetter
     @Schema(description = "Заголовок объявления")
     public String title;
 
+    @NotBlank
     @Schema(description = "Текст объявления")
     public String body;
 
+    @NotBlank
     @Schema(description = "Стоимость")
     public Float price;
 
+    @NotNull
     @Schema(description = "Статус")
     public Status status;
 

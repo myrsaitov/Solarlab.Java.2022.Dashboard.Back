@@ -18,6 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
@@ -26,7 +27,7 @@ import java.util.List;
 @Tag( /* Описание компонента */
         name = "Контроллер тагов",
         description = "REST API для доступа к тагам")
-@Validated /* Действует как @Valid, но только по отношению не к одному, а к группе параметров (всех параметров всех методов класса) */
+@Validated /* Действует к параметрам, которые обозначены аннотациями типа @min(), @max() и т.п. - Contract Validation */
 public class TagController {
 
     // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
@@ -43,12 +44,12 @@ public class TagController {
     )
     public ResponseEntity<Integer> createTag(
             @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
             @RequestBody(required = false)
-                    TagCreateDto dto){
+                    TagCreateDto request){
 
         return new ResponseEntity<Integer>(
-                tagService.create(dto),
+                tagService.create(request),
                 HttpStatus.CREATED);
 
     }
@@ -63,9 +64,9 @@ public class TagController {
     )
     public ResponseEntity updateTag(
             @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
+            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
             @RequestBody(required = false)
-                    TagUpdateDto dto) {
+                    TagUpdateDto request) {
 
         return new ResponseEntity(HttpStatus.OK);
 
@@ -81,6 +82,7 @@ public class TagController {
             @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
+            @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable /* Извлекает параметр, переданный в адресе запроса */
                     Integer tagId) {
 
@@ -103,7 +105,6 @@ public class TagController {
                 required = true)
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
-            //@Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует */
             @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
                     Integer limit) {
 
@@ -122,6 +123,7 @@ public class TagController {
             @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
+            @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр, переданный в адресе запроса */
                     Integer tagId) {
 

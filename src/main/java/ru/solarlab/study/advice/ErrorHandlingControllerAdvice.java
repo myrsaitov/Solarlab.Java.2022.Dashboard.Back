@@ -18,6 +18,9 @@ import javax.validation.ValidationException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+// Если нужно обрабатывать только определенные контроллеры, то можно создать свою аннотацию и пометить ей нужные контроллеры
+//@ControllerAdvice(annotations = CustomAnnotation.class) - так можно к этим обработчикам подключить только выбранные контроллеры, у которых будет @CustomAnnotation
+
 @ControllerAdvice /* Обозначает глобальный класс по обработке ошибок */
 @Slf4j
 public class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
