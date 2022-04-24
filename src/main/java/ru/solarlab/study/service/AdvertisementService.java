@@ -8,6 +8,8 @@ import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.dto.Status;
+import ru.solarlab.study.entity.Advertisement;
+import ru.solarlab.study.mapper.AdvertisementMapper;
 
 import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
@@ -19,6 +21,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
 @Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
 public class AdvertisementService {
+
+    /**
+     * Объект маппера
+     */
+    private final AdvertisementMapper advertisementMapper;
 
     /**
      * Создает новое объявление по данным из DTO
@@ -68,24 +75,25 @@ public class AdvertisementService {
     public List<AdvertisementDto> getAdvertisements(
             Integer limit) {
 
-        List<AdvertisementDto> list = getAdvertisements();
+        List<Advertisement> list = getAdvertisements();
 
         return list.stream()
                 .limit(limit == null ? Integer.MAX_VALUE : limit)
+                .map(advertisementMapper::advertisementToAdvertisementDto)
                 .collect(Collectors.toList());
 
     }
 
-    private List<AdvertisementDto> getAdvertisements() {
+    private List<Advertisement> getAdvertisements() {
 
         return List.of(
-                AdvertisementDto.builder()
+                Advertisement.builder()
                         .id(RandomUtils.nextInt())
                         .title("justDoIt")
                         .createdAt(OffsetDateTime.now())
                         .status(Status.NEW)
                         .build(),
-                AdvertisementDto.builder()
+                Advertisement.builder()
                         .id(RandomUtils.nextInt())
                         .title("justDoIt2")
                         .createdAt(OffsetDateTime.now())
