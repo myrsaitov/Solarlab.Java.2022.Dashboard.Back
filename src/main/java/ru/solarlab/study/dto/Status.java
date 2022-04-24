@@ -9,5 +9,6 @@ public enum Status {
     IN_PROGRESS,
     COMPLETED,
     PAUSED,
-    DELETED
+    DELETED,
+    BLOCKED
 }
