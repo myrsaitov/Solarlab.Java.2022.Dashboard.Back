@@ -7,5 +7,7 @@ import lombok.Getter;
 public enum Status {
     NEW,
     IN_PROGRESS,
-    COMPLETED
+    COMPLETED,
+    PAUSED,
+    DELETED
 }

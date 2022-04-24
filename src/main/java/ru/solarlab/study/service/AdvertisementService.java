@@ -54,8 +54,8 @@ public class AdvertisementService {
 
         return AdvertisementDto.builder()
                 .id(advertisementId)
-                .name("justDoIt")
-                .startedAt(OffsetDateTime.now())
+                .title("justDoIt")
+                .createdAt(OffsetDateTime.now())
                 .status(Status.NEW)
                 .build();
 
@@ -82,14 +82,14 @@ public class AdvertisementService {
         return List.of(
                 AdvertisementDto.builder()
                         .id(RandomUtils.nextInt())
-                        .name("justDoIt")
-                        .startedAt(OffsetDateTime.now())
+                        .title("justDoIt")
+                        .createdAt(OffsetDateTime.now())
                         .status(Status.NEW)
                         .build(),
                 AdvertisementDto.builder()
                         .id(RandomUtils.nextInt())
-                        .name("justDoIt2")
-                        .startedAt(OffsetDateTime.now())
+                        .title("justDoIt2")
+                        .createdAt(OffsetDateTime.now())
                         .status(Status.IN_PROGRESS)
                         .build());
 
@@ -97,6 +97,7 @@ public class AdvertisementService {
 
     /**
      * Удаляет объявление по идентификатору
+     * Объявление из базы не удаляется, меняется только статус на "Удалено"
      * @param advertisementId Идентификатор объявления
      */
     public void deleteById(Integer advertisementId) {

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.OffsetDateTime;
 
 @Data
@@ -15,15 +16,24 @@ import java.time.OffsetDateTime;
 public class AdvertisementDto {
 
     @Schema(description = "Идентификатор")
-    private Integer id;
+    public Integer id;
 
-    @Schema(description = "Имя")
-    private String name;
+    @Schema(description = "Дата и время создания объявления")
+    public OffsetDateTime createdAt;
 
-    @Schema(description = "Время")
-    private OffsetDateTime startedAt;
+    @Schema(description = "Дата и время обновления объявления")
+    public OffsetDateTime updatedAt;
+
+    @Schema(description = "Заголовок объявления")
+    public String title;
+
+    @Schema(description = "Текст объявления")
+    public String body;
+
+    @Schema(description = "Стоимость")
+    public Float price;
 
     @Schema(description = "Статус")
-    private Status status;
+    public Status status;
 
 }

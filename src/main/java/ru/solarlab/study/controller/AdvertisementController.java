@@ -111,7 +111,7 @@ public class AdvertisementController {
 
     @Operation(
             summary = "Удаляет объявление",
-            description = "Удаляет объявление по идентификатору")
+            description = "Объявление из базы не удаляется, меняется только статус на Удалено")
     @DeleteMapping(
             value = "/v1/advertisements/{advertisementId}"
     )
