@@ -2,17 +2,15 @@ package ru.solarlab.study.service;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
-import ru.solarlab.study.dto.Status;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.mapper.AdvertisementMapper;
+import ru.solarlab.study.repository.AdvertisementRepository;
 
-import javax.validation.ValidationException;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,26 +25,36 @@ public class AdvertisementService {
      */
     private final AdvertisementMapper advertisementMapper;
 
+    private final AdvertisementRepository advertisementRepository;
+
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
     /**
      * Создает новое объявление по данным из DTO
-     * @param dto DTO для создания объявления
+     * @param request DTO для создания объявления
      * @return Идентификатор созданного объявления
      */
-    public Integer create(AdvertisementCreateDto dto) {
+    public Integer create(AdvertisementCreateDto request) {
 
-        return RandomUtils.nextInt();
+        Advertisement advertisement = advertisementMapper.toAdvertisement(request);
+        advertisementRepository.save(advertisement);
+        return advertisement.id;
 
     }
 
     /**
      * Обновляет объявление с указанным идентификатором по данным из DTO
-     * @param dto DTO для обновления объявления
+     * @param request DTO для обновления объявления
      */
-    public void update(
-            AdvertisementUpdateDto dto) {
+    public boolean update(
+            AdvertisementUpdateDto request) {
 
-        if (!dto.id.equals(dto.getId()))
-            throw new ValidationException("ID is not valid");
+        Advertisement advertisement = advertisementMapper
+                .advertisementUpdateRequestToAdvertisementView(request);
+
+        advertisementRepository.save(advertisement);
+
+        return true;
 
     }
 
@@ -58,12 +66,11 @@ public class AdvertisementService {
     public AdvertisementDto getById(
             Integer advertisementId) {
 
-        return AdvertisementDto.builder()
-                .id(advertisementId)
-                .title("justDoIt")
-                .createdAt(OffsetDateTime.now())
-                .status(Status.NEW)
-                .build();
+        return advertisementMapper
+                .advertisementToAdvertisementDto(
+                        advertisementRepository
+                                .findById(advertisementId)
+                                .orElse(null));
 
     }
 
@@ -75,30 +82,14 @@ public class AdvertisementService {
     public List<AdvertisementDto> getAdvertisements(
             Integer limit) {
 
-        List<Advertisement> list = getAdvertisements();
-
-        return list.stream()
-                .limit(limit == null ? Integer.MAX_VALUE : limit)
+        return advertisementRepository
+                .findAll(
+                        PageRequest.of(
+                                0,
+                                limit == null ? DEFAULT_PAGE_SIZE : limit))
+                .stream()
                 .map(advertisementMapper::advertisementToAdvertisementDto)
                 .collect(Collectors.toList());
-
-    }
-
-    private List<Advertisement> getAdvertisements() {
-
-        return List.of(
-                Advertisement.builder()
-                        .id(RandomUtils.nextInt())
-                        .title("justDoIt")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.NEW)
-                        .build(),
-                Advertisement.builder()
-                        .id(RandomUtils.nextInt())
-                        .title("justDoIt2")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.IN_PROGRESS)
-                        .build());
 
     }
 
@@ -109,7 +100,7 @@ public class AdvertisementService {
      */
     public void deleteById(Integer advertisementId) {
 
-
+        advertisementRepository.deleteById(advertisementId);
 
     }
 

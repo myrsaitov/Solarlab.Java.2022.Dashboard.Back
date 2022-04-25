@@ -11,35 +11,16 @@ import ru.solarlab.study.entity.Category;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
     CategoryDto categoryToCategoryDto(Category entity);
 
-    Category categoryUpdateRequestToCategoryView(CategoryUpdateDto dto);
+    Category categoryUpdateRequestToCategoryView(CategoryUpdateDto dto, Integer id);
 
-    @Mappings({
-            @Mapping(target = "id", source = "id"),
-            @Mapping(target = "status", ignore = true),
-//            @Mapping(target="id", expression = "java(generateId())"),
-//            @Mapping(target = "status", constant = "NEW")
-    })
-
-    Category toCategory(
-            CategoryCreateDto dto, int id);
+    Category toCategory(CategoryCreateDto dto);
 
     @AfterMapping
-    default void afterMappingFromCreate(
-            @MappingTarget Category target,
-            CategoryCreateDto source) {
-
+    default void afterMappingFromCreate(@MappingTarget Category target, CategoryCreateDto source) {
         target.setStatus(Status.NEW);
-
-    }
-
-    default int generateId() {
-
-        return RandomUtils.nextInt();
-
     }
 
 }

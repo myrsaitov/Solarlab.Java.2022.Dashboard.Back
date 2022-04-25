@@ -8,43 +8,46 @@ import lombok.NoArgsConstructor;
 import ru.solarlab.study.dto.Status;
 import ru.solarlab.study.validation.CapitalLetter;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.OffsetDateTime;
 
 @Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
-@Builder /* @Builder annotation produces complex builder APIs for the annotated POJO classes */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
+@Entity
+@Table(name = "ADVERTISEMENT")
 @Schema(description = "Сущность объявления")
 public class Advertisement {
 
-    @PositiveOrZero
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
     @Schema(description = "Идентификатор")
     public Integer id;
 
-    @NotBlank
+    @Column(name = "created_at", nullable = true)
     @Schema(description = "Дата и время создания объявления")
     public OffsetDateTime createdAt;
 
+    @Column(name = "updated_at", nullable = true)
     @Schema(description = "Дата и время обновления объявления")
     public OffsetDateTime updatedAt;
 
-    @NotBlank
-    @CapitalLetter
+    @Column(name = "title", nullable = false)
     @Schema(description = "Заголовок объявления")
     public String title;
 
-    @NotBlank
+    @Column(name = "body", nullable = false)
     @Schema(description = "Текст объявления")
     public String body;
 
-    @NotBlank
+    @Column(name = "price", nullable = false)
     @Schema(description = "Стоимость")
     public Float price;
 
-    @NotNull
+    @Column(name = "status", nullable = false)
     @Schema(description = "Статус")
     public Status status;
 

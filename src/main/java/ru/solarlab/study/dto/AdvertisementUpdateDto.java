@@ -31,7 +31,7 @@ public class AdvertisementUpdateDto {
     @Schema(description = "Текст объявления")
     public String body;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "Стоимость")
     public Float price;
 

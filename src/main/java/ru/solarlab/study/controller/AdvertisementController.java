@@ -68,7 +68,7 @@ public class AdvertisementController {
             @RequestBody(required = false)
                     AdvertisementUpdateDto request) {
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(advertisementService.update(request));
 
     }
 

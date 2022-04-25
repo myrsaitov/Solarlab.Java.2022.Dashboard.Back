@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
 @Builder /* @Builder annotation produces complex builder APIs for the annotated POJO classes */
@@ -25,7 +26,7 @@ public class AdvertisementCreateDto {
     @Schema(description = "Текст объявления")
     public String body;
 
-    @NotBlank
+    @NotNull
     @Schema(description = "Стоимость")
     public Float price;
 
