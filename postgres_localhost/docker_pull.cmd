@@ -1,0 +1,3 @@
+docker pull postgres
+
+pause

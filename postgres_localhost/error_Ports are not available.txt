@@ -1,0 +1,6 @@
+Ports are not available
+This solution helped me:
+
+net stop winnat
+docker start container_name
+net start winnat
