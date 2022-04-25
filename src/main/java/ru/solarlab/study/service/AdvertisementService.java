@@ -51,6 +51,7 @@ public class AdvertisementService {
     /**
      * Обновляет объявление с указанным идентификатором по данным из DTO
      * @param request DTO для обновления объявления
+     * @return Обновление прошло удачно
      */
     public boolean update(
             AdvertisementUpdateDto request) {

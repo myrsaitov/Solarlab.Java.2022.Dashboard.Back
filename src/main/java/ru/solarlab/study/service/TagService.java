@@ -3,13 +3,17 @@ package ru.solarlab.study.service;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.Status;
 import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
 import ru.solarlab.study.dto.TagUpdateDto;
+import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.mapper.TagMapper;
+import ru.solarlab.study.repository.CategoryRepository;
+import ru.solarlab.study.repository.TagRepository;
 
 import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
@@ -28,25 +32,42 @@ public class TagService {
     private final TagMapper tagMapper;
 
     /**
+     * Объект репозитория
+     */
+    private final TagRepository tagRepository;
+
+    /**
+     * Максимальное количество на странице
+     */
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
+    /**
      * Создает новый таг по данным из DTO
-     * @param dto DTO для создания тага
+     * @param request DTO для создания тага
      * @return Идентификатор нового тага
      */
-    public Integer create(TagCreateDto dto) {
+    public Integer create(TagCreateDto request) {
 
-        return RandomUtils.nextInt();
+        Tag tag = tagMapper.toTag(request);
+        tagRepository.save(tag);
+        return tag.id;
 
     }
 
     /**
      * Обновляет таг с указанным идентификатором по данным из DTO
-     * @param dto DTO для обновления тага
+     * @param request DTO для обновления тага
+     * @return Обновление прошло удачно
      */
-    public void update(
-            TagUpdateDto dto) {
+    public boolean update(
+            TagUpdateDto request) {
 
-        if (!dto.id.equals(dto.getId()))
-            throw new ValidationException("ID is not valid");
+        Tag tag = tagMapper
+                .tagUpdateRequestToTagView(request);
+
+        tagRepository.save(tag);
+
+        return true;
 
     }
 
@@ -58,12 +79,11 @@ public class TagService {
     public TagDto getById(
             Integer tagId) {
 
-        return TagDto.builder()
-                .id(tagId)
-                .text("justDoIt")
-                .createdAt(OffsetDateTime.now())
-                .status(Status.NEW)
-                .build();
+        return tagMapper
+                .tagToTagDto(
+                        tagRepository
+                                .findById(tagId)
+                                .orElse(null));
 
     }
 
@@ -75,30 +95,14 @@ public class TagService {
     public List<TagDto> getTags(
             Integer limit) {
 
-        List<Tag> list = getTags();
-
-        return list.stream()
-                .limit(limit == null ? Integer.MAX_VALUE : limit)
+        return tagRepository
+                .findAll(
+                        PageRequest.of(
+                                0,
+                                limit == null ? DEFAULT_PAGE_SIZE : limit))
+                .stream()
                 .map(tagMapper::tagToTagDto)
                 .collect(Collectors.toList());
-
-    }
-
-    private List<Tag> getTags() {
-
-        return List.of(
-                Tag.builder()
-                        .id(RandomUtils.nextInt())
-                        .text("justDoIt")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.NEW)
-                        .build(),
-                Tag.builder()
-                        .id(RandomUtils.nextInt())
-                        .text("justDoIt2")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.IN_PROGRESS)
-                        .build());
 
     }
 
@@ -109,7 +113,7 @@ public class TagService {
      */
     public void deleteById(Integer tagId) {
 
-
+        tagRepository.deleteById(tagId);
 
     }
 

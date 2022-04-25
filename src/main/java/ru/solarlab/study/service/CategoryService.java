@@ -54,6 +54,7 @@ public class CategoryService {
     /**
      * Обновляет категорию с указанным идентификатором по данным из DTO
      * @param request DTO для обновления категории
+     * @return Обновление прошло удачно
      */
     public boolean update(
             CategoryUpdateDto request) {

@@ -68,7 +68,7 @@ public class TagController {
             @RequestBody(required = false)
                     TagUpdateDto request) {
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(tagService.update(request));
 
     }
 
