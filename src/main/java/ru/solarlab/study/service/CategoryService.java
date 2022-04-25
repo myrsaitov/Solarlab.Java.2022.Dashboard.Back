@@ -3,13 +3,14 @@ package ru.solarlab.study.service;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomUtils;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.solarlab.study.dto.CategoryCreateDto;
-import ru.solarlab.study.dto.CategoryDto;
-import ru.solarlab.study.dto.CategoryUpdateDto;
-import ru.solarlab.study.dto.Status;
+import ru.solarlab.study.dto.*;
+import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.mapper.CategoryMapper;
+import ru.solarlab.study.mapper.CategoryMapper;
+import ru.solarlab.study.repository.CategoryRepository;
 
 import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
@@ -28,25 +29,41 @@ public class CategoryService {
     private final CategoryMapper categoryMapper;
 
     /**
-     * Создает новую категорию по данным из DTO
-     * @param dto DTO для создания категории
-     * @return Идентификатор нового тага
+     * Объект репозитория
      */
-    public Integer create(CategoryCreateDto dto) {
+    private final CategoryRepository categoryRepository;
 
-        return RandomUtils.nextInt();
+    /**
+     * Максимальное количество на странице
+     */
+    private static final int DEFAULT_PAGE_SIZE = 10;
+
+    /**
+     * Создает новую категорию по данным из DTO
+     * @param request DTO для создания категории
+     * @return Идентификатор созданного категории
+     */
+    public Integer create(CategoryCreateDto request) {
+
+        Category category = categoryMapper.toCategory(request);
+        categoryRepository.save(category);
+        return category.id;
 
     }
 
     /**
      * Обновляет категорию с указанным идентификатором по данным из DTO
-     * @param dto DTO для обновления категории
+     * @param request DTO для обновления категории
      */
-    public void update(
-            CategoryUpdateDto dto) {
+    public boolean update(
+            CategoryUpdateDto request) {
 
-        if (!dto.id.equals(dto.getId()))
-            throw new ValidationException("ID is not valid");
+        Category category = categoryMapper
+                .categoryUpdateRequestToCategoryView(request);
+
+        categoryRepository.save(category);
+
+        return true;
 
     }
 
@@ -58,12 +75,11 @@ public class CategoryService {
     public CategoryDto getById(
             Integer categoryId) {
 
-        return CategoryDto.builder()
-                .id(categoryId)
-                .name("justDoIt")
-                .createdAt(OffsetDateTime.now())
-                .status(Status.NEW)
-                .build();
+        return categoryMapper
+                .categoryToCategoryDto(
+                        categoryRepository
+                                .findById(categoryId)
+                                .orElse(null));
 
     }
 
@@ -75,30 +91,14 @@ public class CategoryService {
     public List<CategoryDto> getCategories(
             Integer limit) {
 
-        List<Category> list = getCategories();
-
-        return list.stream()
-                .limit(limit == null ? Integer.MAX_VALUE : limit)
+        return categoryRepository
+                .findAll(
+                        PageRequest.of(
+                                0,
+                                limit == null ? DEFAULT_PAGE_SIZE : limit))
+                .stream()
                 .map(categoryMapper::categoryToCategoryDto)
                 .collect(Collectors.toList());
-
-    }
-
-    private List<Category> getCategories() {
-
-        return List.of(
-                Category.builder()
-                        .id(RandomUtils.nextInt())
-                        .name("justDoIt")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.NEW)
-                        .build(),
-                Category.builder()
-                        .id(RandomUtils.nextInt())
-                        .name("justDoIt2")
-                        .createdAt(OffsetDateTime.now())
-                        .status(Status.IN_PROGRESS)
-                        .build());
 
     }
 
@@ -109,7 +109,7 @@ public class CategoryService {
      */
     public void deleteById(Integer categoryId) {
 
-
+        categoryRepository.deleteById(categoryId);
 
     }
 

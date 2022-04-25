@@ -68,7 +68,7 @@ public class CategoryController {
             @RequestBody(required = false)
                     CategoryUpdateDto request) {
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok(categoryService.update(request));
 
     }
 

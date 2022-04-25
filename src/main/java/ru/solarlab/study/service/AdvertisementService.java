@@ -25,8 +25,14 @@ public class AdvertisementService {
      */
     private final AdvertisementMapper advertisementMapper;
 
+    /**
+     * Объект репозитория
+     */
     private final AdvertisementRepository advertisementRepository;
 
+    /**
+     * Максимальное количество на странице
+     */
     private static final int DEFAULT_PAGE_SIZE = 10;
 
     /**
