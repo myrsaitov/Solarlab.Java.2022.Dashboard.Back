@@ -49,6 +49,7 @@ public class TagService {
     public Integer create(TagCreateDto request) {
 
         Tag tag = tagMapper.toTag(request);
+        tag.createdAt = OffsetDateTime.now();
         tagRepository.save(tag);
         return tag.id;
 
@@ -62,12 +63,34 @@ public class TagService {
     public boolean update(
             TagUpdateDto request) {
 
-        Tag tag = tagMapper
-                .tagUpdateRequestToTagView(request);
+        /**
+         * Достает из базы по Id
+         */
+        Tag tag = tagRepository
+                .findById(request.id)
+                .orElse(null);
 
-        tagRepository.save(tag);
+        /**
+         * Если в базе есть с таким Id
+         */
+        if(tag != null) {
 
-        return true;
+            tag.updatedAt = OffsetDateTime.now();
+            tag.text = request.text;
+            tag.status = request.status;
+
+            tagRepository.save(tag);
+
+            return true;
+        }
+        /**
+         * Если в базе нет с таким Id
+         */
+        else {
+
+            return false;
+
+        }
 
     }
 

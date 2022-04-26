@@ -11,6 +11,7 @@ import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,7 @@ public class AdvertisementService {
     public Integer create(AdvertisementCreateDto request) {
 
         Advertisement advertisement = advertisementMapper.toAdvertisement(request);
+        advertisement.createdAt = OffsetDateTime.now();
         advertisementRepository.save(advertisement);
         return advertisement.id;
 
@@ -56,12 +58,36 @@ public class AdvertisementService {
     public boolean update(
             AdvertisementUpdateDto request) {
 
-        Advertisement advertisement = advertisementMapper
-                .advertisementUpdateRequestToAdvertisementView(request);
+        /**
+         * Достает из базы по Id
+         */
+        Advertisement advertisement = advertisementRepository
+                .findById(request.id)
+                .orElse(null);
 
-        advertisementRepository.save(advertisement);
+        /**
+         * Если в базе есть с таким Id
+         */
+        if(advertisement != null) {
 
-        return true;
+            advertisement.updatedAt = OffsetDateTime.now();
+            advertisement.title = request.title;
+            advertisement.body = request.body;
+            advertisement.price = request.price;
+            advertisement.status = request.status;
+
+            advertisementRepository.save(advertisement);
+
+            return true;
+        }
+        /**
+         * Если в базе нет с таким Id
+         */
+        else {
+
+            return false;
+
+        }
 
     }
 

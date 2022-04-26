@@ -6,6 +6,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.*;
+import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.mapper.CategoryMapper;
@@ -46,6 +47,7 @@ public class CategoryService {
     public Integer create(CategoryCreateDto request) {
 
         Category category = categoryMapper.toCategory(request);
+        category.createdAt = OffsetDateTime.now();
         categoryRepository.save(category);
         return category.id;
 
@@ -59,12 +61,34 @@ public class CategoryService {
     public boolean update(
             CategoryUpdateDto request) {
 
-        Category category = categoryMapper
-                .categoryUpdateRequestToCategoryView(request);
+        /**
+         * Достает из базы по Id
+         */
+        Category category = categoryRepository
+                .findById(request.id)
+                .orElse(null);
 
-        categoryRepository.save(category);
+        /**
+         * Если в базе есть с таким Id
+         */
+        if(category != null) {
 
-        return true;
+            category.updatedAt = OffsetDateTime.now();
+            category.name = request.name;
+            category.status = request.status;
+
+            categoryRepository.save(category);
+
+            return true;
+        }
+        /**
+         * Если в базе нет с таким Id
+         */
+        else {
+
+            return false;
+
+        }
 
     }
 

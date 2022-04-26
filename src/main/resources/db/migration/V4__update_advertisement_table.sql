@@ -1,2 +1,2 @@
 -- Add column
-ALTER TABLE advertisement ADD COLUMN "type" character varying(255);
+ALTER TABLE advertisement ADD COLUMN "test_v2" character varying(255);
