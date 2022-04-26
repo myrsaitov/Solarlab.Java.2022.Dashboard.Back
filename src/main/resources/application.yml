@@ -7,6 +7,8 @@ logging:
     org.springframework: INFO
 
 spring:
+  flyway:
+    enabled: false
   application:
     name: study
   mvc:
@@ -19,7 +21,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/advertisement_db?currentSchema=advertisement
     username: postgres
     password: postgres
-  jpa.hibernate.ddl-auto: create
+  #jpa.hibernate.ddl-auto: create
   jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 springfox:
