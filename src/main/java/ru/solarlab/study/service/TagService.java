@@ -1,21 +1,15 @@
 package ru.solarlab.study.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.solarlab.study.dto.Status;
 import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
 import ru.solarlab.study.dto.TagUpdateDto;
-import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.mapper.TagMapper;
-import ru.solarlab.study.repository.CategoryRepository;
 import ru.solarlab.study.repository.TagRepository;
 
-import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,15 +56,17 @@ public class TagService {
 
     /**
      * Обновляет таг с указанным идентификатором по данным из DTO
+     * @param tagId Идентификатор обновляемого тага
      * @param request DTO для обновления тага
      * @return Обновление прошло удачно
      */
-    public boolean update(
+    public TagDto update(
+            long tagId,
             TagUpdateDto request) {
 
         // Достает из базы по Id
         Tag tag = tagRepository
-                .findById(request.id)
+                .findById(tagId)
                 .orElse(null);
 
         // Если в базе есть сущность с таким Id
@@ -82,14 +78,15 @@ public class TagService {
 
             tagRepository.save(tag);
 
-            return true;
         }
         // Если в базе нет сущности с таким Id
         else {
 
-            return false;
+            // TODO excecption
 
         }
+
+        return tagMapper.tagToTagDto(tag);
 
     }
 
@@ -99,7 +96,7 @@ public class TagService {
      * @return Таг
      */
     public TagDto getById(
-            Integer tagId) {
+            long tagId) {
 
         return tagMapper
                 .tagToTagDto(
@@ -133,9 +130,9 @@ public class TagService {
      * Таг из базы не удаляется, меняется только статус на "Удалено"
      * @param tagId Идентификатор тага
      */
-    public void deleteById(Integer tagId) {
+    public void deleteById(long tagId) {
 
-        tagRepository.deleteById(tagId);
+        //tagRepository.deleteById(tagId);
 
     }
 

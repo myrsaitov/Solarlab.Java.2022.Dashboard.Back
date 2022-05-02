@@ -56,15 +56,17 @@ public class AdvertisementService {
 
     /**
      * Обновляет объявление с указанным идентификатором по данным из DTO
+     * @param advertisementId Идентификатор обновляемого объявления
      * @param request DTO для обновления объявления
      * @return Обновление прошло удачно
      */
-    public boolean update(
+    public AdvertisementDto update(
+            long advertisementId,
             AdvertisementUpdateDto request) {
 
         //Достает из базы по Id
         Advertisement advertisement = advertisementRepository
-                .findById(request.id)
+                .findById(advertisementId)
                 .orElse(null);
 
         //Если в базе есть сущность с таким Id
@@ -78,14 +80,15 @@ public class AdvertisementService {
 
             advertisementRepository.save(advertisement);
 
-            return true;
         }
-        // Если в базе нет с таким Id
+        // Если в базе нет сущности с таким Id
         else {
 
-            return false;
+            // TODO excecption
 
         }
+
+        return advertisementMapper.advertisementToAdvertisementDto(advertisement);
 
     }
 
@@ -95,7 +98,7 @@ public class AdvertisementService {
      * @return Объявление
      */
     public AdvertisementDto getById(
-            Integer advertisementId) {
+            long advertisementId) {
 
         return advertisementMapper
                 .advertisementToAdvertisementDto(
@@ -129,7 +132,7 @@ public class AdvertisementService {
      * Объявление из базы не удаляется, меняется только статус на "Удалено"
      * @param advertisementId Идентификатор объявления
      */
-    public void deleteById(Integer advertisementId) {
+    public void deleteById(long advertisementId) {
 
         advertisementRepository.deleteById(advertisementId);
 

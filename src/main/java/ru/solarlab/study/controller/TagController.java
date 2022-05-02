@@ -69,11 +69,21 @@ public class TagController {
             summary = "Обновляет таг",
             description = "Обновляет таг с указанным идентификатором по данным из DTO")
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
-            value = "/",
+            value = "/{tagId}",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateTag(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор тага",
+                    required = true)
+            @PositiveOrZero /* Допустимое значение >= 0 */
+            @PathVariable("tagId") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    long tagId,
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
@@ -84,7 +94,10 @@ public class TagController {
             @RequestBody(required = false)
                     TagUpdateDto request) {
 
-        return ResponseEntity.ok(tagService.update(request));
+        return ResponseEntity.ok(
+                tagService.update(
+                        tagId,
+                        request));
 
     }
 
@@ -104,7 +117,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer tagId) {
+                    long tagId) {
 
         return ResponseEntity.ok(
                 tagService.getById(tagId));
@@ -130,7 +143,7 @@ public class TagController {
             @Max(20) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                 value = "limit", required = true)
-                    Integer limit) {
+                    Integer limit) { // Integer, т.к. PageRequest требует Integer!
 
         return ResponseEntity.ok(
                 tagService.getTags(limit));
@@ -153,7 +166,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer tagId) {
+                    long tagId) {
 
         tagService.deleteById(tagId);
         return ResponseEntity.noContent().build();

@@ -74,11 +74,21 @@ public class CategoryController {
             summary = "Обновляет категорию",
             description = "Обновляет категорию с указанным идентификатором по данным из DTO")
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
-            value = "/",
+            value = "/{categoryId}",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateCategory(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор категории",
+                    required = true)
+            @PositiveOrZero /* Допустимое значение >= 0 */
+            @PathVariable("categoryId") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    long categoryId,
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
@@ -89,7 +99,10 @@ public class CategoryController {
             @RequestBody(required = false)
                     CategoryUpdateDto request) {
 
-        return ResponseEntity.ok(categoryService.update(request));
+        return ResponseEntity.ok(
+                categoryService.update(
+                        categoryId,
+                        request));
 
     }
 
@@ -109,7 +122,7 @@ public class CategoryController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer categoryId) {
+                    long categoryId) {
 
         return ResponseEntity.ok(
                 categoryService.getById(categoryId));
@@ -135,7 +148,7 @@ public class CategoryController {
             @Max(20) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                 value = "limit", required = true)            
-                    Integer limit) {
+                    Integer limit) { // Integer, т.к. PageRequest требует Integer!
 
         return ResponseEntity.ok(
                 categoryService.getCategories(limit));
@@ -158,7 +171,7 @@ public class CategoryController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer categoryId) {
+                    long categoryId) {
 
         categoryService.deleteById(categoryId);
         return ResponseEntity.noContent().build();

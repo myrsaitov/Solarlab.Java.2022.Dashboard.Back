@@ -57,15 +57,17 @@ public class CategoryService {
 
     /**
      * Обновляет категорию с указанным идентификатором по данным из DTO
+     * @param categoryId Идентификатор обновляемой категории
      * @param request DTO для обновления категории
      * @return Обновление прошло удачно
      */
-    public boolean update(
+    public CategoryDto update(
+            long categoryId,
             CategoryUpdateDto request) {
 
         // Достает из базы по Id
         Category category = categoryRepository
-                .findById(request.id)
+                .findById(categoryId)
                 .orElse(null);
 
 
@@ -78,14 +80,15 @@ public class CategoryService {
 
             categoryRepository.save(category);
 
-            return true;
         }
         // Если в базе нет сущности с таким Id
         else {
 
-            return false;
+            // TODO excecption
 
         }
+
+        return categoryMapper.categoryToCategoryDto(category);
 
     }
 
@@ -95,7 +98,7 @@ public class CategoryService {
      * @return Категория
      */
     public CategoryDto getById(
-            Integer categoryId) {
+            long categoryId) {
 
         return categoryMapper
                 .categoryToCategoryDto(
@@ -129,7 +132,7 @@ public class CategoryService {
      * Категория из базы не удаляется, меняется только статус на "Удалено"
      * @param categoryId Идентификатор категории
      */
-    public void deleteById(Integer categoryId) {
+    public void deleteById(long categoryId) {
 
         categoryRepository.deleteById(categoryId);
 

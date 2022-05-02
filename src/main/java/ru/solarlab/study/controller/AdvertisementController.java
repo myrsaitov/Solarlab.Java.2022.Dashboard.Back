@@ -74,11 +74,21 @@ public class AdvertisementController {
             summary = "Обновляет объявление",
             description = "Обновляет объявление с указанным идентификатором по данным из DTO")
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
-            value = "/",
+            value = "/{advertisementId}",
             produces = { "application/json" },
             consumes = { "application/json" }
     )
     public ResponseEntity updateAdvertisement(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор объявления",
+                    required = true)
+            @PositiveOrZero /* Допустимое значение >= 0 */
+            @PathVariable("advertisementId") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    long advertisementId,
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
@@ -89,7 +99,10 @@ public class AdvertisementController {
             @RequestBody(required = false)
                     AdvertisementUpdateDto request) {
 
-        return ResponseEntity.ok(advertisementService.update(request));
+        return ResponseEntity.ok(
+                advertisementService.update(
+                        advertisementId,
+                        request));
 
     }
 
@@ -109,7 +122,7 @@ public class AdvertisementController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer advertisementId) {
+                    long advertisementId) {
 
         return ResponseEntity.ok(
                 advertisementService.getById(advertisementId));
@@ -135,7 +148,7 @@ public class AdvertisementController {
             @Max(20) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                 value = "limit", required = true)
-                    Integer limit) {
+                    Integer limit) { // Integer, т.к. PageRequest требует Integer!
 
         return ResponseEntity.ok(
                 advertisementService.getAdvertisements(limit));
@@ -158,7 +171,7 @@ public class AdvertisementController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    Integer advertisementId) {
+                    long advertisementId) {
 
         advertisementService.deleteById(advertisementId);
         return ResponseEntity.noContent().build();
