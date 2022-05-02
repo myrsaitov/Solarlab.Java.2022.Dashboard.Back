@@ -7,6 +7,7 @@ import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.entity.Advertisement;
+import ru.solarlab.study.exception.AdvertisementNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
 
@@ -62,14 +63,14 @@ public class AdvertisementService {
      */
     public AdvertisementDto update(
             long advertisementId,
-            AdvertisementUpdateDto request) throws Exception {
+            AdvertisementUpdateDto request){
 
         try {
 
             Advertisement advertisement = advertisementRepository
                     .findById(advertisementId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new AdvertisementNotFoundException(advertisementId));
 
             advertisement.updatedAt = OffsetDateTime.now();
             advertisement.title = request.title;
@@ -95,14 +96,14 @@ public class AdvertisementService {
      * @return Объявление
      */
     public AdvertisementDto getById(
-            long advertisementId) throws Exception {
+            long advertisementId){
 
         try {
 
             Advertisement advertisement = advertisementRepository
                     .findById(advertisementId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new AdvertisementNotFoundException(advertisementId));
             return advertisementMapper.advertisementToAdvertisementDto(advertisement);
 
         }
@@ -138,14 +139,14 @@ public class AdvertisementService {
      * Объявление из базы не удаляется, меняется только статус на "Удалено"
      * @param advertisementId Идентификатор объявления
      */
-    public void deleteById(long advertisementId) throws Exception {
+    public void deleteById(long advertisementId){
 
         try {
 
             Advertisement advertisement = advertisementRepository
                     .findById(advertisementId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new AdvertisementNotFoundException(advertisementId));
             advertisementRepository.deleteById(advertisementId);
 
         }

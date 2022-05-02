@@ -92,7 +92,7 @@ public class TagController {
                 и только потом, после проверки, 
                 его использует - Bean Validation */
             @RequestBody(required = false)
-                    TagUpdateDto request) {
+                    TagUpdateDto request){
 
         return ResponseEntity.ok(
                 tagService.update(
@@ -117,7 +117,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long tagId) throws Exception {
+                    long tagId){
 
         return ResponseEntity.ok(
                 tagService.getById(tagId));
@@ -166,7 +166,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long tagId) throws Exception {
+                    long tagId){
 
         tagService.deleteById(tagId);
         return ResponseEntity.noContent().build();

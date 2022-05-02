@@ -7,6 +7,7 @@ import ru.solarlab.study.dto.CategoryCreateDto;
 import ru.solarlab.study.dto.CategoryDto;
 import ru.solarlab.study.dto.CategoryUpdateDto;
 import ru.solarlab.study.entity.Category;
+import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.CategoryMapper;
 import ru.solarlab.study.repository.CategoryRepository;
 
@@ -63,14 +64,14 @@ public class CategoryService {
      */
     public CategoryDto update(
             long categoryId,
-            CategoryUpdateDto request) throws Exception {
+            CategoryUpdateDto request){
 
         try {
 
             Category category = categoryRepository
                     .findById(categoryId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new CategoryNotFoundException(categoryId));
 
             category.updatedAt = OffsetDateTime.now();
             category.name = request.name;
@@ -95,14 +96,14 @@ public class CategoryService {
      * @return Категория
      */
     public CategoryDto getById(
-            long categoryId) throws Exception {
+            long categoryId){
 
         try {
 
             Category category = categoryRepository
                     .findById(categoryId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new CategoryNotFoundException(categoryId));
             return categoryMapper.categoryToCategoryDto(category);
 
         }
@@ -138,14 +139,14 @@ public class CategoryService {
      * Категория из базы не удаляется, меняется только статус на "Удалено"
      * @param categoryId Идентификатор категории
      */
-    public void deleteById(long categoryId) throws Exception {
+    public void deleteById(long categoryId){
 
         try {
 
             Category category = categoryRepository
                     .findById(categoryId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new CategoryNotFoundException(categoryId));
             categoryRepository.deleteById(categoryId);
 
         }

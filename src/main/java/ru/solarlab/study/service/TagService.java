@@ -7,6 +7,7 @@ import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
 import ru.solarlab.study.dto.TagUpdateDto;
 import ru.solarlab.study.entity.Tag;
+import ru.solarlab.study.exception.TagNotFoundException;
 import ru.solarlab.study.mapper.TagMapper;
 import ru.solarlab.study.repository.TagRepository;
 
@@ -62,14 +63,14 @@ public class TagService {
      */
     public TagDto update(
             long tagId,
-            TagUpdateDto request) throws Exception {
+            TagUpdateDto request){
 
         try {
 
             Tag tag = tagRepository
                     .findById(tagId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new TagNotFoundException(tagId));
 
             tag.updatedAt = OffsetDateTime.now();
             tag.text = request.text;
@@ -94,14 +95,14 @@ public class TagService {
      * @return Таг
      */
     public TagDto getById(
-            long tagId) throws Exception {
+            long tagId){
 
         try {
 
             Tag tag = tagRepository
                     .findById(tagId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new TagNotFoundException(tagId));
             return tagMapper.tagToTagDto(tag);
 
         }
@@ -137,14 +138,14 @@ public class TagService {
      * Таг из базы не удаляется, меняется только статус на "Удалено"
      * @param tagId Идентификатор тага
      */
-    public void deleteById(long tagId) throws Exception {
+    public void deleteById(long tagId){
 
         try {
 
             Tag tag = tagRepository
                     .findById(tagId)
                     .orElseThrow(
-                            () -> new Exception("Not Found"));
+                            () -> new TagNotFoundException(tagId));
             tagRepository.deleteById(tagId);
 
         }

@@ -97,7 +97,7 @@ public class AdvertisementController {
                 и только потом, после проверки, 
                 его использует - Bean Validation */
             @RequestBody(required = false)
-                    AdvertisementUpdateDto request) throws Exception {
+                    AdvertisementUpdateDto request){
 
         return ResponseEntity.ok(
                 advertisementService.update(
@@ -122,7 +122,7 @@ public class AdvertisementController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long advertisementId) throws Exception {
+                    long advertisementId){
 
         return ResponseEntity.ok(
                 advertisementService.getById(advertisementId));
@@ -171,7 +171,7 @@ public class AdvertisementController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long advertisementId) throws Exception {
+                    long advertisementId){
 
         advertisementService.deleteById(advertisementId);
         return ResponseEntity.noContent().build();
