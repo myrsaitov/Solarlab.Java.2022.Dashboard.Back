@@ -9,6 +9,7 @@ import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -19,21 +20,40 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "DTO обновления объявления")
 public class AdvertisementUpdateDto {
 
+    /**
+     * Заголовок объявления
+     */
     @NotBlank
     @CapitalLetter
     @Schema(description = "Заголовок объявления")
     public String title;
 
+    /**
+     * Текст объявления
+     */
     @NotBlank
     @Schema(description = "Текст объявления")
     public String body;
 
+    /**
+     * Стоимость
+     */
     @NotNull
     @Schema(description = "Стоимость")
-    public Float price;
+    public float price;
 
+    /**
+     * Статус объявления
+     */
     @NotNull
     @Schema(description = "Статус")
     public AdvertisementStatus status;
+
+    /**
+     * Идентификатор категории
+     */
+    @PositiveOrZero
+    @Schema(description = "Идентификатор категории")
+    public long categoryId;
 
 }

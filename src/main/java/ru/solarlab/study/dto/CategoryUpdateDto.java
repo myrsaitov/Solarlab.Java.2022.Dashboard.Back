@@ -19,11 +19,17 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "Сущность категории")
 public class CategoryUpdateDto {
 
+    /**
+     * Имя категории
+     */
     @NotBlank
     @CapitalLetter
     @Schema(description = "Имя категории")
     public String name;
 
+    /**
+     * Статус категории
+     */
     @NotNull
     @Schema(description = "Статус")
     public CategoryStatus status;

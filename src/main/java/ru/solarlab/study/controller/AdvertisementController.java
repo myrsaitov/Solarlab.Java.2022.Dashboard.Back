@@ -179,3 +179,5 @@ public class AdvertisementController {
     }
 
 }
+
+// https://bookflow.ru/rukovodstvo-po-rest-arhitekture/

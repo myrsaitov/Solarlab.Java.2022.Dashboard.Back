@@ -23,30 +23,55 @@ public class AdvertisementDto {
 
     @PositiveOrZero
     @Schema(description = "Идентификатор")
-    public Integer id;
+    public long id;
 
+    /**
+     * Дата и время создания объявления
+     */
     @NotBlank
     @Schema(description = "Дата и время создания объявления")
     public OffsetDateTime createdAt;
 
+    /**
+     * Дата и время обновления объявления
+     */
     @Schema(description = "Дата и время обновления объявления")
     public OffsetDateTime updatedAt;
 
+    /**
+     * Заголовок объявления
+     */
     @NotBlank
     @CapitalLetter
     @Schema(description = "Заголовок объявления")
     public String title;
 
+    /**
+     * Текст объявления
+     */
     @NotBlank
     @Schema(description = "Текст объявления")
     public String body;
 
+    /**
+     * Стоимость
+     */
     @NotNull
     @Schema(description = "Стоимость")
-    public Float price;
+    public float price;
 
+    /**
+     * Статус объявления
+     */
     @NotNull
     @Schema(description = "Статус")
     public AdvertisementStatus status;
+
+    /**
+     * Идентификатор категории
+     */
+    @PositiveOrZero
+    @Schema(description = "Идентификатор категории")
+    public long categoryId;
 
 }

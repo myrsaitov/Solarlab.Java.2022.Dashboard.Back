@@ -22,19 +22,31 @@ public class TagDto {
 
     @PositiveOrZero
     @Schema(description = "Идентификатор")
-    public Integer id;
+    public long id;
 
+    /**
+     * Дата и время создания тага
+     */
     @NotBlank
     @Schema(description = "Дата и время создания тага")
     public OffsetDateTime createdAt;
 
+    /**
+     * Дата и время обновления тага
+     */
     @Schema(description = "Дата и время обновления тага")
     public OffsetDateTime updatedAt;
 
+    /**
+     * Текст тага
+     */
     @NotBlank
     @Schema(description = "Текст тага")
     public String text;
 
+    /**
+     * Статус тага
+     */
     @NotNull
     @Schema(description = "Статус")
     public TagStatus status;

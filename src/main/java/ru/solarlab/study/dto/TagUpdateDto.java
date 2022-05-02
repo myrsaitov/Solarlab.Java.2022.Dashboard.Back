@@ -18,10 +18,16 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "DTO обновления тага")
 public class TagUpdateDto {
 
+    /**
+     * Текст тага
+     */
     @NotBlank
     @Schema(description = "Текст тага")
     public String text;
 
+    /**
+     * Статус тага
+     */
     @NotNull
     @Schema(description = "Статус")
     public TagStatus status;

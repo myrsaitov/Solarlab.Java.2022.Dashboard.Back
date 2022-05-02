@@ -13,13 +13,12 @@ CREATE SEQUENCE HIBERNATE_SEQUENCE_ADVERTISEMENT
 -- Create table
 CREATE TABLE ADVERTISEMENT
 (
-    id BIGINT NOT NULL, -- Dialect PostgreSQL
-    title character varying(255) NOT NULL,
-    body character varying(255) NOT NULL,
-    price real NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone,
-    status integer NOT NULL,
-    CONSTRAINT advertisement_pkey PRIMARY KEY (id)
-)
-;
+    ID BIGINT NOT NULL, -- Dialect PostgreSQL
+    TITLE character varying(255) NOT NULL,
+    BODY character varying(1023) NOT NULL,
+    PRICE real NOT NULL,
+    CREATED_AT timestamp without time zone NOT NULL,
+    UPDATED_AT timestamp without time zone,
+    STATUS integer NOT NULL,
+    CONSTRAINT ADVERTISEMENT_PKEY PRIMARY KEY (ID)
+);

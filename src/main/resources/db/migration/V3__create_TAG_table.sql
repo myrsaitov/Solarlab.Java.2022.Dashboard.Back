@@ -13,11 +13,10 @@ CREATE SEQUENCE HIBERNATE_SEQUENCE_TAG
 -- Create table
 CREATE TABLE TAG
 (
-    id BIGINT NOT NULL, -- Dialect PostgreSQL
-    text character varying(255) NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone,
-    status integer NOT NULL,
-    CONSTRAINT tag_pkey PRIMARY KEY (id)
-)
-;
+    ID BIGINT NOT NULL, -- Dialect PostgreSQL
+    TEXT character varying(255) NOT NULL,
+    CREATED_AT timestamp without time zone NOT NULL,
+    UPDATED_AT timestamp without time zone,
+    STATUS integer NOT NULL,
+    CONSTRAINT TAG_PKEY PRIMARY KEY (ID)
+);

@@ -7,9 +7,12 @@ import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.entity.Advertisement;
+import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.exception.AdvertisementNotFoundException;
+import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
+import ru.solarlab.study.repository.CategoryRepository;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -35,6 +38,7 @@ public class AdvertisementService {
      * Объект репозитория
      */
     private final AdvertisementRepository advertisementRepository;
+    private final CategoryRepository categoryRepository;
 
     /**
      * Максимальное количество на странице
@@ -48,10 +52,29 @@ public class AdvertisementService {
      */
     public Long create(AdvertisementCreateDto request) {
 
-        Advertisement advertisement = advertisementMapper.toAdvertisement(request);
-        advertisement.createdAt = OffsetDateTime.now();
-        advertisementRepository.save(advertisement);
-        return advertisement.id;
+        try {
+
+            Category category = categoryRepository
+                    .findById(request.categoryId)
+                    .orElseThrow(
+                            () -> new CategoryNotFoundException(request.categoryId));
+
+            Advertisement advertisement = advertisementMapper.toAdvertisement(request);
+            advertisement.createdAt = OffsetDateTime.now();
+            advertisement.category = category;
+            advertisementRepository.save(advertisement);
+
+            category.addAdvertisement(advertisement);
+            categoryRepository.save(category);
+
+            return advertisement.id;
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -104,7 +127,13 @@ public class AdvertisementService {
                     .findById(advertisementId)
                     .orElseThrow(
                             () -> new AdvertisementNotFoundException(advertisementId));
-            return advertisementMapper.advertisementToAdvertisementDto(advertisement);
+
+            AdvertisementDto result = advertisementMapper
+                    .advertisementToAdvertisementDto(advertisement);
+
+            result.categoryId = advertisement.category.id;
+
+            return result;
 
         }
         catch (Exception ex) {

@@ -13,11 +13,10 @@ CREATE SEQUENCE HIBERNATE_SEQUENCE_CATEGORY
 -- Create table
 CREATE TABLE CATEGORY
 (
-    id BIGINT NOT NULL, -- Dialect PostgreSQL
-    name character varying(255) NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone,
-    status integer NOT NULL,
-    CONSTRAINT category_pkey PRIMARY KEY (id)
-)
-;
+    ID BIGINT NOT NULL, -- Dialect PostgreSQL
+    NAME character varying(255) NOT NULL,
+    CREATED_AT timestamp without time zone NOT NULL,
+    UPDATED_AT timestamp without time zone,
+    STATUS integer NOT NULL,
+    CONSTRAINT CATEGORY_PKEY PRIMARY KEY (ID)
+);

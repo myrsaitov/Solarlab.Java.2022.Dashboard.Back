@@ -174,3 +174,5 @@ public class TagController {
     }
 
 }
+
+// https://bookflow.ru/rukovodstvo-po-rest-arhitekture/

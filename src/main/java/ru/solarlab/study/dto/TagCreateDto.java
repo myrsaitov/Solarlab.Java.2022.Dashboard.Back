@@ -14,6 +14,9 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "DTO создания тага")
 public class TagCreateDto {
 
+    /**
+     * Текст тага
+     */
     @NotBlank
     @Schema(description = "Текст тага")
     public String text;

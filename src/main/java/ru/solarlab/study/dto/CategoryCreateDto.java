@@ -15,6 +15,9 @@ import javax.validation.constraints.NotBlank;
 @Schema(description = "DTO создания категории")
 public class CategoryCreateDto {
 
+    /**
+     * Имя категории
+     */
     @NotBlank
     @CapitalLetter
     @Schema(description = "Имя категории")
