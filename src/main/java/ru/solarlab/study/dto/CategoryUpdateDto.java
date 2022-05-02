@@ -8,8 +8,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
-@Getter /* Вы можете добавить аннотацию @Getter и/или @Setter к любому полю, чтобы lombok автоматически сгенерировал методы получения и установки значения. */
-@Setter /* Вы можете добавить аннотацию @Getter и/или @Setter к любому полю, чтобы lombok автоматически сгенерировал методы получения и установки значения. */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
+@Setter /* lombok автоматически сгенерирует
+           метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Schema(description = "Сущность категории")

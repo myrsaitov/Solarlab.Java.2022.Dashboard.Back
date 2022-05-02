@@ -22,15 +22,23 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
-@RequestMapping("/v1/categories") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
-@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
+@RequestMapping("/v1/categories") /* Задаёт адрес,
+    по которому весь контроллер или его метод доступен на клиенте */
+@RequiredArgsConstructor /* Генерирует конструктор,
+    принимающий значения для каждого final поля или 
+    поля с аннотацией @NonNull. Аргументы конструктора 
+    будут сгенерированы в том порядке, в котором поля 
+    перечислены в классе. Для @NonNull полей конструктор 
+    так же будет проверять, чтобы в него не передали значение null. */
 @Tag( /* Описание компонента */
         name = "Контроллер категорий",
         description = "REST API для доступа к категориям")
-@Validated /* Действует к параметрам, которые обозначены аннотациями типа @min(), @max() и т.п. - Contract Validation */
+@Validated /* Действует к параметрам, которые обозначены 
+    аннотациями типа @min(), @max() и т.п. - Contract Validation */
 public class CategoryController {
 
-    // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
+    // final: после присвоения объекта, нельзя изменить ссылку на данный объект,
+    // а состояние объекта изменить можно
     private final CategoryService categoryService;
 
     @Operation( /* Описывает возможности методов контроллера */
@@ -42,13 +50,21 @@ public class CategoryController {
             consumes = { "application/json" }
 
     )
-    public ResponseEntity<Integer> createCategory(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+    // Здесь "Long", а не "long", потому что
+    // "Type argument cannot be of primitive type"
+    public ResponseEntity<Long> createCategory(
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     CategoryCreateDto request){
 
-        return new ResponseEntity<Integer>(
+        // Не указываем тип <>, берётся тип результатаs
+        return new ResponseEntity<>(
                 categoryService.create(request),
                 HttpStatus.CREATED);
 
@@ -63,8 +79,13 @@ public class CategoryController {
             consumes = { "application/json" }
     )
     public ResponseEntity updateCategory(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     CategoryUpdateDto request) {
 
@@ -79,11 +100,15 @@ public class CategoryController {
             produces = { "application/json" }
     )
     public ResponseEntity<CategoryDto> getCategory(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                     description = "Идентификатор категории",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("categoryId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer categoryId) {
 
         return ResponseEntity.ok(
@@ -100,12 +125,16 @@ public class CategoryController {
     )
     public ResponseEntity<List<CategoryDto>> getCategories(
             @NotNull /* Показывает, что поле или параметр не может быть null */
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                 description = "Количество категорий на странице",
                 required = true)
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
-            @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                value = "limit", required = true)            
                     Integer limit) {
 
         return ResponseEntity.ok(
@@ -120,11 +149,15 @@ public class CategoryController {
             value = "/{categoryId}"
     )
     public ResponseEntity<Void> deleteCategory(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */            
                     description = "Идентификатор категории",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable("categoryId") /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("categoryId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer categoryId) {
 
         categoryService.deleteById(categoryId);

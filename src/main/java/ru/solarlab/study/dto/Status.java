@@ -2,8 +2,12 @@ package ru.solarlab.study.dto;
 
 import lombok.Getter;
 
+/**
+ * Статус объявления
+ */
 
-@Getter /* Вы можете добавить аннотацию @Getter и/или @Setter к любому полю, чтобы lombok автоматически сгенерировал методы получения и установки значения. */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
 public enum Status {
 
     NEW,

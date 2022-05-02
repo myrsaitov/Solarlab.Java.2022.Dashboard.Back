@@ -22,15 +22,18 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
-@RequestMapping("/v1/tags") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
+@RequestMapping("/v1/tags") /* Задаёт адрес,
+    по которому весь контроллер или его метод доступен на клиенте */
 @RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
 @Tag( /* Описание компонента */
         name = "Контроллер тагов",
         description = "REST API для доступа к тагам")
-@Validated /* Действует к параметрам, которые обозначены аннотациями типа @min(), @max() и т.п. - Contract Validation */
+@Validated /* Действует к параметрам, которые обозначены 
+    аннотациями типа @min(), @max() и т.п. - Contract Validation */
 public class TagController {
 
-    // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
+    // final: после присвоения объекта, нельзя изменить ссылку на данный объект,
+    // а состояние объекта изменить можно
     private final TagService tagService;
 
     @Operation( /* Описывает возможности методов контроллера */
@@ -42,13 +45,21 @@ public class TagController {
             consumes = { "application/json" }
 
     )
-    public ResponseEntity<Integer> createTag(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+    // Здесь "Long", а не "long", потому что
+    // "Type argument cannot be of primitive type"
+    public ResponseEntity<Long> createTag(
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     TagCreateDto request){
 
-        return new ResponseEntity<Integer>(
+        // Не указываем тип <>, берётся тип результата
+        return new ResponseEntity<>(
                 tagService.create(request),
                 HttpStatus.CREATED);
 
@@ -63,8 +74,13 @@ public class TagController {
             consumes = { "application/json" }
     )
     public ResponseEntity updateTag(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     TagUpdateDto request) {
 
@@ -79,11 +95,15 @@ public class TagController {
             produces = { "application/json" }
     )
     public ResponseEntity<TagDto> getTag(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("tagId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer tagId) {
 
         return ResponseEntity.ok(
@@ -100,12 +120,16 @@ public class TagController {
     )
     public ResponseEntity<List<TagDto>> getTags(
             @NotNull /* Показывает, что поле или параметр не может быть null */
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */        
                 description = "Количество тагов на странице",
                 required = true)
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
-            @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                value = "limit", required = true)
                     Integer limit) {
 
         return ResponseEntity.ok(
@@ -120,11 +144,15 @@ public class TagController {
             value = "/{tagId}"
     )
     public ResponseEntity<Void> deleteTag(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable("tagId") /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("tagId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer tagId) {
 
         tagService.deleteById(tagId);

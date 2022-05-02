@@ -1,4 +1,4 @@
-package ru.solarlab.study.errors;
+package ru.solarlab.study.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,10 @@ import java.util.List;
 /**
  *  Объект, служащий для удобства вывода ошибки
  */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
-@Getter /* Вы можете добавить аннотацию @Getter и/или @Setter к любому полю, чтобы lombok автоматически сгенерировал методы получения и установки значения. */
 public class ValidationErrorResponse {
 
     private List<String> errors;

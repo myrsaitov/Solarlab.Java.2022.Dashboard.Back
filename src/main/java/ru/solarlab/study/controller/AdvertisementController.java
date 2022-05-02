@@ -22,15 +22,23 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
-@RequestMapping("/v1/advertisements") /* Задаёт адрес, по которому весь контроллер или его метод доступен на клиенте */
-@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
+@RequestMapping("/v1/advertisements") /* Задаёт адрес,
+    по которому весь контроллер или его метод доступен на клиенте */
+@RequiredArgsConstructor /* Генерирует конструктор,
+    принимающий значения для каждого final поля или 
+    поля с аннотацией @NonNull. Аргументы конструктора 
+    будут сгенерированы в том порядке, в котором поля 
+    перечислены в классе. Для @NonNull полей конструктор 
+    так же будет проверять, чтобы в него не передали значение null. */
 @Tag( /* Описание компонента */
         name = "Контроллер объявлений",
         description = "REST API для доступа к объявлениям")
-@Validated /* Действует к параметрам, которые обозначены аннотациями типа @min(), @max() и т.п. - Contract Validation */
+@Validated /* Действует к параметрам, которые обозначены 
+    аннотациями типа @min(), @max() и т.п. - Contract Validation */
 public class AdvertisementController {
 
-    // final: после присвоения объекта, нельзя изменить ссылку на данный объект, а состояние объекта изменить можно
+    // final: после присвоения объекта, нельзя изменить ссылку на данный объект,
+    // а состояние объекта изменить можно
     private final AdvertisementService advertisementService;
 
     @Operation( /* Описывает возможности методов контроллера */
@@ -42,13 +50,21 @@ public class AdvertisementController {
             consumes = { "application/json" }
 
     )
-    public ResponseEntity<Integer> createAdvertisement(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+    // Здесь "Long", а не "long", потому что
+    // "Type argument cannot be of primitive type"
+    public ResponseEntity<Long> createAdvertisement(
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     AdvertisementCreateDto request){
 
-        return new ResponseEntity<Integer>(
+        // Не указываем тип <>, берётся тип результата
+        return new ResponseEntity<>(
                 advertisementService.create(request),
                 HttpStatus.CREATED);
 
@@ -63,8 +79,13 @@ public class AdvertisementController {
             consumes = { "application/json" }
     )
     public ResponseEntity updateAdvertisement(
-            @Parameter /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
-            @Valid /* Отправляет объект параметра валидатору и только потом, после проверки, его использует - Bean Validation */
+            @Parameter /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+            @Valid /* Отправляет объект параметра валидатору 
+                и только потом, после проверки, 
+                его использует - Bean Validation */
             @RequestBody(required = false)
                     AdvertisementUpdateDto request) {
 
@@ -79,11 +100,15 @@ public class AdvertisementController {
             produces = { "application/json" }
     )
     public ResponseEntity<AdvertisementDto> getAdvertisement(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("advertisementId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer advertisementId) {
 
         return ResponseEntity.ok(
@@ -100,12 +125,16 @@ public class AdvertisementController {
     )
     public ResponseEntity<List<AdvertisementDto>> getAdvertisements(
             @NotNull /* Показывает, что поле или параметр не может быть null */
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                 description = "Количество объявлений на странице",
                  required = true)
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
-            @RequestParam(value = "limit", required = true) /* Извлекает параметр, переданный в запросе */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                value = "limit", required = true)
                     Integer limit) {
 
         return ResponseEntity.ok(
@@ -120,11 +149,15 @@ public class AdvertisementController {
             value = "/{advertisementId}"
     )
     public ResponseEntity<Void> deleteAdvertisement(
-            @Parameter( /* The annotation may be used on a method parameter to define it as a parameter for the operation, and/or to define additional properties for the Parameter */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
             @PositiveOrZero /* Допустимое значение >= 0 */
-            @PathVariable("advertisementId") /* Извлекает параметр, переданный в адресе запроса */
+            @PathVariable("advertisementId") /* Извлекает параметр,
+                переданный в адресе запроса */
                     Integer advertisementId) {
 
         advertisementService.deleteById(advertisementId);

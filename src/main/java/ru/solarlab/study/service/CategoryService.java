@@ -1,27 +1,28 @@
 package ru.solarlab.study.service;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.solarlab.study.dto.*;
-import ru.solarlab.study.entity.Advertisement;
+import ru.solarlab.study.dto.CategoryCreateDto;
+import ru.solarlab.study.dto.CategoryDto;
+import ru.solarlab.study.dto.CategoryUpdateDto;
 import ru.solarlab.study.entity.Category;
-import ru.solarlab.study.entity.Category;
-import ru.solarlab.study.mapper.CategoryMapper;
 import ru.solarlab.study.mapper.CategoryMapper;
 import ru.solarlab.study.repository.CategoryRepository;
 
-import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service /* Компонент бизнес уровня */
-@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
-@Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@RequiredArgsConstructor /* Генерирует конструктор,
+    принимающий значения для каждого final поля или 
+    поля с аннотацией @NonNull. 
+    Аргументы конструктора будут сгенерированы в том порядке,
+    в котором поля перечислены в классе. 
+    Для @NonNull полей конструктор так же будет проверять,
+    чтобы в него не передали значение null. */
 public class CategoryService {
 
     /**
@@ -44,8 +45,9 @@ public class CategoryService {
      * @param request DTO для создания категории
      * @return Идентификатор созданного категории
      */
-    public Integer create(CategoryCreateDto request) {
+    public Long create(CategoryCreateDto request) {
 
+        // TODO Проверять на наличие повторяющейся категории
         Category category = categoryMapper.toCategory(request);
         category.createdAt = OffsetDateTime.now();
         categoryRepository.save(category);
@@ -61,16 +63,13 @@ public class CategoryService {
     public boolean update(
             CategoryUpdateDto request) {
 
-        /**
-         * Достает из базы по Id
-         */
+        // Достает из базы по Id
         Category category = categoryRepository
                 .findById(request.id)
                 .orElse(null);
 
-        /**
-         * Если в базе есть с таким Id
-         */
+
+        // Если в базе есть сущность с таким Id
         if(category != null) {
 
             category.updatedAt = OffsetDateTime.now();
@@ -81,9 +80,7 @@ public class CategoryService {
 
             return true;
         }
-        /**
-         * Если в базе нет с таким Id
-         */
+        // Если в базе нет сущности с таким Id
         else {
 
             return false;

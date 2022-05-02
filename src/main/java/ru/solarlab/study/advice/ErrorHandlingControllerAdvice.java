@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.solarlab.study.errors.ValidationErrorResponse;
+import ru.solarlab.study.error.ValidationErrorResponse;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;

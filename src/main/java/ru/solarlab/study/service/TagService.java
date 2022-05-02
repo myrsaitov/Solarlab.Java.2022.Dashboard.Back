@@ -22,8 +22,13 @@ import java.util.stream.Collectors;
 
 
 @Service /* Компонент бизнес уровня */
-@RequiredArgsConstructor /* DI: Генерирует конструктор, принимающий значения для каждого final поля или поля с аннотацией @NonNull. Аргументы конструктора будут сгенерированы в том порядке, в котором поля перечислены в классе. Для @NonNull полей конструктор так же будет проверять, чтобы в него не передали значение null. */
-@Data /* @Data - это удобная сокращённая аннотация, которая содержит в себе возможности из @ToString, @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@RequiredArgsConstructor /* Генерирует конструктор,
+    принимающий значения для каждого final поля или 
+    поля с аннотацией @NonNull. 
+    Аргументы конструктора будут сгенерированы в том порядке,
+    в котором поля перечислены в классе. 
+    Для @NonNull полей конструктор так же будет проверять,
+    чтобы в него не передали значение null. */
 public class TagService {
 
     /**
@@ -46,7 +51,7 @@ public class TagService {
      * @param request DTO для создания тага
      * @return Идентификатор нового тага
      */
-    public Integer create(TagCreateDto request) {
+    public Long create(TagCreateDto request) {
 
         Tag tag = tagMapper.toTag(request);
         tag.createdAt = OffsetDateTime.now();
@@ -63,16 +68,12 @@ public class TagService {
     public boolean update(
             TagUpdateDto request) {
 
-        /**
-         * Достает из базы по Id
-         */
+        // Достает из базы по Id
         Tag tag = tagRepository
                 .findById(request.id)
                 .orElse(null);
 
-        /**
-         * Если в базе есть с таким Id
-         */
+        // Если в базе есть сущность с таким Id
         if(tag != null) {
 
             tag.updatedAt = OffsetDateTime.now();
@@ -83,9 +84,7 @@ public class TagService {
 
             return true;
         }
-        /**
-         * Если в базе нет с таким Id
-         */
+        // Если в базе нет сущности с таким Id
         else {
 
             return false;
