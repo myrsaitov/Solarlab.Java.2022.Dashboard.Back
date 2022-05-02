@@ -24,6 +24,6 @@ public class TagUpdateDto {
 
     @NotNull
     @Schema(description = "Статус")
-    public Status status;
+    public TagStatus status;
 
 }

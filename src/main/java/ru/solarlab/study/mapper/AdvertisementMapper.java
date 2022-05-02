@@ -1,12 +1,12 @@
 package ru.solarlab.study.mapper;
 
-import org.apache.commons.lang3.RandomUtils;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
+import ru.solarlab.study.dto.AdvertisementStatus;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
-import ru.solarlab.study.dto.Status;
 import ru.solarlab.study.entity.Advertisement;
 
 @Mapper(componentModel = "spring")
@@ -19,8 +19,12 @@ public interface AdvertisementMapper {
     Advertisement toAdvertisement(AdvertisementCreateDto dto);
 
     @AfterMapping
-    default void afterMappingFromCreate(@MappingTarget Advertisement target, AdvertisementCreateDto source) {
-        target.setStatus(Status.NEW);
+    default void afterMappingFromCreate(
+            @MappingTarget Advertisement target,
+            AdvertisementCreateDto source) {
+
+        target.setStatus(AdvertisementStatus.NEW);
+
     }
 
 }

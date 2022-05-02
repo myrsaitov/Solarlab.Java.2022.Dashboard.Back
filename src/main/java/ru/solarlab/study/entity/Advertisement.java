@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.solarlab.study.dto.Status;
+import ru.solarlab.study.dto.AdvertisementStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -83,6 +83,6 @@ public class Advertisement {
     @Column(name = "STATUS", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
-    public Status status;
+    public AdvertisementStatus status;
 
 }

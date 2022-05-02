@@ -1,9 +1,12 @@
 package ru.solarlab.study.mapper;
 
-import org.apache.commons.lang3.RandomUtils;
-import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
-import ru.solarlab.study.dto.*;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import ru.solarlab.study.dto.CategoryCreateDto;
+import ru.solarlab.study.dto.CategoryDto;
+import ru.solarlab.study.dto.CategoryStatus;
+import ru.solarlab.study.dto.CategoryUpdateDto;
 import ru.solarlab.study.entity.Category;
 
 @Mapper(componentModel = "spring")
@@ -16,8 +19,12 @@ public interface CategoryMapper {
     Category toCategory(CategoryCreateDto dto);
 
     @AfterMapping
-    default void afterMappingFromCreate(@MappingTarget Category target, CategoryCreateDto source) {
-        target.setStatus(Status.NEW);
+    default void afterMappingFromCreate(
+            @MappingTarget Category target,
+            CategoryCreateDto source) {
+
+        target.setStatus(CategoryStatus.ACTIVE);
+
     }
 
 }

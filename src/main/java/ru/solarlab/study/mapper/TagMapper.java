@@ -14,8 +14,12 @@ public interface TagMapper {
     Tag toTag(TagCreateDto dto);
 
     @AfterMapping
-    default void afterMappingFromCreate(@MappingTarget Tag target, TagCreateDto source) {
-        target.setStatus(Status.NEW);
+    default void afterMappingFromCreate(
+            @MappingTarget Tag target,
+            TagCreateDto source) {
+
+        target.setStatus(TagStatus.ACTIVE);
+
     }
 
 }

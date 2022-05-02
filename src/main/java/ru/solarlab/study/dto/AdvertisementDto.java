@@ -47,6 +47,6 @@ public class AdvertisementDto {
 
     @NotNull
     @Schema(description = "Статус")
-    public Status status;
+    public AdvertisementStatus status;
 
 }

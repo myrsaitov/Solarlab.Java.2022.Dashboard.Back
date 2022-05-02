@@ -39,6 +39,6 @@ public class CategoryDto {
 
     @NotNull
     @Schema(description = "Статус")
-    public Status status;
+    public CategoryStatus status;
 
 }

@@ -3,18 +3,15 @@ package ru.solarlab.study.dto;
 import lombok.Getter;
 
 /**
- * Статус объявления
+ * Статус категории
  */
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
-public enum Status {
+public enum CategoryStatus {
 
-    NEW,
-    IN_PROGRESS,
-    COMPLETED,
-    PAUSED,
+    ACTIVE,
     DELETED,
     BLOCKED
-    
+
 }
