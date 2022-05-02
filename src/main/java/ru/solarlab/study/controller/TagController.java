@@ -117,7 +117,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long tagId) {
+                    long tagId) throws Exception {
 
         return ResponseEntity.ok(
                 tagService.getById(tagId));
@@ -166,7 +166,7 @@ public class TagController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long tagId) {
+                    long tagId) throws Exception {
 
         tagService.deleteById(tagId);
         return ResponseEntity.noContent().build();

@@ -63,16 +63,14 @@ public class CategoryService {
      */
     public CategoryDto update(
             long categoryId,
-            CategoryUpdateDto request) {
+            CategoryUpdateDto request) throws Exception {
 
-        // Достает из базы по Id
-        Category category = categoryRepository
-                .findById(categoryId)
-                .orElse(null);
+        try {
 
-
-        // Если в базе есть сущность с таким Id
-        if(category != null) {
+            Category category = categoryRepository
+                    .findById(categoryId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
 
             category.updatedAt = OffsetDateTime.now();
             category.name = request.name;
@@ -80,15 +78,14 @@ public class CategoryService {
 
             categoryRepository.save(category);
 
-        }
-        // Если в базе нет сущности с таким Id
-        else {
-
-            // TODO excecption
+            return categoryMapper.categoryToCategoryDto(category);
 
         }
+        catch (Exception ex) {
 
-        return categoryMapper.categoryToCategoryDto(category);
+            throw ex;
+
+        }
 
     }
 
@@ -98,13 +95,22 @@ public class CategoryService {
      * @return Категория
      */
     public CategoryDto getById(
-            long categoryId) {
+            long categoryId) throws Exception {
 
-        return categoryMapper
-                .categoryToCategoryDto(
-                        categoryRepository
-                                .findById(categoryId)
-                                .orElse(null));
+        try {
+
+            Category category = categoryRepository
+                    .findById(categoryId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            return categoryMapper.categoryToCategoryDto(category);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -132,9 +138,22 @@ public class CategoryService {
      * Категория из базы не удаляется, меняется только статус на "Удалено"
      * @param categoryId Идентификатор категории
      */
-    public void deleteById(long categoryId) {
+    public void deleteById(long categoryId) throws Exception {
 
-        categoryRepository.deleteById(categoryId);
+        try {
+
+            Category category = categoryRepository
+                    .findById(categoryId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            categoryRepository.deleteById(categoryId);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 

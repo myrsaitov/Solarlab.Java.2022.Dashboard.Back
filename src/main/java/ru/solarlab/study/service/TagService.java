@@ -62,15 +62,14 @@ public class TagService {
      */
     public TagDto update(
             long tagId,
-            TagUpdateDto request) {
+            TagUpdateDto request) throws Exception {
 
-        // Достает из базы по Id
-        Tag tag = tagRepository
-                .findById(tagId)
-                .orElse(null);
+        try {
 
-        // Если в базе есть сущность с таким Id
-        if(tag != null) {
+            Tag tag = tagRepository
+                    .findById(tagId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
 
             tag.updatedAt = OffsetDateTime.now();
             tag.text = request.text;
@@ -78,15 +77,14 @@ public class TagService {
 
             tagRepository.save(tag);
 
-        }
-        // Если в базе нет сущности с таким Id
-        else {
-
-            // TODO excecption
+            return tagMapper.tagToTagDto(tag);
 
         }
+        catch (Exception ex) {
 
-        return tagMapper.tagToTagDto(tag);
+            throw ex;
+
+        }
 
     }
 
@@ -96,13 +94,22 @@ public class TagService {
      * @return Таг
      */
     public TagDto getById(
-            long tagId) {
+            long tagId) throws Exception {
 
-        return tagMapper
-                .tagToTagDto(
-                        tagRepository
-                                .findById(tagId)
-                                .orElse(null));
+        try {
+
+            Tag tag = tagRepository
+                    .findById(tagId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            return tagMapper.tagToTagDto(tag);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -130,9 +137,22 @@ public class TagService {
      * Таг из базы не удаляется, меняется только статус на "Удалено"
      * @param tagId Идентификатор тага
      */
-    public void deleteById(long tagId) {
+    public void deleteById(long tagId) throws Exception {
 
-        //tagRepository.deleteById(tagId);
+        try {
+
+            Tag tag = tagRepository
+                    .findById(tagId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            tagRepository.deleteById(tagId);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 

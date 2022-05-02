@@ -62,15 +62,14 @@ public class AdvertisementService {
      */
     public AdvertisementDto update(
             long advertisementId,
-            AdvertisementUpdateDto request) {
+            AdvertisementUpdateDto request) throws Exception {
 
-        //Достает из базы по Id
-        Advertisement advertisement = advertisementRepository
-                .findById(advertisementId)
-                .orElse(null);
+        try {
 
-        //Если в базе есть сущность с таким Id
-        if(advertisement != null) {
+            Advertisement advertisement = advertisementRepository
+                    .findById(advertisementId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
 
             advertisement.updatedAt = OffsetDateTime.now();
             advertisement.title = request.title;
@@ -79,16 +78,14 @@ public class AdvertisementService {
             advertisement.status = request.status;
 
             advertisementRepository.save(advertisement);
+            return advertisementMapper.advertisementToAdvertisementDto(advertisement);
 
         }
-        // Если в базе нет сущности с таким Id
-        else {
+        catch (Exception ex) {
 
-            // TODO excecption
+            throw ex;
 
         }
-
-        return advertisementMapper.advertisementToAdvertisementDto(advertisement);
 
     }
 
@@ -98,13 +95,22 @@ public class AdvertisementService {
      * @return Объявление
      */
     public AdvertisementDto getById(
-            long advertisementId) {
+            long advertisementId) throws Exception {
 
-        return advertisementMapper
-                .advertisementToAdvertisementDto(
-                        advertisementRepository
-                                .findById(advertisementId)
-                                .orElse(null));
+        try {
+
+            Advertisement advertisement = advertisementRepository
+                    .findById(advertisementId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            return advertisementMapper.advertisementToAdvertisementDto(advertisement);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -132,9 +138,22 @@ public class AdvertisementService {
      * Объявление из базы не удаляется, меняется только статус на "Удалено"
      * @param advertisementId Идентификатор объявления
      */
-    public void deleteById(long advertisementId) {
+    public void deleteById(long advertisementId) throws Exception {
 
-        advertisementRepository.deleteById(advertisementId);
+        try {
+
+            Advertisement advertisement = advertisementRepository
+                    .findById(advertisementId)
+                    .orElseThrow(
+                            () -> new Exception("Not Found"));
+            advertisementRepository.deleteById(advertisementId);
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 

@@ -97,7 +97,7 @@ public class CategoryController {
                 и только потом, после проверки, 
                 его использует - Bean Validation */
             @RequestBody(required = false)
-                    CategoryUpdateDto request) {
+                    CategoryUpdateDto request) throws Exception {
 
         return ResponseEntity.ok(
                 categoryService.update(
@@ -122,7 +122,7 @@ public class CategoryController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long categoryId) {
+                    long categoryId) throws Exception {
 
         return ResponseEntity.ok(
                 categoryService.getById(categoryId));
@@ -171,7 +171,7 @@ public class CategoryController {
             @PositiveOrZero /* Допустимое значение >= 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
-                    long categoryId) {
+                    long categoryId) throws Exception {
 
         categoryService.deleteById(categoryId);
         return ResponseEntity.noContent().build();
