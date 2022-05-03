@@ -13,6 +13,7 @@ import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
 import ru.solarlab.study.repository.CategoryRepository;
+import ru.solarlab.study.repository.TagRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,10 +35,11 @@ public class AdvertisementService {
     private final AdvertisementMapper advertisementMapper;
 
     /**
-     * Объект репозитория
+     * Объекты репозиториев
      */
     private final AdvertisementRepository advertisementRepository;
     private final CategoryRepository categoryRepository;
+    private final TagRepository tagRepository;
 
     /**
      * Максимальное количество на странице
@@ -65,6 +67,21 @@ public class AdvertisementService {
 
             // Привязывает категорию к объявлению
             advertisement.category = category;
+
+            // Добавляет таги
+            long tags[] = { 2, 3, 4, 5, 6 };
+
+            for (var tagId: tags)  {
+
+                // Возвращает таг по Id и если существует - добавляет
+               tagRepository
+                        .findById(tagId)
+                        .ifPresent(
+                                tag ->
+                                advertisement.addTag(tag));
+
+            }
+
             // Сохраняет объявление в БД
             advertisementRepository.save(advertisement);
 

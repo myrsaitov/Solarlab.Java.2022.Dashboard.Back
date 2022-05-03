@@ -32,11 +32,6 @@ public interface CategoryMapper {
     Category categoryCreateDtoToCategory(
             CategoryCreateDto dto);
 
-    /**
-     * FromCreate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the
@@ -66,11 +61,6 @@ public interface CategoryMapper {
             @MappingTarget Category entity,
             CategoryUpdateDto dto);
 
-    /**
-     * FromUpdate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the

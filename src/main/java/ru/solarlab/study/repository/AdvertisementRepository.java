@@ -21,4 +21,13 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
     Optional<Advertisement> findByIdAndFetchCategory(@Param("id") Long id);
         /* Optional<> нужен для orElseThrow */
 
+    /**
+     * Возвращает объявление по тагу
+     * @param tagId
+     * @return
+     */
+    //List<Advertisement> findAdvertisementsByTagId(Long tagId);
+
 }
+
+//@Modifying

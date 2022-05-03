@@ -10,6 +10,8 @@ import ru.solarlab.study.dto.AdvertisementStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -18,7 +20,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */
-@Table(name = "ADVERTISEMENT") /* указывает на имя таблицы, 
+@Table(name = "advertisement") /* указывает на имя таблицы, 
     которая будет отображаться в этой сущности */
 @Schema(description = "Сущность объявления")
 public class Advertisement {
@@ -29,12 +31,12 @@ public class Advertisement {
     @Id /* Является первичным ключом текущего объекта - 
         полем в таблице, которое однозначно идентифицирует 
         каждую строку/запись в таблице базы данных. */
-    @Column(name = "ID", nullable = false)
+    @Column(name = "advertisement_id", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @SequenceGenerator(
             allocationSize = 1, // = INCREMENT in SQL
             name = "hibernate_sequence_advertisement_generator",
-            sequenceName="HIBERNATE_SEQUENCE_ADVERTISEMENT")
+            sequenceName="hibernate_sequence_advertisement")
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "hibernate_sequence_advertisement_generator")
@@ -62,7 +64,7 @@ public class Advertisement {
     /**
      * Дата и время создания объявления
      */
-    @Column(name = "CREATED_AT", nullable = false)
+    @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания объявления")
     public OffsetDateTime createdAt;
@@ -70,7 +72,7 @@ public class Advertisement {
     /**
      * Дата и время обновления объявления
      */
-    @Column(name = "UPDATED_AT")
+    @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления объявления")
     public OffsetDateTime updatedAt;
@@ -78,7 +80,7 @@ public class Advertisement {
     /**
      * Заголовок объявления
      */
-    @Column(name = "TITLE", nullable = false)
+    @Column(name = "title", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Заголовок объявления")
     public String title;
@@ -86,7 +88,7 @@ public class Advertisement {
     /**
      * Текст объявления
      */
-    @Column(name = "BODY", nullable = false)
+    @Column(name = "body", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Текст объявления")
     public String body;
@@ -94,7 +96,7 @@ public class Advertisement {
     /**
      * Стоимость
      */
-    @Column(name = "PRICE", nullable = false)
+    @Column(name = "price", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Стоимость")
     public float price;
@@ -102,25 +104,67 @@ public class Advertisement {
     /**
      * Статус объявления
      */
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
     public AdvertisementStatus status;
 
     /**
-     * Категория: Внешний ключ
-     * Внешний ключ SQL — это ключ, используемый
-     * для объединения двух таблиц. Иногда его также
-     * называют ссылочным ключом. Внешний ключ — это
-     * столбец или комбинация столбцов, значения
-     * которых соответствуют Первичному ключу в
-     * другой таблице
+     * Категория
      */
     @JsonBackReference /* Для предотвращения StackOverFlow Error */
     @ManyToOne(fetch = FetchType.LAZY) /* LAZY: Запись извлекается
         только по требованию, т.е. когда нам нужны данные */
     //@JsonIgnoreProperties("advertisements")
     public Category category; /* mappedBy = "category" in Category */
+
+    /**
+     * Таги
+     */
+    @ManyToMany(
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    @JoinTable(
+        schema = "advertisement_schema", // Для PostgreSQL нужно указать имя схемы
+        name = "advertisement_tag",
+        joinColumns = @JoinColumn(name = "advertisement_id"),
+        inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<Tag>();
+
+    /**
+     * Добавляет таг
+     * @param tag
+     */
+    public void addTag(Tag tag) {
+
+        this.tags.add(tag);
+        tag.getAdvertisements().add(this);
+
+    }
+
+    /**
+     * Удаляет таг
+     * @param tagId
+     */
+    public void removeTag(long tagId) {
+
+        Tag tag = this
+                .tags
+                .stream()
+                .filter(t -> t.getId() == tagId)
+                .findFirst()
+                .orElse(null);
+
+        if (tag != null) {
+
+            this.tags.remove(tag);
+            tag.getAdvertisements().remove(this);
+
+        }
+
+    }
 
 }
 
@@ -136,7 +180,7 @@ public class Advertisement {
 // https://sysout.ru/kak-rabotaet-orphanremoval/
 // https://sysout.ru/tipy-cascade-primer-na-hibernate-i-spring-boot/
 // https://ask-dev.ru/info/18433/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api
-
+// https://www.bezkoder.com/jpa-many-to-many/
 
 /* @Data - это удобная сокращённая аннотация,
     которая содержит в себе возможности из @ToString,

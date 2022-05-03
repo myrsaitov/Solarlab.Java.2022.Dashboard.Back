@@ -9,6 +9,8 @@ import ru.solarlab.study.dto.TagStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -17,7 +19,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */
-@Table(name = "TAG") /* указывает на имя таблицы, 
+@Table(name = "tag") /* указывает на имя таблицы, 
     которая будет отображаться в этой сущности */
 @Schema(description = "Сущность тага")
 public class Tag {
@@ -28,12 +30,12 @@ public class Tag {
     @Id /* Является первичным ключом текущего объекта - 
         полем в таблице, которое однозначно идентифицирует 
         каждую строку/запись в таблице базы данных. */
-    @Column(name = "ID", nullable = false)
+    @Column(name = "tag_id", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @SequenceGenerator(
             allocationSize = 1, // = INCREMENT in SQL
             name = "hibernate_sequence_tag_generator",
-            sequenceName="HIBERNATE_SEQUENCE_TAG")
+            sequenceName="hibernate_sequence_tag")
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "hibernate_sequence_tag_generator")
@@ -61,7 +63,7 @@ public class Tag {
     /**
      * Дата и время создания тага
      */
-    @Column(name = "CREATED_AT", nullable = false)
+    @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания тага")
     public OffsetDateTime createdAt;
@@ -69,7 +71,7 @@ public class Tag {
     /**
      * Дата и время обновления тага
      */
-    @Column(name = "UPDATED_AT")
+    @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления тага")
     public OffsetDateTime updatedAt;
@@ -77,7 +79,7 @@ public class Tag {
     /**
      * Текст тага
      */
-    @Column(name = "TEXT", nullable = false)
+    @Column(name = "text", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Текст тага")
     public String text;
@@ -85,10 +87,21 @@ public class Tag {
     /**
      * Статус тага
      */
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
     public TagStatus status;
+
+    /**
+     * Объявления
+     */
+    @ManyToMany(
+        mappedBy = "tags",
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+        })
+    public Set<Advertisement> advertisements = new HashSet<Advertisement>();
 
 }
 

@@ -34,14 +34,10 @@ public interface AdvertisementMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     Advertisement advertisementCreateDtoToAdvertisement(
             AdvertisementCreateDto dto);
 
-    /**
-     * FromCreate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the
@@ -67,15 +63,11 @@ public interface AdvertisementMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "tags", ignore = true)
     Advertisement advertisementUpdateDtoToAdvertisement(
             @MappingTarget Advertisement entity,
             AdvertisementUpdateDto dto);
 
-    /**
-     * FromUpdate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the

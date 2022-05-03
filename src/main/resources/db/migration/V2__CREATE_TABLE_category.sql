@@ -2,7 +2,7 @@
 -- which is a database object from which multiple users 
 -- may generate unique integers. 
 -- You can use sequences to automatically generate primary key values.
-CREATE SEQUENCE HIBERNATE_SEQUENCE_ADVERTISEMENT
+CREATE SEQUENCE hibernate_sequence_category
     INCREMENT 1
     START 100 -- Чтобы не пересекаться с сидированными данными
     MINVALUE 1
@@ -10,17 +10,16 @@ CREATE SEQUENCE HIBERNATE_SEQUENCE_ADVERTISEMENT
     CACHE 1 -- Для улучшения производительности: это количество элементов,
             -- которые накапливаются в памяти, перед тем как записаться на диск
             -- https://stackoverflow.com/questions/44988294/how-does-the-cache-option-of-create-sequence-work
+
 ;
 
 -- Create table
-CREATE TABLE ADVERTISEMENT
+CREATE TABLE category
 (
-    ID BIGINT NOT NULL, -- Dialect PostgreSQL
-    TITLE character varying(255) NOT NULL,
-    BODY character varying(1023) NOT NULL,
-    PRICE real NOT NULL,
-    CREATED_AT timestamp without time zone NOT NULL,
-    UPDATED_AT timestamp without time zone,
-    STATUS integer NOT NULL,
-    CONSTRAINT ADVERTISEMENT_PKEY PRIMARY KEY (ID)
+    category_id BIGINT NOT NULL, -- Dialect PostgreSQL
+    name character varying(255) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone,
+    status integer NOT NULL,
+    CONSTRAINT category_pkey PRIMARY KEY (category_id)
 );

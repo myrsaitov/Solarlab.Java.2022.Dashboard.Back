@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */
-@Table(name = "CATEGORY") /* указывает на имя таблицы, 
+@Table(name = "category") /* указывает на имя таблицы, 
     которая будет отображаться в этой сущности */
 @Schema(description = "Сущность категории")
 public class Category {
@@ -31,12 +31,12 @@ public class Category {
     @Id /* Является первичным ключом текущего объекта - 
         полем в таблице, которое однозначно идентифицирует 
         каждую строку/запись в таблице базы данных. */
-    @Column(name = "ID", nullable = false)
+    @Column(name = "category_id", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @SequenceGenerator(
             allocationSize = 1, // = INCREMENT in SQL
             name = "hibernate_sequence_category_generator",
-            sequenceName="HIBERNATE_SEQUENCE_CATEGORY")
+            sequenceName="hibernate_sequence_category")
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "hibernate_sequence_category_generator")
@@ -64,7 +64,7 @@ public class Category {
     /**
      * Дата и время создания категории
      */
-    @Column(name = "CREATED_AT", nullable = false)
+    @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания категории")
     public OffsetDateTime createdAt;
@@ -72,7 +72,7 @@ public class Category {
     /**
      * Дата и время обновления категории
      */
-    @Column(name = "UPDATED_AT")
+    @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления категории")
     public OffsetDateTime updatedAt;
@@ -80,7 +80,7 @@ public class Category {
     /**
      * Имя категории
      */
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "name", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Имя категории")
     public String name;
@@ -88,7 +88,7 @@ public class Category {
     /**
      * Статус категории
      */
-    @Column(name = "STATUS", nullable = false)
+    @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
     public CategoryStatus status;

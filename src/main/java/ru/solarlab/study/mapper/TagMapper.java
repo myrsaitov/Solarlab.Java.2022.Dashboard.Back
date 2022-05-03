@@ -31,14 +31,10 @@ public interface TagMapper {
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
+    @Mapping(target = "advertisements", ignore = true)
     Tag tagCreateDtoToTag(
             TagCreateDto dto);
 
-    /**
-     * FromCreate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the
@@ -63,15 +59,11 @@ public interface TagMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "advertisements", ignore = true)
     Tag tagUpdateDtoToTag(
             @MappingTarget Tag entity,
             TagUpdateDto dto);
 
-    /**
-     * FromUpdate
-     * @param target
-     * @param source
-     */
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
         before the last RETURN statement of the
