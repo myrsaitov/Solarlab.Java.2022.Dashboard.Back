@@ -2,4 +2,4 @@
 TRUNCATE TABLE advertisement CASCADE;
 
 -- Insert Data into columns
-INSERT INTO advertisement (advertisement_id, created_at, updated_at, title, body, price, status) VALUES (1, now(), NULL, 'FromMigrationAdvertisement', 'NULL', 0, 0);
+INSERT INTO advertisement (id, created_at, updated_at, title, body, price, status) VALUES (1, now(), NULL, 'FromMigrationAdvertisement', 'NULL', 0, 0);

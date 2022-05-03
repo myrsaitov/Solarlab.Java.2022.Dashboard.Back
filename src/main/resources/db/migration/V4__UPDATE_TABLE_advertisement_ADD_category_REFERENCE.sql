@@ -8,4 +8,4 @@
 -- Add column
 ALTER TABLE advertisement ADD COLUMN category_id BIGINT;
 -- Add reference
-ALTER TABLE advertisement ADD CONSTRAINT advertisement_fkey FOREIGN KEY (category_id) REFERENCES category (category_id);
+ALTER TABLE advertisement ADD CONSTRAINT advertisement_fkey FOREIGN KEY (category_id) REFERENCES category (id);

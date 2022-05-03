@@ -16,10 +16,10 @@ CREATE SEQUENCE hibernate_sequence_tag
 -- Create table
 CREATE TABLE tag
 (
-    tag_id BIGINT NOT NULL, -- Dialect PostgreSQL
+    id BIGINT NOT NULL, -- Dialect PostgreSQL
     text character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone,
     status integer NOT NULL,
-    CONSTRAINT tag_pkey PRIMARY KEY (tag_id)
+    CONSTRAINT tag_pkey PRIMARY KEY (id)
 );

@@ -15,12 +15,12 @@ CREATE SEQUENCE hibernate_sequence_advertisement
 -- Create table
 CREATE TABLE advertisement
 (
-    advertisement_id BIGINT NOT NULL, -- Dialect PostgreSQL
+    id BIGINT NOT NULL, -- Dialect PostgreSQL
     title character varying(255) NOT NULL,
     body character varying(1023) NOT NULL,
     price real NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone,
     status integer NOT NULL,
-    CONSTRAINT advertisement_pkey PRIMARY KEY (advertisement_id)
+    CONSTRAINT advertisement_pkey PRIMARY KEY (id)
 );

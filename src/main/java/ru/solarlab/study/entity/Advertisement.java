@@ -31,7 +31,7 @@ public class Advertisement {
     @Id /* Является первичным ключом текущего объекта - 
         полем в таблице, которое однозначно идентифицирует 
         каждую строку/запись в таблице базы данных. */
-    @Column(name = "advertisement_id", nullable = false)
+    @Column(name = "id", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @SequenceGenerator(
             allocationSize = 1, // = INCREMENT in SQL

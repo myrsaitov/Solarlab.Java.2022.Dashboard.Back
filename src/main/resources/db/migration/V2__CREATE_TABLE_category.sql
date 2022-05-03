@@ -16,10 +16,10 @@ CREATE SEQUENCE hibernate_sequence_category
 -- Create table
 CREATE TABLE category
 (
-    category_id BIGINT NOT NULL, -- Dialect PostgreSQL
+    id BIGINT NOT NULL, -- Dialect PostgreSQL
     name character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone,
     status integer NOT NULL,
-    CONSTRAINT category_pkey PRIMARY KEY (category_id)
+    CONSTRAINT category_pkey PRIMARY KEY (id)
 );
