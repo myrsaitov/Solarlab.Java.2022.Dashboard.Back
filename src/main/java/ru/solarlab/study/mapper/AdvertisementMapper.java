@@ -42,7 +42,10 @@ public interface AdvertisementMapper {
      * @param target
      * @param source
      */
-    @AfterMapping
+    @AfterMapping /* Marks a method to be invoked at
+        the end of a generated mapping method, right
+        before the last RETURN statement of the
+        mapping method */
     default void afterMappingFromCreate(
             @MappingTarget Advertisement target,
             AdvertisementCreateDto source) {
@@ -73,7 +76,10 @@ public interface AdvertisementMapper {
      * @param target
      * @param source
      */
-    @AfterMapping
+    @AfterMapping /* Marks a method to be invoked at
+        the end of a generated mapping method, right
+        before the last RETURN statement of the
+        mapping method */
     default void afterMappingFromUpdate(
             @MappingTarget Advertisement target,
             AdvertisementUpdateDto source) {

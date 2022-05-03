@@ -48,10 +48,26 @@ public class TagService {
      */
     public Long create(TagCreateDto request) {
 
-        Tag tag = tagMapper.toTag(request);
-        tag.createdAt = OffsetDateTime.now();
-        tagRepository.save(tag);
-        return tag.id;
+        try {
+
+            // TODO Проверять на наличие повторяющегося тага
+
+            // Создаёт сущность на основе DTO
+            Tag tag = tagMapper
+                    .tagCreateDtoToTag(request);
+
+            // Сохраняет категорию в БД
+            tagRepository.save(tag);
+
+            // Возвращает результат
+            return tag.id;
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 

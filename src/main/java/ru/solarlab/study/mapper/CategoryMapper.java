@@ -37,7 +37,10 @@ public interface CategoryMapper {
      * @param target
      * @param source
      */
-    @AfterMapping
+    @AfterMapping /* Marks a method to be invoked at
+        the end of a generated mapping method, right
+        before the last RETURN statement of the
+        mapping method */
     default void afterMappingFromCreate(
             @MappingTarget Category target,
             CategoryCreateDto source) {
@@ -68,7 +71,10 @@ public interface CategoryMapper {
      * @param target
      * @param source
      */
-    @AfterMapping
+    @AfterMapping /* Marks a method to be invoked at
+        the end of a generated mapping method, right
+        before the last RETURN statement of the
+        mapping method */
     default void afterMappingFromUpdate(
             @MappingTarget Category target,
             CategoryUpdateDto source) {
@@ -77,6 +83,5 @@ public interface CategoryMapper {
         target.setUpdatedAt(OffsetDateTime.now());
 
     }
-
 
 }
