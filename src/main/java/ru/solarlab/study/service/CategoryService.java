@@ -11,7 +11,6 @@ import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.CategoryMapper;
 import ru.solarlab.study.repository.CategoryRepository;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,11 +47,26 @@ public class CategoryService {
      */
     public Long create(CategoryCreateDto request) {
 
-        // TODO Проверять на наличие повторяющейся категории
-        Category category = categoryMapper.toCategory(request);
-        category.createdAt = OffsetDateTime.now();
-        categoryRepository.save(category);
-        return category.id;
+        try {
+
+            // TODO Проверять на наличие повторяющейся категории
+
+            // Создаёт сущность на основе DTO
+            Category category = categoryMapper
+                    .categoryCreateDtoToCategory(request);
+
+            // Сохраняет категорию в БД
+            categoryRepository.save(category);
+
+            // Возвращает результат
+            return category.id;
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -68,17 +82,21 @@ public class CategoryService {
 
         try {
 
+            // Достаёт из базы категорию с categoryId
             Category category = categoryRepository
                     .findById(categoryId)
                     .orElseThrow(
                             () -> new CategoryNotFoundException(categoryId));
 
-            category.updatedAt = OffsetDateTime.now();
-            category.name = request.name;
-            category.status = request.status;
+            // Обновляет поля категории
+            categoryMapper.categoryUpdateDtoToCategory(
+                    category,
+                    request);
 
+            // Сохраняет в базе
             categoryRepository.save(category);
 
+            // Возвращает результат
             return categoryMapper.categoryToCategoryDto(category);
 
         }

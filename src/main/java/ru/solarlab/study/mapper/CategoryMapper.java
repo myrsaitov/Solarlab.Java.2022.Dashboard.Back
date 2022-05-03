@@ -4,11 +4,10 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import ru.solarlab.study.dto.CategoryCreateDto;
-import ru.solarlab.study.dto.CategoryDto;
-import ru.solarlab.study.dto.CategoryStatus;
-import ru.solarlab.study.dto.CategoryUpdateDto;
+import ru.solarlab.study.dto.*;
 import ru.solarlab.study.entity.Category;
+
+import java.time.OffsetDateTime;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
@@ -21,17 +20,6 @@ public interface CategoryMapper {
     CategoryDto categoryToCategoryDto(Category entity);
 
     /**
-     * CategoryUpdateDto => Category
-     * @param dto
-     * @return
-     */
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "advertisements", ignore = true)
-    Category categoryUpdateRequestToCategoryView(CategoryUpdateDto dto);
-
-    /**
      * CategoryCreateDto => Category
      * @param dto
      * @return
@@ -41,7 +29,8 @@ public interface CategoryMapper {
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "status", ignore = true)
     @Mapping(target = "advertisements", ignore = true)
-    Category toCategory(CategoryCreateDto dto);
+    Category categoryCreateDtoToCategory(
+            CategoryCreateDto dto);
 
     /**
      * FromCreate
@@ -50,11 +39,44 @@ public interface CategoryMapper {
      */
     @AfterMapping
     default void afterMappingFromCreate(
-        @MappingTarget Category target,
-        CategoryCreateDto source) {
+            @MappingTarget Category target,
+            CategoryCreateDto source) {
 
+        // Время создания
+        target.setCreatedAt(OffsetDateTime.now());
+
+        // Статус
         target.setStatus(CategoryStatus.ACTIVE);
 
     }
+
+    /**
+     * CategoryUpdateDto => Category
+     * @param dto
+     * @return
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "advertisements", ignore = true)
+    Category categoryUpdateDtoToCategory(
+            @MappingTarget Category entity,
+            CategoryUpdateDto dto);
+
+    /**
+     * FromUpdate
+     * @param target
+     * @param source
+     */
+    @AfterMapping
+    default void afterMappingFromUpdate(
+            @MappingTarget Category target,
+            CategoryUpdateDto source) {
+
+        // Время обновления
+        target.setUpdatedAt(OffsetDateTime.now());
+
+    }
+
 
 }

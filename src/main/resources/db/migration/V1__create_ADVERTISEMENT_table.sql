@@ -4,10 +4,12 @@
 -- You can use sequences to automatically generate primary key values.
 CREATE SEQUENCE HIBERNATE_SEQUENCE_ADVERTISEMENT
     INCREMENT 1
-    START 2
+    START 100 -- Чтобы не пересекаться с сидированными данными
     MINVALUE 1
     MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
-    CACHE 1
+    CACHE 1 -- Для улучшения производительности: это количество элементов,
+            -- которые накапливаются в памяти, перед тем как записаться на диск
+            -- https://stackoverflow.com/questions/44988294/how-does-the-cache-option-of-create-sequence-work
 ;
 
 -- Create table

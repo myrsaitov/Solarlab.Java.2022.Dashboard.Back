@@ -47,8 +47,11 @@ public interface AdvertisementMapper {
             @MappingTarget Advertisement target,
             AdvertisementCreateDto source) {
 
-        target.setStatus(AdvertisementStatus.NEW);
+        // Время создания
         target.setCreatedAt(OffsetDateTime.now());
+
+        // Статус
+        target.setStatus(AdvertisementStatus.NEW);
 
     }
 
@@ -75,6 +78,7 @@ public interface AdvertisementMapper {
             @MappingTarget Advertisement target,
             AdvertisementUpdateDto source) {
 
+        // Время обновления
         target.setUpdatedAt(OffsetDateTime.now());
 
     }
