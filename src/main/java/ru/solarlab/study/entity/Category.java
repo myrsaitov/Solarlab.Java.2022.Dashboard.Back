@@ -1,9 +1,11 @@
 package ru.solarlab.study.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.solarlab.study.dto.CategoryStatus;
 
 import javax.persistence.*;
@@ -11,9 +13,10 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data /* @Data - это удобная сокращённая аннотация,
-    которая содержит в себе возможности из @ToString, 
-    @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
+@Setter /* lombok автоматически сгенерирует
+           метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */
@@ -93,11 +96,13 @@ public class Category {
     /**
      * Коллекция объявлений, принадлежащих данной категории
      */
+    @JsonManagedReference /* Для предотвращения StackOverFlow Error */
     @OneToMany(
             mappedBy = "category", /* Указывает на поле объекта, которым владеет,
                 которое указывает на объект-владелец */
             fetch = FetchType.LAZY, /* LAZY: Запись извлекается
                 только по требованию, т.е. когда нам нужны данные */
+            //cascade = { CascadeType.PERSIST, CascadeType.MERGE },
             cascade = CascadeType.ALL, /* CascadeType.ALL означает,
                 что необходимо выполнять каскадно сразу все операции:
                     CascadeType.PERSIST
@@ -107,6 +112,8 @@ public class Category {
                     CascadeType.DETACH */
             orphanRemoval = true) /* true = при удалении сущности из списка,
                 она удаляется и из базы. */
+    //@JsonIgnoreProperties("category")
+    //@JsonIgnore
     public List<Advertisement> advertisements = new ArrayList<>();
 
     /**
@@ -114,8 +121,10 @@ public class Category {
      * @param advertisement
      */
     public void addAdvertisement(Advertisement advertisement) {
+
         advertisements.add(advertisement);
         advertisement.setCategory(this);
+
     }
 
     /**
@@ -123,8 +132,10 @@ public class Category {
      * @param advertisement
      */
     public void removeAdvertisement(Advertisement advertisement) {
+
         advertisements.remove(advertisement);
         advertisement.setCategory(null);
+
     }
 
 }

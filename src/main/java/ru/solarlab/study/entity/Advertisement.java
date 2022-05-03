@@ -1,17 +1,20 @@
 package ru.solarlab.study.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.solarlab.study.dto.AdvertisementStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 
-@Data /* @Data - это удобная сокращённая аннотация,
-    которая содержит в себе возможности из @ToString, 
-    @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
+@Setter /* lombok автоматически сгенерирует
+           метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */
@@ -113,8 +116,10 @@ public class Advertisement {
      * которых соответствуют Первичному ключу в
      * другой таблице
      */
+    @JsonBackReference /* Для предотвращения StackOverFlow Error */
     @ManyToOne(fetch = FetchType.LAZY) /* LAZY: Запись извлекается
         только по требованию, т.е. когда нам нужны данные */
+    //@JsonIgnoreProperties("advertisements")
     public Category category; /* mappedBy = "category" in Category */
 
 }
@@ -131,3 +136,8 @@ public class Advertisement {
 // https://sysout.ru/kak-rabotaet-orphanremoval/
 // https://sysout.ru/tipy-cascade-primer-na-hibernate-i-spring-boot/
 // https://ask-dev.ru/info/18433/difference-between-fetchtype-lazy-and-eager-in-java-persistence-api
+
+
+/* @Data - это удобная сокращённая аннотация,
+    которая содержит в себе возможности из @ToString,
+    @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */

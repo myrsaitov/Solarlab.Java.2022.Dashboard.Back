@@ -3,4 +3,4 @@ TRUNCATE TABLE ADVERTISEMENT CASCADE;
 
 -- Insert Data into columns
 INSERT INTO ADVERTISEMENT (ID, CREATED_AT, UPDATED_AT, TITLE, BODY, PRICE, STATUS)
-    VALUES (1, now(), now(), 'FromMigrationAdvertisement', 'FromMigrationAdvertisement', 0, 0);
+    VALUES (1, now(), NULL, 'FromMigrationAdvertisement', 'NULL', 0, 0);

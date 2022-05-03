@@ -2,16 +2,18 @@ package ru.solarlab.study.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.solarlab.study.dto.TagStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
 
-@Data /* @Data - это удобная сокращённая аннотация,
-    которая содержит в себе возможности из @ToString, 
-    @EqualsAndHashCode, @Getter / @Setter и @RequiredArgsConstructor */
+@Getter /* lombok автоматически сгенерирует
+           метод получения значения */
+@Setter /* lombok автоматически сгенерирует
+           метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
 @Entity /* Указывает, что данный бин (класс) является сущностью */

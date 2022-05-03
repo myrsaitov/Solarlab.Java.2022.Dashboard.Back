@@ -14,7 +14,6 @@ import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
 import ru.solarlab.study.repository.CategoryRepository;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,19 +53,27 @@ public class AdvertisementService {
 
         try {
 
+            // Проверяет существование категории с categoryId
             Category category = categoryRepository
                     .findById(request.categoryId)
                     .orElseThrow(
                             () -> new CategoryNotFoundException(request.categoryId));
 
-            Advertisement advertisement = advertisementMapper.toAdvertisement(request);
-            advertisement.createdAt = OffsetDateTime.now();
+            // Создаёт сущность на основе DTO
+            Advertisement advertisement = advertisementMapper
+                    .advertisementCreateDtoToAdvertisement(request);
+
+            // Привязывает категорию к объявлению
             advertisement.category = category;
+            // Сохраняет объявление в БД
             advertisementRepository.save(advertisement);
 
+            // Привязывает объявление к категории
             category.addAdvertisement(advertisement);
+            // Сохраняет категорию в БД
             categoryRepository.save(category);
 
+            // Возвращает результат
             return advertisement.id;
 
         }
@@ -90,18 +97,50 @@ public class AdvertisementService {
 
         try {
 
+            // Проверяет существование категории с categoryId
+            Category newCategory = categoryRepository
+                    .findById(request.categoryId)
+                    .orElseThrow(
+                            () -> new CategoryNotFoundException(request.categoryId));
+
+            // Достаёт из базы объявление с advertisementId
             Advertisement advertisement = advertisementRepository
-                    .findById(advertisementId)
+                    .findByIdAndFetchCategory(advertisementId)
                     .orElseThrow(
                             () -> new AdvertisementNotFoundException(advertisementId));
 
-            advertisement.updatedAt = OffsetDateTime.now();
-            advertisement.title = request.title;
-            advertisement.body = request.body;
-            advertisement.price = request.price;
-            advertisement.status = request.status;
+            // Обновляет поля объявления
+            advertisementMapper.advertisementUpdateDtoToAdvertisement(
+                    advertisement,
+                    request);
 
+            // Сохраняет в базе
             advertisementRepository.save(advertisement);
+
+            // Старая категория
+            var oldCategory = advertisement.category;
+
+            // Если категории не совпадают
+            if(newCategory.id != oldCategory.id){
+
+                // Привязывает новую категорию к объявлению
+                advertisement.category = newCategory;
+                // Сохраняет в базе
+                advertisementRepository.save(advertisement);
+
+                // Удаляет ссылку на объявление у старой категории
+                oldCategory.removeAdvertisement(advertisement);
+                // Сохраняет в базе
+                categoryRepository.save(oldCategory);
+
+                // Привязываем объявление к новой категории
+                newCategory.addAdvertisement(advertisement);
+                // Сохраняет в базе
+                categoryRepository.save(newCategory);
+
+            }
+
+            // Возвращает результат
             return advertisementMapper.advertisementToAdvertisementDto(advertisement);
 
         }
@@ -124,14 +163,12 @@ public class AdvertisementService {
         try {
 
             Advertisement advertisement = advertisementRepository
-                    .findById(advertisementId)
+                    .findByIdAndFetchCategory(advertisementId)
                     .orElseThrow(
                             () -> new AdvertisementNotFoundException(advertisementId));
 
             AdvertisementDto result = advertisementMapper
                     .advertisementToAdvertisementDto(advertisement);
-
-            result.categoryId = advertisement.category.id;
 
             return result;
 

@@ -3,4 +3,4 @@ TRUNCATE TABLE TAG CASCADE;
 
 -- Insert Data into columns
 INSERT INTO TAG (ID, CREATED_AT, UPDATED_AT, TEXT, STATUS)
-    VALUES (1, now(), now(), 'FromMigrationTag',  0);
+    VALUES (1, now(), NULL, 'FromMigrationTag',  0);
