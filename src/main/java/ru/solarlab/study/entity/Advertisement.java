@@ -59,7 +59,7 @@ public class Advertisement {
                  то будет использоваться стратегия TABLE 
                  (или IDENTITY, в версии до 5.0). */
     @Schema(description = "Идентификатор")
-    public Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
+    private Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
 
     /**
      * Дата и время создания объявления
@@ -67,7 +67,7 @@ public class Advertisement {
     @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания объявления")
-    public OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления объявления
@@ -75,7 +75,7 @@ public class Advertisement {
     @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления объявления")
-    public OffsetDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     /**
      * Заголовок объявления
@@ -83,7 +83,7 @@ public class Advertisement {
     @Column(name = "title", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Заголовок объявления")
-    public String title;
+    private String title;
 
     /**
      * Текст объявления
@@ -91,7 +91,7 @@ public class Advertisement {
     @Column(name = "body", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Текст объявления")
-    public String body;
+    private String body;
 
     /**
      * Стоимость
@@ -99,7 +99,7 @@ public class Advertisement {
     @Column(name = "price", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Стоимость")
-    public float price;
+    private float price;
 
     /**
      * Статус объявления
@@ -107,7 +107,7 @@ public class Advertisement {
     @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
-    public AdvertisementStatus status;
+    private AdvertisementStatus status;
 
     /**
      * Категория
@@ -116,7 +116,7 @@ public class Advertisement {
     @ManyToOne(fetch = FetchType.LAZY) /* LAZY: Запись извлекается
         только по требованию, т.е. когда нам нужны данные */
     //@JsonIgnoreProperties("advertisements")
-    public Category category; /* mappedBy = "category" in Category */
+    private Category category; /* mappedBy = "category" in Category */
 
     /**
      * Таги
@@ -134,7 +134,7 @@ public class Advertisement {
     private Set<Tag> tags = new HashSet<Tag>();
 
     /**
-     * Добавляет таг
+     * Привязывает таг к объявлению
      * @param tag
      */
     public void addTag(Tag tag) {
@@ -145,7 +145,7 @@ public class Advertisement {
     }
 
     /**
-     * Удаляет таг
+     * Отвязывает таг от объявления
      * @param tagId
      */
     public void removeTag(long tagId) {

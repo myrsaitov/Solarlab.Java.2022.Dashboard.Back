@@ -59,7 +59,7 @@ public class CategoryService {
             categoryRepository.save(category);
 
             // Возвращает результат
-            return category.id;
+            return category.getId();
 
         }
         catch (Exception ex) {

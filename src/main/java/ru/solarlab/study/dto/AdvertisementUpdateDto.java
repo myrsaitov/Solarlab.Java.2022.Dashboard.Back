@@ -26,40 +26,40 @@ public class AdvertisementUpdateDto {
     @NotBlank
     @CapitalLetter
     @Schema(description = "Заголовок объявления")
-    public String title;
+    private String title;
 
     /**
      * Текст объявления
      */
     @NotBlank
     @Schema(description = "Текст объявления")
-    public String body;
+    private String body;
 
     /**
      * Стоимость
      */
     @NotNull
     @Schema(description = "Стоимость")
-    public float price;
+    private float price;
 
     /**
      * Статус объявления
      */
     @NotNull
     @Schema(description = "Статус")
-    public AdvertisementStatus status;
+    private AdvertisementStatus status;
 
     /**
      * Идентификатор категории
      */
     @PositiveOrZero
     @Schema(description = "Идентификатор категории")
-    public long categoryId;
+    private long categoryId;
 
     /**
      * Идентификаторы связанных тагов
      */
     @Schema(description = "Идентификаторы связанных тагов")
-    public Long tagId[]; // Long - удобнее с массивами
+    private Long tagId[]; // Long - удобнее с массивами
 
 }

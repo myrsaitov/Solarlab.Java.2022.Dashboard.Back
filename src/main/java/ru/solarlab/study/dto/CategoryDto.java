@@ -23,20 +23,20 @@ public class CategoryDto {
 
     @PositiveOrZero
     @Schema(description = "Идентификатор")
-    public long id;
+    private long id;
 
     /**
      * Дата и время создания категории
      */
     @NotBlank
     @Schema(description = "Дата и время создания категории")
-    public OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления категории
      */
     @Schema(description = "Дата и время обновления категории")
-    public OffsetDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     /**
      * Имя категории
@@ -44,13 +44,13 @@ public class CategoryDto {
     @NotBlank
     @CapitalLetter
     @Schema(description = "Имя категории")
-    public String name;
+    private String name;
 
     /**
      * Статус категории
      */
     @NotNull
     @Schema(description = "Статус")
-    public CategoryStatus status;
+    private CategoryStatus status;
 
 }

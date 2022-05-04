@@ -23,13 +23,13 @@ public class TagUpdateDto {
      */
     @NotBlank
     @Schema(description = "Текст тага")
-    public String text;
+    private String text;
 
     /**
      * Статус тага
      */
     @NotNull
     @Schema(description = "Статус")
-    public TagStatus status;
+    private TagStatus status;
 
 }

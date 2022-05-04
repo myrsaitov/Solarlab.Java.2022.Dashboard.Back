@@ -58,7 +58,7 @@ public class Tag {
                  то будет использоваться стратегия TABLE 
                  (или IDENTITY, в версии до 5.0). */
     @Schema(description = "Идентификатор")
-    public Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
+    private Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
 
     /**
      * Дата и время создания тага
@@ -66,7 +66,7 @@ public class Tag {
     @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания тага")
-    public OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления тага
@@ -74,7 +74,7 @@ public class Tag {
     @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления тага")
-    public OffsetDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     /**
      * Текст тага
@@ -82,7 +82,7 @@ public class Tag {
     @Column(name = "text", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Текст тага")
-    public String text;
+    private String text;
 
     /**
      * Статус тага
@@ -90,7 +90,7 @@ public class Tag {
     @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
-    public TagStatus status;
+    private TagStatus status;
 
     /**
      * Объявления
@@ -101,7 +101,7 @@ public class Tag {
             CascadeType.PERSIST,
             CascadeType.MERGE
         })
-    public Set<Advertisement> advertisements = new HashSet<Advertisement>();
+    private Set<Advertisement> advertisements = new HashSet<Advertisement>();
 
 }
 

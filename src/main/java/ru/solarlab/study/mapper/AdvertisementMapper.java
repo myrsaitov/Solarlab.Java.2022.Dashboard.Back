@@ -22,6 +22,7 @@ public interface AdvertisementMapper {
      * @param entity
      * @return
      */
+    @Mapping(target = "tagId", ignore = true)
     @Mapping(source = "entity.category.id", target = "categoryId")
     AdvertisementDto advertisementToAdvertisementDto(
             Advertisement entity);

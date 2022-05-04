@@ -19,6 +19,6 @@ public class TagCreateDto {
      */
     @NotBlank
     @Schema(description = "Текст тага")
-    public String text;
+    private String text;
 
 }

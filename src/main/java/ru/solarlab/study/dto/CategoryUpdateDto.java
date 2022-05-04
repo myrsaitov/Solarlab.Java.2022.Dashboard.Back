@@ -25,13 +25,13 @@ public class CategoryUpdateDto {
     @NotBlank
     @CapitalLetter
     @Schema(description = "Имя категории")
-    public String name;
+    private String name;
 
     /**
      * Статус категории
      */
     @NotNull
     @Schema(description = "Статус")
-    public CategoryStatus status;
+    private CategoryStatus status;
 
 }

@@ -10,8 +10,8 @@ import ru.solarlab.study.dto.CategoryStatus;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -59,7 +59,7 @@ public class Category {
                  то будет использоваться стратегия TABLE 
                  (или IDENTITY, в версии до 5.0). */
     @Schema(description = "Идентификатор")
-    public Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
+    private Long id;  //SQL: MAXVALUE 9223372036854775807 -- Long.MAX_VALUE
 
     /**
      * Дата и время создания категории
@@ -67,7 +67,7 @@ public class Category {
     @Column(name = "created_at", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время создания категории")
-    public OffsetDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления категории
@@ -75,7 +75,7 @@ public class Category {
     @Column(name = "updated_at")
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Дата и время обновления категории")
-    public OffsetDateTime updatedAt;
+    private OffsetDateTime updatedAt;
 
     /**
      * Имя категории
@@ -83,7 +83,7 @@ public class Category {
     @Column(name = "name", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Имя категории")
-    public String name;
+    private String name;
 
     /**
      * Статус категории
@@ -91,7 +91,7 @@ public class Category {
     @Column(name = "status", nullable = false)
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Статус")
-    public CategoryStatus status;
+    private CategoryStatus status;
 
     /**
      * Коллекция объявлений, принадлежащих данной категории
@@ -112,9 +112,7 @@ public class Category {
                     CascadeType.DETACH */
             orphanRemoval = true) /* true = при удалении сущности из списка,
                 она удаляется и из базы. */
-    //@JsonIgnoreProperties("category")
-    //@JsonIgnore
-    public List<Advertisement> advertisements = new ArrayList<>();
+    private Set<Advertisement> advertisements = new HashSet<>();
 
     /**
      * Метод, добавляет объявление в категорию

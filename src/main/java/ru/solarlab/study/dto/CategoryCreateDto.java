@@ -21,6 +21,6 @@ public class CategoryCreateDto {
     @NotBlank
     @CapitalLetter
     @Schema(description = "Имя категории")
-    public String name;
+    private String name;
 
 }

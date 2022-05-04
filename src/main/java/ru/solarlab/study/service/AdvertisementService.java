@@ -58,19 +58,20 @@ public class AdvertisementService {
 
             // Проверяет существование категории с categoryId
             Category category = categoryRepository
-                    .findById(request.categoryId)
+                    .findById(request.getCategoryId())
                     .orElseThrow(
-                            () -> new CategoryNotFoundException(request.categoryId));
+                            () -> new CategoryNotFoundException(
+                                    request.getCategoryId()));
 
             // Создаёт сущность на основе DTO
             Advertisement advertisement = advertisementMapper
                     .advertisementCreateDtoToAdvertisement(request);
 
             // Привязывает категорию к объявлению
-            advertisement.category = category;
+            advertisement.setCategory(category);
 
             // Добавляет таги
-            for (var tagId: request.tagId)  {
+            for (var tagId: request.getTagId())  {
 
                 // Возвращает таг по Id и если существует - добавляет
                tagRepository
@@ -90,7 +91,7 @@ public class AdvertisementService {
             categoryRepository.save(category);
 
             // Возвращает результат
-            return advertisement.id;
+            return advertisement.getId();
 
         }
         catch (Exception ex) {
@@ -115,15 +116,17 @@ public class AdvertisementService {
 
             // Проверяет существование категории с categoryId
             Category newCategory = categoryRepository
-                    .findById(request.categoryId)
+                    .findById(request.getCategoryId())
                     .orElseThrow(
-                            () -> new CategoryNotFoundException(request.categoryId));
+                            () -> new CategoryNotFoundException(
+                                    request.getCategoryId()));
 
             // Достаёт из базы объявление с advertisementId
             Advertisement advertisement = advertisementRepository
                     .findByIdAndFetchCategory(advertisementId)
                     .orElseThrow(
-                            () -> new AdvertisementNotFoundException(advertisementId));
+                            () -> new AdvertisementNotFoundException(
+                                    advertisementId));
 
             // Обновляет поля объявления
             advertisementMapper.advertisementUpdateDtoToAdvertisement(
@@ -141,7 +144,7 @@ public class AdvertisementService {
                     tagId -> advertisement.removeTag(tagId));
 
             // Добавляет таги
-            for (var tagId: request.tagId)  {
+            for (var tagId: request.getTagId())  {
 
                 // Возвращает таг по Id и если существует - добавляет
                 tagRepository
@@ -156,13 +159,13 @@ public class AdvertisementService {
             advertisementRepository.save(advertisement);
 
             // Старая категория
-            var oldCategory = advertisement.category;
+            var oldCategory = advertisement.getCategory();
 
             // Если категории не совпадают
-            if(newCategory.id != oldCategory.id){
+            if(newCategory.getId() != oldCategory.getId()){
 
                 // Привязывает новую категорию к объявлению
-                advertisement.category = newCategory;
+                advertisement.setCategory(newCategory);
                 // Сохраняет в базе
                 advertisementRepository.save(advertisement);
 
@@ -179,7 +182,9 @@ public class AdvertisementService {
             }
 
             // Возвращает результат
-            return advertisementMapper.advertisementToAdvertisementDto(advertisement);
+            return advertisementMapper
+                    .advertisementToAdvertisementDto(
+                            advertisement);
 
         }
         catch (Exception ex) {

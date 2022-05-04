@@ -15,7 +15,6 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @Service /* Компонент бизнес уровня */
 @RequiredArgsConstructor /* Генерирует конструктор,
     принимающий значения для каждого final поля или 
@@ -60,7 +59,7 @@ public class TagService {
             tagRepository.save(tag);
 
             // Возвращает результат
-            return tag.id;
+            return tag.getId();
 
         }
         catch (Exception ex) {
@@ -88,9 +87,9 @@ public class TagService {
                     .orElseThrow(
                             () -> new TagNotFoundException(tagId));
 
-            tag.updatedAt = OffsetDateTime.now();
-            tag.text = request.text;
-            tag.status = request.status;
+            tag.setUpdatedAt(OffsetDateTime.now());
+            tag.setText(request.getText());
+            tag.setStatus(request.getStatus());
 
             tagRepository.save(tag);
 
