@@ -159,7 +159,10 @@ public class Advertisement {
 
         if (tag != null) {
 
+            // Удаляет привязанный к объявлению таг
             this.tags.remove(tag);
+
+            // Удаляет привязанное к тагу объявление
             tag.getAdvertisements().remove(this);
 
         }

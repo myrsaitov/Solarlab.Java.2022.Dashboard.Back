@@ -56,4 +56,10 @@ public class AdvertisementUpdateDto {
     @Schema(description = "Идентификатор категории")
     public long categoryId;
 
+    /**
+     * Идентификаторы связанных тагов
+     */
+    @Schema(description = "Идентификаторы связанных тагов")
+    public Long tagId[]; // Long - удобнее с массивами
+
 }

@@ -8,6 +8,7 @@ import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Category;
+import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.exception.AdvertisementNotFoundException;
 import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
@@ -69,9 +70,7 @@ public class AdvertisementService {
             advertisement.category = category;
 
             // Добавляет таги
-            long tags[] = { 2, 3, 4, 5, 6 };
-
-            for (var tagId: tags)  {
+            for (var tagId: request.tagId)  {
 
                 // Возвращает таг по Id и если существует - добавляет
                tagRepository
@@ -130,6 +129,28 @@ public class AdvertisementService {
             advertisementMapper.advertisementUpdateDtoToAdvertisement(
                     advertisement,
                     request);
+
+            // Удаляет старые таги
+
+            // Получает список индексов тагов заранее,
+            // т.к. нельзя в цикле изменять коллекцию
+            var tagIds = advertisement.getTags().stream()
+                    .map(Tag::getId).collect(Collectors.toList());
+
+            tagIds.forEach(
+                    tagId -> advertisement.removeTag(tagId));
+
+            // Добавляет таги
+            for (var tagId: request.tagId)  {
+
+                // Возвращает таг по Id и если существует - добавляет
+                tagRepository
+                        .findById(tagId)
+                        .ifPresent(
+                                tag ->
+                                        advertisement.addTag(tag));
+
+            }
 
             // Сохраняет в базе
             advertisementRepository.save(advertisement);

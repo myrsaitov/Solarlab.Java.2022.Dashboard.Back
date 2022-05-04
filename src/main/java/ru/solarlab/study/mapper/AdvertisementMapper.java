@@ -9,8 +9,10 @@ import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementStatus;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.entity.Advertisement;
+import ru.solarlab.study.entity.Tag;
 
 import java.time.OffsetDateTime;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
@@ -23,6 +25,21 @@ public interface AdvertisementMapper {
     @Mapping(source = "entity.category.id", target = "categoryId")
     AdvertisementDto advertisementToAdvertisementDto(
             Advertisement entity);
+
+    @AfterMapping /* Marks a method to be invoked at
+        the end of a generated mapping method, right
+        before the last RETURN statement of the
+        mapping method */
+    default void afterMappingFromToAdvertisementDto(
+            @MappingTarget AdvertisementDto target,
+            Advertisement source) {
+
+        // Получает список индексов тагов
+        var tagIds = source.getTags().stream()
+                .map(Tag::getId).collect(Collectors.toList());
+        target.setTagId(tagIds.toArray(new Long[0]));
+
+    }
 
     /**
      * AdvertisementCreateDto => Advertisement

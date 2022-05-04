@@ -46,4 +46,11 @@ public class AdvertisementCreateDto {
     @Schema(description = "Идентификатор категории")
     public long categoryId;
 
+    /**
+     * Идентификаторы связанных тагов
+     */
+    @NotNull
+    @Schema(description = "Идентификаторы связанных тагов")
+    public Long tagId[]; // Long - удобнее с массивами
+
 }
