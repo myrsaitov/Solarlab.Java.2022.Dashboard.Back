@@ -5,6 +5,7 @@ import lombok.*;
 import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -22,5 +23,12 @@ public class CategoryCreateDto {
     @CapitalLetter
     @Schema(description = "Имя категории")
     private String name;
+
+    /**
+     * Идентификатор родительской категории
+     */
+    @PositiveOrZero
+    @Schema(description = "Идентификатор родительской категории")
+    private long parentCategoryId;
 
 }

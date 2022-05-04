@@ -1,5 +1,6 @@
 package ru.solarlab.study.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -94,6 +95,59 @@ public class Category {
     private CategoryStatus status;
 
     /**
+     * Родительская категория
+     */
+    @JsonBackReference /* Для предотвращения StackOverFlow Error */
+    @ManyToOne(fetch = FetchType.LAZY) /* LAZY: Запись извлекается
+        только по требованию, т.е. когда нам нужны данные */
+    @Schema(description = "Статус")
+    private Category parentCategory;
+
+    /**
+     * Коллекция дочерних категорий
+     */
+    @JsonManagedReference /* Для предотвращения StackOverFlow Error */
+    @OneToMany(
+            mappedBy = "parentCategory", /* Указывает на поле объекта,
+                которое указывает на объект-владелец */
+            fetch = FetchType.LAZY, /* LAZY: Запись извлекается
+                только по требованию, т.е. когда нам нужны данные */
+            //cascade = { CascadeType.PERSIST, CascadeType.MERGE },
+            cascade = CascadeType.ALL, /* CascadeType.ALL означает,
+                что необходимо выполнять каскадно сразу все операции:
+                    CascadeType.PERSIST
+                    CascadeType.MERGE
+                    CascadeType.REMOVE
+                    CascadeType.REFRESH
+                    CascadeType.DETACH */
+            orphanRemoval = true) /* true = при удалении сущности из списка,
+                она удаляется и из базы. */
+    @Schema(description = "Коллекция дочерних категорий")
+    private Set<Category> subCategories = new HashSet<>();
+
+    /**
+     * Метод, добавляет подкатегорию к категории
+     * @param subCategory Подкатегория
+     */
+    public void addSubCategory(Category subCategory) {
+
+        subCategories.add(subCategory);
+        subCategory.setParentCategory(this);
+
+    }
+
+    /**
+     * Метод, удаляет подкатегорию у категории
+     * @param subCategory Подкатегория
+     */
+    public void removeSubCategory(Category subCategory) {
+
+        subCategories.remove(subCategory);
+        subCategory.setParentCategory(null);
+
+    }
+
+    /**
      * Коллекция объявлений, принадлежащих данной категории
      */
     @JsonManagedReference /* Для предотвращения StackOverFlow Error */
@@ -112,6 +166,7 @@ public class Category {
                     CascadeType.DETACH */
             orphanRemoval = true) /* true = при удалении сущности из списка,
                 она удаляется и из базы. */
+    @Schema(description = "Коллекция объявлений, принадлежащих данной категории")
     private Set<Advertisement> advertisements = new HashSet<>();
         /* LIST is a type of ordered collection that maintains 
            the elements in insertion order while Set is a type 

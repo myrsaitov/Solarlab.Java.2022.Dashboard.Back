@@ -9,6 +9,7 @@ import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -33,5 +34,12 @@ public class CategoryUpdateDto {
     @NotNull
     @Schema(description = "Статус")
     private CategoryStatus status;
+
+    /**
+     * Идентификатор родительской категории
+     */
+    @PositiveOrZero
+    @Schema(description = "Идентификатор родительской категории")
+    private long parentCategoryId;
 
 }

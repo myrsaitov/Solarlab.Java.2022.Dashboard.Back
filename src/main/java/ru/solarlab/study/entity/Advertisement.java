@@ -115,11 +115,10 @@ public class Advertisement {
     @JsonBackReference /* Для предотвращения StackOverFlow Error */
     @ManyToOne(fetch = FetchType.LAZY) /* LAZY: Запись извлекается
         только по требованию, т.е. когда нам нужны данные */
-    //@JsonIgnoreProperties("advertisements")
     private Category category; /* mappedBy = "category" in Category */
 
     /**
-     * Таги
+     * Коллекция связанных тагов
      */
     @ManyToMany(
         cascade = {
@@ -131,6 +130,7 @@ public class Advertisement {
         name = "advertisement_tag",
         joinColumns = @JoinColumn(name = "advertisement_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @Schema(description = "Коллекция связанных тагов")
     private Set<Tag> tags = new HashSet<>();
         /* LIST is a type of ordered collection that maintains 
            the elements in insertion order while Set is a type 

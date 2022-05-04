@@ -55,6 +55,13 @@ public class CategoryService {
             Category category = categoryMapper
                     .categoryCreateDtoToCategory(request);
 
+            // Достаёт из базы родительскую категорию с parentCategoryId
+            categoryRepository
+                    .findById(request.getParentCategoryId())
+                    .ifPresent(
+                            parentcat ->
+                                    parentcat.addSubCategory(category));
+
             // Сохраняет категорию в БД
             categoryRepository.save(category);
 
@@ -92,6 +99,13 @@ public class CategoryService {
             categoryMapper.categoryUpdateDtoToCategory(
                     category,
                     request);
+
+            // Достаёт из базы родительскую категорию с parentCategoryId
+            categoryRepository
+                    .findById(request.getParentCategoryId())
+                    .ifPresent(
+                            parentcat ->
+                                    parentcat.addSubCategory(category));
 
             // Сохраняет в базе
             categoryRepository.save(category);
@@ -161,10 +175,20 @@ public class CategoryService {
 
         try {
 
+            // Достаёт из базы категорию с categoryId
             Category category = categoryRepository
                     .findById(categoryId)
                     .orElseThrow(
                             () -> new CategoryNotFoundException(categoryId));
+
+            // Достаёт из базы родительскую категорию и отвязывает от нее подкатегорию
+            categoryRepository
+                    .findById(category.getParentCategory().getId())
+                    .ifPresent(
+                            parentcat ->
+                                    parentcat.removeSubCategory(category));
+
+            // Удаляет категорию из БД
             categoryRepository.deleteById(categoryId);
 
         }

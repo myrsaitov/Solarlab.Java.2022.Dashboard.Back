@@ -53,4 +53,11 @@ public class CategoryDto {
     @Schema(description = "Статус")
     private CategoryStatus status;
 
+    /**
+     * Идентификатор родительской категории
+     */
+    @PositiveOrZero
+    @Schema(description = "Идентификатор родительской категории")
+    private long parentCategoryId;
+
 }
