@@ -131,11 +131,26 @@ public class Advertisement {
         name = "advertisement_tag",
         joinColumns = @JoinColumn(name = "advertisement_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<Tag>();
+    private Set<Tag> tags = new HashSet<>();
+        /* LIST is a type of ordered collection that maintains 
+           the elements in insertion order while Set is a type 
+           of unordered collection so elements are not maintained any order.
+
+           LIST allows duplicates while SET doesn't allow duplicate elements.
+           All the elements of a SET should be unique if you try to insert the
+           duplicate element in SET it would replace the existing value.
+        
+           LIST is an ordered sequence of elements, 
+           however SET is distinct list of element which 
+           is unordered. So, use LIST for storing non-unique 
+           objects as per insertion order and use SET for 
+           storing unique objects in random order
+           
+           https://net-informations.com/java/cjava/list.htm */
 
     /**
      * Привязывает таг к объявлению
-     * @param tag
+     * @param tag Сущность тага
      */
     public void addTag(Tag tag) {
 
@@ -146,7 +161,7 @@ public class Advertisement {
 
     /**
      * Отвязывает таг от объявления
-     * @param tagId
+     * @param tagId Сущность тага
      */
     public void removeTag(long tagId) {
 

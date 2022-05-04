@@ -98,7 +98,7 @@ public class Category {
      */
     @JsonManagedReference /* Для предотвращения StackOverFlow Error */
     @OneToMany(
-            mappedBy = "category", /* Указывает на поле объекта, которым владеет,
+            mappedBy = "category", /* Указывает на поле объекта,
                 которое указывает на объект-владелец */
             fetch = FetchType.LAZY, /* LAZY: Запись извлекается
                 только по требованию, т.е. когда нам нужны данные */
@@ -113,10 +113,25 @@ public class Category {
             orphanRemoval = true) /* true = при удалении сущности из списка,
                 она удаляется и из базы. */
     private Set<Advertisement> advertisements = new HashSet<>();
+        /* LIST is a type of ordered collection that maintains 
+           the elements in insertion order while Set is a type 
+           of unordered collection so elements are not maintained any order.
+
+           LIST allows duplicates while SET doesn't allow duplicate elements.
+           All the elements of a SET should be unique if you try to insert the
+           duplicate element in SET it would replace the existing value.
+        
+           LIST is an ordered sequence of elements, 
+           however SET is distinct list of element which 
+           is unordered. So, use LIST for storing non-unique 
+           objects as per insertion order and use SET for 
+           storing unique objects in random order
+           
+           https://net-informations.com/java/cjava/list.htm */
 
     /**
      * Метод, добавляет объявление в категорию
-     * @param advertisement
+     * @param advertisement Сущность объявления
      */
     public void addAdvertisement(Advertisement advertisement) {
 
@@ -127,7 +142,7 @@ public class Category {
 
     /**
      * Метод, удаляет объявление из категории
-     * @param advertisement
+     * @param advertisement Сущность объявления
      */
     public void removeAdvertisement(Advertisement advertisement) {
 
