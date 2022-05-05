@@ -9,7 +9,7 @@ import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 import java.time.OffsetDateTime;
 
 @Getter /* lombok автоматически сгенерирует
@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 @Schema(description = "Сущность категории")
 public class CategoryDto {
 
-    @PositiveOrZero
+    @Positive
     @Schema(description = "Идентификатор")
     private long id;
 
@@ -56,7 +56,7 @@ public class CategoryDto {
     /**
      * Идентификатор родительской категории
      */
-    @PositiveOrZero
+    @Positive
     @Schema(description = "Идентификатор родительской категории")
     private long parentCategoryId;
 

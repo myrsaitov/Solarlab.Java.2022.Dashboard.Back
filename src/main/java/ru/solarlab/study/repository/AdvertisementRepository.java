@@ -1,5 +1,7 @@
 package ru.solarlab.study.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -20,6 +22,17 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
         /* Прикрепляет связанные объекты */
     Optional<Advertisement> findByIdAndFetchCategory(@Param("id") Long id);
         /* Optional<> нужен для orElseThrow */
+
+    /**
+     * Возвращает объявления с фильтром по категории
+     */
+    @Query("SELECT a FROM Advertisement a WHERE a.category.id = (:categoryId)")
+    /* Прикрепляет связанные объекты */
+    Page<Advertisement> findAllByCategory(
+            Pageable pageable,
+            @Param("categoryId") Long categoryId);
+    /* Optional<> нужен для orElseThrow */
+
 
     /**
      * Возвращает объявление по тагу

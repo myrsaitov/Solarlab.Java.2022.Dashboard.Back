@@ -1,12 +1,15 @@
 package ru.solarlab.study.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
@@ -42,7 +45,7 @@ public class AdvertisementCreateDto {
     /**
      * Идентификатор категории
      */
-    @PositiveOrZero
+    @Positive
     @Schema(description = "Идентификатор категории")
     private long categoryId;
 

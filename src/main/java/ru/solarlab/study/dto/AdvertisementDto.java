@@ -9,7 +9,7 @@ import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 import java.time.OffsetDateTime;
 
 @Getter /* lombok автоматически сгенерирует
@@ -21,7 +21,7 @@ import java.time.OffsetDateTime;
 @Schema(description = "Сущность объявления")
 public class AdvertisementDto {
 
-    @PositiveOrZero
+    @Positive
     @Schema(description = "Идентификатор")
     public long id;
 
@@ -70,7 +70,7 @@ public class AdvertisementDto {
     /**
      * Идентификатор категории
      */
-    @PositiveOrZero
+    @Positive
     @Schema(description = "Идентификатор категории")
     public long categoryId;
 

@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
@@ -80,7 +80,7 @@ public class TagController {
                 properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long tagId,
@@ -114,7 +114,7 @@ public class TagController {
                 properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long tagId){
@@ -163,7 +163,7 @@ public class TagController {
                 properties for the Parameter */
                     description = "Идентификатор тага",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long tagId){

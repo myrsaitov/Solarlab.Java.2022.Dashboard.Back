@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
@@ -85,7 +85,7 @@ public class CategoryController {
                 properties for the Parameter */
                     description = "Идентификатор категории",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long categoryId,
@@ -119,7 +119,7 @@ public class CategoryController {
                 properties for the Parameter */
                     description = "Идентификатор категории",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long categoryId){
@@ -168,7 +168,7 @@ public class CategoryController {
                 properties for the Parameter */            
                     description = "Идентификатор категории",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long categoryId){

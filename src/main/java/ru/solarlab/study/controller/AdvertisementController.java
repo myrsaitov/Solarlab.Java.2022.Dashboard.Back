@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,10 +16,7 @@ import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.service.AdvertisementService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Controller /* Компонент слоя управления */
@@ -85,7 +83,7 @@ public class AdvertisementController {
                 properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long advertisementId,
@@ -119,7 +117,7 @@ public class AdvertisementController {
                 properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long advertisementId){
@@ -137,33 +135,173 @@ public class AdvertisementController {
             produces = { "application/json" }
     )
     public ResponseEntity<List<AdvertisementDto>> getAdvertisements(
-            @NotNull /* Показывает, что поле или параметр не может быть null */
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Номер страницы",
                     required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
             @PositiveOrZero /* Не меньше нуля */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                     value = "page")
-                    Integer page,
+                    int page, // Integer, т.к. PageRequest требует Integer!
 
-            @NotNull /* Показывает, что поле или параметр не может быть null */
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
                 description = "Количество объявлений на странице",
                  required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                 value = "size")
-                    Integer size) { // Integer, т.к. PageRequest требует Integer!
+                    int size, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Направление сортировки (DESC, ASC)",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "direction")
+                    Sort.Direction direction) {
 
         return ResponseEntity.ok(
-                advertisementService.getAdvertisements(page, size));
+                advertisementService.getAdvertisements(
+                        page,
+                        size,
+                        direction));
+
+    }
+
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Возвращает коллекцию объявлений с фильтром по категории",
+            description = "Возвращает коллекцию объявлений с пагинацией")
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/category/{categoryId}",
+            produces = { "application/json" }
+    )
+    public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByCategory(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Номер страницы",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @PositiveOrZero /* Не меньше нуля */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "page")
+                    int page, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Количество объявлений на странице",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Min(0) /* Минимальное допустимое значение */
+            @Max(20) /* Максимальное допустимое значение */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "size")
+                    int size, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Направление сортировки (DESC, ASC)",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "direction")
+                    Sort.Direction direction,
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор категории")
+            @Positive /* Больше нуля */
+            @PathVariable("categoryId") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    Long categoryId) {
+
+        return ResponseEntity.ok(
+                advertisementService.getAdvertisementsByCategory(
+                        page,
+                        size,
+                        direction,
+                        categoryId));
+
+    }
+
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Возвращает коллекцию объявлений с фильтром по категории",
+            description = "Возвращает коллекцию объявлений с пагинацией")
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/tag/{tagId}",
+            produces = { "application/json" }
+    )
+    public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByTag(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Номер страницы",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @PositiveOrZero /* Не меньше нуля */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "page")
+                    int page, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Количество объявлений на странице",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Min(0) /* Минимальное допустимое значение */
+            @Max(20) /* Максимальное допустимое значение */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "size")
+                    int size, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Направление сортировки (DESC, ASC)",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "direction")
+                    Sort.Direction direction,
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор тага")
+            @Positive /* Больше нуля */
+            @PathVariable("tagId") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    Long tagId) {
+
+        return ResponseEntity.ok(
+                advertisementService.getAdvertisementsByTag(
+                        page,
+                        size,
+                        direction,
+                        tagId));
 
     }
 
@@ -180,7 +318,7 @@ public class AdvertisementController {
                 properties for the Parameter */
                     description = "Идентификатор объявления",
                     required = true)
-            @PositiveOrZero /* Допустимое значение >= 0 */
+            @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
                     long advertisementId){

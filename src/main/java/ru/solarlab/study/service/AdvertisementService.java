@@ -225,11 +225,64 @@ public class AdvertisementService {
      * Возвращает коллекцию объявлений с пагинацией
      * @param page Номер страницы
      * @param size Количество объявлений на странице
+     * @param direction Порядок сортировки (возрастающий, убывающий)
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisements(
             Integer page,
-            Integer size) {
+            Integer size,
+            Sort.Direction direction) {
+
+        return advertisementRepository
+                .findAll(
+                        PageRequest.of(
+                                page == null ? 0 : page,
+                                size == null ? DEFAULT_PAGE_SIZE : size,
+                                Sort.unsorted()))
+                .stream()
+                .map(advertisementMapper::advertisementToAdvertisementDto)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Возвращает коллекцию объявлений с пагинацией и фильтром по категории
+     * @param page Номер страницы
+     * @param size Количество объявлений на странице
+     * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @return Коллекция объявлений
+     */
+    public List<AdvertisementDto> getAdvertisementsByCategory(
+            Integer page,
+            Integer size,
+            Sort.Direction direction,
+            Long categoryId) {
+
+        return advertisementRepository
+                .findAllByCategory(
+                        PageRequest.of(
+                                page == null ? 0 : page,
+                                size == null ? DEFAULT_PAGE_SIZE : size,
+                                Sort.unsorted()),
+                        categoryId)
+                .stream()
+                .map(advertisementMapper::advertisementToAdvertisementDto)
+                .collect(Collectors.toList());
+
+    }
+
+    /**
+     * Возвращает коллекцию объявлений с пагинацией и фильтром по тагу
+     * @param page Номер страницы
+     * @param size Количество объявлений на странице
+     * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @return Коллекция объявлений
+     */
+    public List<AdvertisementDto> getAdvertisementsByTag(
+            Integer page,
+            Integer size,
+            Sort.Direction direction,
+            Long tagId) {
 
         return advertisementRepository
                 .findAll(
@@ -268,3 +321,11 @@ public class AdvertisementService {
     }
 
 }
+
+
+// Сортировка по столбцам таблицы: appleName - толбец
+// https://wesome.org/pagerequest
+// https://www.baeldung.com/spring-data-jpa-pagination-sorting
+//Pageable page = PageRequest.of(0, 5, Sort.Direction.DESC, new String[]{"appleName"});
+//Page<Apple> apples = appleRepository.findAll(page);
+//Sort.by("price").descending().and(Sort.by("name"))
