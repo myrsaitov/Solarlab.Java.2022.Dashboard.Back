@@ -31,8 +31,16 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
     Page<Advertisement> findAllByCategory(
             Pageable pageable,
             @Param("categoryId") Long categoryId);
-    /* Optional<> нужен для orElseThrow */
 
+    /**
+     * Возвращает объявления с фильтром по тагу
+     */
+    //@Query("SELECT a FROM Advertisement a WHERE a.tags.id = (:tagId)")
+    @Query("SELECT DISTINCT a FROM Advertisement a JOIN a.tags tag WHERE tag.id = (:tagId)")
+    /* Прикрепляет связанные объекты */
+    Page<Advertisement> findAllByTag(
+            Pageable pageable,
+            @Param("tagId") Long tagId);
 
     /**
      * Возвращает объявление по тагу

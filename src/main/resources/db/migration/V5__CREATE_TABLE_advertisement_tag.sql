@@ -2,6 +2,5 @@
 CREATE TABLE advertisement_tag (
     advertisement_id BIGINT REFERENCES advertisement (id) ON UPDATE CASCADE ON DELETE CASCADE,
     tag_id BIGINT REFERENCES tag (id) ON UPDATE CASCADE,
-    amount numeric NOT NULL DEFAULT 1,
     CONSTRAINT advertisement_tag_pkey PRIMARY KEY (advertisement_id, tag_id)  -- explicit pk
 );

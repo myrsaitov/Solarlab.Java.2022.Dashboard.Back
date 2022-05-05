@@ -1,3 +1,5 @@
+-- Объявления не засидируются, если нет сидированных категорий!
+
 -- Removes all rows from a table or specified partitions of a table, without logging the individual row deletions.
 TRUNCATE TABLE advertisement CASCADE;
 

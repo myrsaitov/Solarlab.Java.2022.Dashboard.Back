@@ -285,11 +285,12 @@ public class AdvertisementService {
             Long tagId) {
 
         return advertisementRepository
-                .findAll(
+                .findAllByTag(
                         PageRequest.of(
                                 page == null ? 0 : page,
                                 size == null ? DEFAULT_PAGE_SIZE : size,
-                                Sort.unsorted()))
+                                Sort.unsorted()),
+                        tagId)
                 .stream()
                 .map(advertisementMapper::advertisementToAdvertisementDto)
                 .collect(Collectors.toList());

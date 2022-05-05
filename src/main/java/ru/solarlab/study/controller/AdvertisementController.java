@@ -183,7 +183,7 @@ public class AdvertisementController {
             summary = "Возвращает коллекцию объявлений с фильтром по категории",
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
-            value = "/category/{categoryId}",
+            value = "/categories/{categoryId}",
             produces = { "application/json" }
     )
     public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByCategory(
@@ -246,7 +246,7 @@ public class AdvertisementController {
             summary = "Возвращает коллекцию объявлений с фильтром по категории",
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
-            value = "/tag/{tagId}",
+            value = "/tags/{tagId}",
             produces = { "application/json" }
     )
     public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByTag(
