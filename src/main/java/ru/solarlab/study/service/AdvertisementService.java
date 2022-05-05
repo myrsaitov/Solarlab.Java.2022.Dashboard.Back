@@ -2,6 +2,7 @@ package ru.solarlab.study.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
@@ -77,8 +78,7 @@ public class AdvertisementService {
                tagRepository
                         .findById(tagId)
                         .ifPresent(
-                                tag ->
-                                advertisement.addTag(tag));
+                                advertisement::addTag); // Вместо лямбды
 
             }
 
@@ -141,7 +141,7 @@ public class AdvertisementService {
                     .map(Tag::getId).collect(Collectors.toList());
 
             tagIds.forEach(
-                    tagId -> advertisement.removeTag(tagId));
+                    advertisement::removeTag); // Вместо лямбды
 
             // Добавляет таги
             for (var tagId: request.getTagId())  {
@@ -150,8 +150,7 @@ public class AdvertisementService {
                 tagRepository
                         .findById(tagId)
                         .ifPresent(
-                                tag ->
-                                        advertisement.addTag(tag));
+                                advertisement::addTag); // Вместо лямбды
 
             }
 
@@ -210,10 +209,8 @@ public class AdvertisementService {
                     .orElseThrow(
                             () -> new AdvertisementNotFoundException(advertisementId));
 
-            AdvertisementDto result = advertisementMapper
+            return advertisementMapper
                     .advertisementToAdvertisementDto(advertisement);
-
-            return result;
 
         }
         catch (Exception ex) {
@@ -226,17 +223,20 @@ public class AdvertisementService {
 
     /**
      * Возвращает коллекцию объявлений с пагинацией
-     * @param limit количество объявлений на странице
+     * @param page Номер страницы
+     * @param size Количество объявлений на странице
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisements(
-            Integer limit) {
+            Integer page,
+            Integer size) {
 
         return advertisementRepository
                 .findAll(
                         PageRequest.of(
-                                0,
-                                limit == null ? DEFAULT_PAGE_SIZE : limit))
+                                page == null ? 0 : page,
+                                size == null ? DEFAULT_PAGE_SIZE : size,
+                                Sort.unsorted()))
                 .stream()
                 .map(advertisementMapper::advertisementToAdvertisementDto)
                 .collect(Collectors.toList());

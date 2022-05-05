@@ -145,9 +145,9 @@ public class CategoryController {
                 description = "Количество категорий на странице",
                 required = true)
             @Min(0) /* Минимальное допустимое значение */
-            @Max(20) /* Максимальное допустимое значение */
+            @Max(1000) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
-                value = "limit", required = true)            
+                value = "limit")
                     Integer limit) { // Integer, т.к. PageRequest требует Integer!
 
         return ResponseEntity.ok(

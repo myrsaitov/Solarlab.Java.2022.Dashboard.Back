@@ -142,16 +142,28 @@ public class AdvertisementController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
+                    description = "Номер страницы",
+                    required = true)
+            @PositiveOrZero /* Не меньше нуля */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "page")
+                    Integer page,
+
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
                 description = "Количество объявлений на странице",
                  required = true)
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
-                value = "limit", required = true)
-                    Integer limit) { // Integer, т.к. PageRequest требует Integer!
+                value = "size")
+                    Integer size) { // Integer, т.к. PageRequest требует Integer!
 
         return ResponseEntity.ok(
-                advertisementService.getAdvertisements(limit));
+                advertisementService.getAdvertisements(page, size));
 
     }
 
