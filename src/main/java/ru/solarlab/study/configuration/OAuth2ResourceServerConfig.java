@@ -19,8 +19,17 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/oauth/**", "/v3/api-docs.yaml", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers( /* Страницы, которые должны быть
+                                 доступны без авторизации */
+                        "/", // Main
+                        "/oauth/**",
+                        "/v3/api-docs.yaml", // API Swagger
+                        "/v3/api-docs/**",   // API Swagger
+                        "/swagger-ui.html",
+                        "/swagger-ui/**")
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
     }
 

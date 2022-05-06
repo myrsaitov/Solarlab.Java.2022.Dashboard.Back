@@ -1,3 +1,6 @@
+-- https://howtodoinjava.com/spring-boot2/oauth2-auth-server/
+-- https://docs.spring.io/spring-security-oauth2-boot/docs/2.2.x-SNAPSHOT/reference/html/boot-features-security-oauth2-authorization-server.html
+-- https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/appendix-schema.html
 CREATE TABLE users
 (
 
@@ -55,6 +58,7 @@ INSERT INTO oauth_client_details (client_id,
                                   refresh_token_validity,
                                   additional_information,
                                   autoapprove)
+
 VALUES ('task-client', -- client-id
         '$2a$10$ftGBqfb6LCFoQTbGR8OAf.QGV7e97jwLhboX8OB0OIQzuFH8F5cKa', -- hash client secret: 3vKDcTh5C4
         'password,refresh_token', -- grant types
@@ -68,9 +72,9 @@ VALUES ('task-client', -- client-id
 
 -- users, hash of password: password
 
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c71', 'admin', null, true, '$2a$10$9OJhEIj3eZo3A7pTbPJC8e6cExaFTs3EOVjwLUS9JK5TXPCtBUx2e');
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c72', 'user1', null, true, '$2a$10$9OJhEIj3eZo3A7pTbPJC8e6cExaFTs3EOVjwLUS9JK5TXPCtBUx2e');
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c73', 'user2', null, true, '$2a$10$9OJhEIj3eZo3A7pTbPJC8e6cExaFTs3EOVjwLUS9JK5TXPCtBUx2e');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c71', 'admin', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- 5k5bsAy2
+INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c72', 'user1', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- https://bcrypt-generator.com/
+INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c73', 'user2', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- 10 rounds
 
 
 -- authorities
