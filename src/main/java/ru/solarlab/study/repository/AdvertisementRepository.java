@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.solarlab.study.entity.Advertisement;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,8 +16,8 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
 
     /**
      * Возвращает объявление с прикрепленной категорией
-     * @param id
-     * @return
+     * @param id Идентификатор объявления
+     * @return Сущность объявления
      */
     @Query("SELECT a FROM Advertisement a JOIN FETCH a.category WHERE a.id = (:id)")
         /* Прикрепляет связанные объекты */
@@ -41,13 +42,6 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
     Page<Advertisement> findAllByTag(
             Pageable pageable,
             @Param("tagId") Long tagId);
-
-    /**
-     * Возвращает объявление по тагу
-     * @param tagId
-     * @return
-     */
-    //List<Advertisement> findAdvertisementsByTagId(Long tagId);
 
 }
 
