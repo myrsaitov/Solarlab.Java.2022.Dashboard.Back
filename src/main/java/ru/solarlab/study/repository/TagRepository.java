@@ -7,11 +7,4 @@ import ru.solarlab.study.entity.Tag;
 @Repository
 public interface TagRepository extends PagingAndSortingRepository<Tag, Long> {
 
-    /**
-     * Возвращает таги по объявлению
-     * @param advertisementId
-     * @return
-     */
-    //List<Tag> findTagsByAdvertisementId(Long advertisementId);
-    
 }

@@ -36,7 +36,6 @@ public interface AdvertisementRepository extends PagingAndSortingRepository<Adve
     /**
      * Возвращает объявления с фильтром по тагу
      */
-    //@Query("SELECT a FROM Advertisement a WHERE a.tags.id = (:tagId)")
     @Query("SELECT DISTINCT a FROM Advertisement a JOIN a.tags tag WHERE tag.id = (:tagId)")
     /* Прикрепляет связанные объекты */
     Page<Advertisement> findAllByTag(

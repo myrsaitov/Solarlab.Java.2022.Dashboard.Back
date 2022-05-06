@@ -31,6 +31,9 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	implementation 'org.flywaydb:flyway-core:8.5.0'
 
+	// OAuth
+	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.3'
+
 	// Позволяет сократить код за счет аннотаций
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
