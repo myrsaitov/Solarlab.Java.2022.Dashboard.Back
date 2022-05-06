@@ -13,6 +13,9 @@ import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Модель объявления
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует
@@ -92,6 +95,12 @@ public class Advertisement {
         /* Указывает на имя колонки, в которой отображается свойство сущности. */
     @Schema(description = "Текст объявления")
     private String body;
+
+    /**
+     * Хозяин объявления
+     */
+    @Column(name = "owner", nullable = false)
+    private String owner;
 
     /**
      * Стоимость

@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.OffsetDateTime;
 
+/**
+ * DTO объявления
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует
@@ -80,5 +83,11 @@ public class AdvertisementDto {
     @NotNull
     @Schema(description = "Идентификаторы связанных тагов")
     public Long tagId[]; // Long - удобнее с массивами
+
+    /**
+     * Владелец
+     */
+    @Schema(description = "Владелец")
+    private String owner;
 
 }

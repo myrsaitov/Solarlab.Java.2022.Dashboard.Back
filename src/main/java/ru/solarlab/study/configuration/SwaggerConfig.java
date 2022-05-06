@@ -25,7 +25,7 @@ public class SwaggerConfig {
 
                                     new Contact()
                                             .email("myrsaitov@gmail.com")
-                                            .url("mursaitov.ru")
+                                            .url("myrsaitov.ru")
                                             .name("Konstantin Mirsaitov")
 
                                 )

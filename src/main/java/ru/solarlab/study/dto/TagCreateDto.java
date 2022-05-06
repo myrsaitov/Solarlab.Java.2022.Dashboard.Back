@@ -5,6 +5,9 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * DTO создания тага
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует

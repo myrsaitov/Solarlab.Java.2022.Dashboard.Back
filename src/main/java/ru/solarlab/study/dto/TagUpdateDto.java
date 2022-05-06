@@ -9,6 +9,9 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * DTO обновления тага
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует

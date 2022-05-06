@@ -11,6 +11,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+/**
+ * DTO обновления объявления
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует

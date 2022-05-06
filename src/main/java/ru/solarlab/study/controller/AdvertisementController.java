@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,9 +46,7 @@ public class AdvertisementController {
     @PostMapping( /* Говорит, что этот метод должен быть вызван при запросе POST */
             value = "/",
             produces = { "application/json" },
-            consumes = { "application/json" }
-
-    )
+            consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
     public ResponseEntity<Long> createAdvertisement(
@@ -74,8 +73,7 @@ public class AdvertisementController {
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
             value = "/{advertisementId}",
             produces = { "application/json" },
-            consumes = { "application/json" }
-    )
+            consumes = { "application/json" })
     public ResponseEntity updateAdvertisement(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -108,8 +106,7 @@ public class AdvertisementController {
             summary = "Возвращает объявление по идентификатору")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/{advertisementId}",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<AdvertisementDto> getAdvertisement(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -132,8 +129,7 @@ public class AdvertisementController {
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<List<AdvertisementDto>> getAdvertisements(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -184,8 +180,7 @@ public class AdvertisementController {
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/categories/{categoryId}",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -247,8 +242,7 @@ public class AdvertisementController {
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/tags/{tagId}",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByTag(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -309,8 +303,8 @@ public class AdvertisementController {
             summary = "Удаляет объявление по идентификатору",
             description = "Объявление из базы не удаляется, меняется только статус на Удалено")
     @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
-            value = "/{advertisementId}"
-    )
+            value = "/{advertisementId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteAdvertisement(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter

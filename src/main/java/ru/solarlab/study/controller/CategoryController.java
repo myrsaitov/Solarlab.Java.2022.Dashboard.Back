@@ -47,9 +47,7 @@ public class CategoryController {
     @PostMapping( /* Говорит, что этот метод должен быть вызван при запросе POST */
             value = "/",
             produces = { "application/json" },
-            consumes = { "application/json" }
-
-    )
+            consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
     public ResponseEntity<Long> createCategory(
@@ -76,8 +74,7 @@ public class CategoryController {
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
             value = "/{categoryId}",
             produces = { "application/json" },
-            consumes = { "application/json" }
-    )
+            consumes = { "application/json" })
     public ResponseEntity updateCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -110,8 +107,7 @@ public class CategoryController {
             summary = "Возвращает категорию по идентификатору")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/{categoryId}",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<CategoryDto> getCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -134,8 +130,7 @@ public class CategoryController {
             description = "Возвращает коллекцию категорий с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<List<CategoryDto>> getCategories(
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Parameter( /* The annotation may be used on
@@ -159,8 +154,7 @@ public class CategoryController {
             summary = "Удаляет категорию по идентификатору",
             description = "Категория из базы не удаляется, меняется только статус на Удалено")
     @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
-            value = "/{categoryId}"
-    )
+            value = "/{categoryId}")
     public ResponseEntity<Void> deleteCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter

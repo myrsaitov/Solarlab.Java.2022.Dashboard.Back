@@ -3,14 +3,18 @@ package ru.solarlab.study.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
+import ru.solarlab.study.dto.UserDto;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.exception.AdvertisementNotFoundException;
+import ru.solarlab.study.exception.CannotEditOtherAdvertisementException;
 import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.repository.AdvertisementRepository;
@@ -18,9 +22,12 @@ import ru.solarlab.study.repository.CategoryRepository;
 import ru.solarlab.study.repository.TagRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+/**
+ * Сервис объявлений (бизнес-логика)
+ */
 @Service /* Компонент бизнес уровня */
 @RequiredArgsConstructor /* Генерирует конструктор,
     принимающий значения для каждого final поля или 
@@ -66,7 +73,9 @@ public class AdvertisementService {
 
             // Создаёт сущность на основе DTO
             Advertisement advertisement = advertisementMapper
-                    .advertisementCreateDtoToAdvertisement(request);
+                    .advertisementCreateDtoToAdvertisement(
+                            request,
+                            getCurrentUser().getUsername());
 
             // Привязывает категорию к объявлению
             advertisement.setCategory(category);
@@ -114,6 +123,10 @@ public class AdvertisementService {
 
         try {
 
+            // Проверяет, может ли текущий авторизированный пользователь
+            // обновлять объявление с таким advertisementId
+            checkCurrentUserUpdatePermission(advertisementId);
+
             // Проверяет существование категории с categoryId
             Category newCategory = categoryRepository
                     .findById(request.getCategoryId())
@@ -131,7 +144,8 @@ public class AdvertisementService {
             // Обновляет поля объявления
             advertisementMapper.advertisementUpdateDtoToAdvertisement(
                     advertisement,
-                    request);
+                    request,
+                    getCurrentUser().getUsername());
 
             // Удаляет старые таги
 
@@ -318,6 +332,44 @@ public class AdvertisementService {
             throw ex;
 
         }
+
+    }
+
+    /**
+     * Проверяет, разрешено ли текущему авторизированному
+     * пользователю редактировать объявление
+     * @param advertisementId Идентификатор объявления
+     */
+    private void checkCurrentUserUpdatePermission(
+            Long advertisementId) {
+
+        UserDto currentUser = getCurrentUser();
+
+        Optional<Advertisement> optionalAdvertisement = advertisementRepository
+                .findById(advertisementId);
+        if (optionalAdvertisement.isPresent() &&
+            !optionalAdvertisement
+                .get()
+                .getOwner()
+                .equals(currentUser.getUsername()) &&
+            !currentUser.getRole().equals("ADMIN")) {
+
+            throw new CannotEditOtherAdvertisementException();
+
+        }
+
+    }
+
+    /**
+     * Возвращает текущего авторизированного пользователя
+     * @return
+     */
+    private UserDto getCurrentUser() {
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        String username = securityContext.getAuthentication().getPrincipal().toString();
+        String role = securityContext.getAuthentication().getAuthorities().stream().findAny().get().getAuthority();
+        return new UserDto(username, role);
 
     }
 

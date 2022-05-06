@@ -10,6 +10,9 @@ import ru.solarlab.study.validation.CapitalLetter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
+/**
+ * DTO создания категории
+ */
 @Getter /* lombok автоматически сгенерирует
            метод получения значения */
 @Setter /* lombok автоматически сгенерирует

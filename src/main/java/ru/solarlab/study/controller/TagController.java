@@ -42,9 +42,7 @@ public class TagController {
     @PostMapping( /* Говорит, что этот метод должен быть вызван при запросе POST */
             value = "/",
             produces = { "application/json" },
-            consumes = { "application/json" }
-
-    )
+            consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
     public ResponseEntity<Long> createTag(
@@ -71,8 +69,7 @@ public class TagController {
     @PutMapping( /* Говорит, что этот метод должен быть вызван при запросе PUT */
             value = "/{tagId}",
             produces = { "application/json" },
-            consumes = { "application/json" }
-    )
+            consumes = { "application/json" })
     public ResponseEntity updateTag(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -105,8 +102,7 @@ public class TagController {
             summary = "Возвращает таг по идентификатору")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/{tagId}",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<TagDto> getTag(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -129,8 +125,7 @@ public class TagController {
             description = "Возвращает коллекцию тагов с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/",
-            produces = { "application/json" }
-    )
+            produces = { "application/json" })
     public ResponseEntity<List<TagDto>> getTags(
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Parameter( /* The annotation may be used on
@@ -154,8 +149,7 @@ public class TagController {
             summary = "Удаляет таг по идентификатору",
             description = "Таг из базы не удаляется, меняется только статус на Удалено")
     @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
-            value = "/{tagId}"
-    )
+            value = "/{tagId}")
     public ResponseEntity<Void> deleteTag(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter

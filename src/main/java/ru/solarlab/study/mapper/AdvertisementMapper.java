@@ -54,7 +54,8 @@ public interface AdvertisementMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "tags", ignore = true)
     Advertisement advertisementCreateDtoToAdvertisement(
-            AdvertisementCreateDto dto);
+            AdvertisementCreateDto dto,
+            String owner);
 
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
@@ -84,7 +85,8 @@ public interface AdvertisementMapper {
     @Mapping(target = "tags", ignore = true)
     Advertisement advertisementUpdateDtoToAdvertisement(
             @MappingTarget Advertisement entity,
-            AdvertisementUpdateDto dto);
+            AdvertisementUpdateDto dto,
+            String owner);
 
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
