@@ -147,13 +147,14 @@ public class AdvertisementService {
                     request,
                     getCurrentUser().getUsername());
 
-            // Удаляет старые таги
+            // Удаляет прикрепленные таги:
 
             // Получает список индексов тагов заранее,
             // т.к. нельзя в цикле изменять коллекцию
             var tagIds = advertisement.getTags().stream()
                     .map(Tag::getId).collect(Collectors.toList());
 
+            // Открепляет таги
             tagIds.forEach(
                     advertisement::removeTag); // Вместо лямбды
 
@@ -313,17 +314,30 @@ public class AdvertisementService {
 
     /**
      * Удаляет объявление по идентификатору
-     * Объявление из базы не удаляется, меняется только статус на "Удалено"
      * @param advertisementId Идентификатор объявления
      */
     public void deleteById(long advertisementId){
 
         try {
 
+            // Получает объявление из базы
             Advertisement advertisement = advertisementRepository
                     .findById(advertisementId)
                     .orElseThrow(
                             () -> new AdvertisementNotFoundException(advertisementId));
+
+            // Удаляет прикрепленные таги:
+
+            // Получает список индексов тагов заранее,
+            // т.к. нельзя в цикле изменять коллекцию
+            var tagIds = advertisement.getTags().stream()
+                    .map(Tag::getId).collect(Collectors.toList());
+
+            // Открепляет таги
+            tagIds.forEach(
+                    advertisement::removeTag); // Вместо лямбды
+
+            // Удаляет из базы на совсем
             advertisementRepository.deleteById(advertisementId);
 
         }

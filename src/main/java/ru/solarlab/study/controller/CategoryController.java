@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,7 @@ public class CategoryController {
             consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Long> createCategory(
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -78,6 +80,7 @@ public class CategoryController {
             value = "/{categoryId}",
             produces = { "application/json" },
             consumes = { "application/json" })
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity updateCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
@@ -158,6 +161,7 @@ public class CategoryController {
             description = "Категория из базы не удаляется, меняется только статус на Удалено")
     @DeleteMapping( /* Говорит, что этот метод должен быть вызван при запросе DELETE */
             value = "/{categoryId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Void> deleteCategory(
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter

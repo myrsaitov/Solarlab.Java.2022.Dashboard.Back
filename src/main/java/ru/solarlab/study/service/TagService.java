@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
 import ru.solarlab.study.dto.TagUpdateDto;
+import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.exception.TagNotFoundException;
 import ru.solarlab.study.mapper.TagMapper;
+import ru.solarlab.study.repository.AdvertisementRepository;
 import ru.solarlab.study.repository.TagRepository;
 
 import java.time.OffsetDateTime;
@@ -31,8 +33,9 @@ public class TagService {
     private final TagMapper tagMapper;
 
     /**
-     * Объект репозитория
+     * Объекты репозитория
      */
+    private final AdvertisementRepository advertisementRepository;
     private final TagRepository tagRepository;
 
     /**
@@ -150,17 +153,34 @@ public class TagService {
 
     /**
      * Удаляет таг по идентификатору
-     * Таг из базы не удаляется, меняется только статус на "Удалено"
      * @param tagId Идентификатор тага
      */
     public void deleteById(long tagId){
 
         try {
 
+            // Возвращает таг из базы
             Tag tag = tagRepository
-                    .findById(tagId)
+                    .findByIdAndFetchAdvertisements(tagId)
                     .orElseThrow(
                             () -> new TagNotFoundException(tagId));
+
+            // Открепляет объявления:
+
+            // Получает список индексов тагов заранее,
+            // т.к. нельзя в цикле изменять коллекцию
+            var advertisementIds = tag.getAdvertisements().stream()
+                    .map(Advertisement::getId).collect(Collectors.toList());
+
+            // Открепляет объявления
+            advertisementIds.forEach(
+                    advertisementId ->
+                    advertisementRepository
+                            .findById(advertisementId)
+                            .ifPresent(
+                                a -> a.removeTag(tagId)));
+
+            // Удаляет таг
             tagRepository.deleteById(tagId);
 
         }

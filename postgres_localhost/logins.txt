@@ -8,5 +8,7 @@ user6
 
 5k5bsAy2
 
-client-id: task-client
-secret: fBqa60wNm2
+client_id:client_secret
+
+task-client
+fBqa60wNm2

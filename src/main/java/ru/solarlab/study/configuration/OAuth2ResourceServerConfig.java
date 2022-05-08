@@ -38,7 +38,9 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     .permitAll()
                 .and()
 
+                // https://bushansirgur.in/everything-need-to-know-about-matchers-methods-in-spring-security/
                 // https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html
+                // https://developpaper.com/spring-security-ant-style-in-path-uri/
                 // ? matches one character
                 //* matches zero or more characters
                 //** matches zero or more directories in a path
@@ -46,6 +48,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                 /* Запросы, которые должны быть
                    доступны без авторизации */
                 .authorizeRequests()
+
+                    // Advertisements
                     .antMatchers(HttpMethod.GET, "/v1/advertisements/")
                         .permitAll()
                     .mvcMatchers(HttpMethod.GET, "v1/advertisements/{advertisementId:^[0-9]+$}")
@@ -53,6 +57,18 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                     .mvcMatchers(HttpMethod.GET, "v1/advertisements/tags/{tagId:^[0-9]+$}")
                         .permitAll()
                     .mvcMatchers(HttpMethod.GET, "v1/advertisements/categories/{categoryId:^[0-9]+$}")
+                        .permitAll()
+
+                    // Categories
+                    .antMatchers(HttpMethod.GET, "/v1/categories/")
+                        .permitAll()
+                    .mvcMatchers(HttpMethod.GET, "v1/categories/{categoryId:^[0-9]+$}")
+                        .permitAll()
+
+                    // Tags
+                    .antMatchers(HttpMethod.GET, "/v1/tags/")
+                        .permitAll()
+                    .mvcMatchers(HttpMethod.GET, "v1/tags/{tagId:^[0-9]+$}")
                         .permitAll()
 
                 /* Остальные запросы доступны только с авторизацией */

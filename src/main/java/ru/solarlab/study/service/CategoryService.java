@@ -168,7 +168,6 @@ public class CategoryService {
 
     /**
      * Удаляет категорию по идентификатору
-     * Категория из базы не удаляется, меняется только статус на "Удалено"
      * @param categoryId Идентификатор категории
      */
     public void deleteById(long categoryId){
