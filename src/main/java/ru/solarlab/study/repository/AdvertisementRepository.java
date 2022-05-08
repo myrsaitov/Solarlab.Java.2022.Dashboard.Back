@@ -8,9 +8,11 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.solarlab.study.entity.Advertisement;
 
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * Репозиторий объявлений
+ */
 @Repository
 public interface AdvertisementRepository extends PagingAndSortingRepository<Advertisement, Long> {
 

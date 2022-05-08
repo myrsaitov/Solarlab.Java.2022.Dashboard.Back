@@ -1,0 +1,12 @@
+admin
+user1
+user2
+user3
+user4
+user5
+user6
+
+5k5bsAy2
+
+client-id: task-client
+secret: fBqa60wNm2

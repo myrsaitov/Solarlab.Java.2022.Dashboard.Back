@@ -27,20 +27,28 @@ import javax.sql.DataSource;
 @EnableAuthorizationServer
 public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
-    /** Менеджер аутентификации */
+    /**
+     * Менеджер аутентификации
+     */
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    /** Драйвер к БД */
+    /**
+     * Драйвер к БД
+     */
     @Autowired
     private DataSource dataSource;
 
-    /** Ключ для симметричного шифрования JWT токена */
+    /**
+     * Ключ для симметричного шифрования JWT токена
+     */
     @Value("${secure.signingKey}")
     private String signingKey;
 
 
-    /** Конфигурация модулей auth сервиса */
+    /**
+     * Конфигурация модулей auth сервиса
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
 
@@ -52,7 +60,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Конфигурация security auth сервиса */
+    /**
+     * Конфигурация security auth сервиса
+     */
     @Override
     public void configure(
             AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -61,7 +71,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Конфигурация клиентов auth сервиса. */
+    /**
+     * Конфигурация клиентов auth сервиса.
+     */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 
@@ -69,7 +81,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Бин для шифрования паролей пользователей */
+    /**
+     * Бин для шифрования паролей пользователей
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
 
@@ -77,7 +91,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Кастомный сервис по работе с oauth токенами */
+    /**
+     * Кастомный сервис по работе с oauth токенами
+     */
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
@@ -90,7 +106,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Кастомное хранилище oauth токенов */
+    /**
+     * Кастомное хранилище oauth токенов
+     */
     @Bean
     public TokenStore tokenStore() {
 
@@ -98,7 +116,9 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 
     }
 
-    /** Кастомный конвертер oauth токенов */
+    /**
+     * Кастомный конвертер oauth токенов
+     */
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
 

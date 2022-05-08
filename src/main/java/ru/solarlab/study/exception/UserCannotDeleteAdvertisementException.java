@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.validation.ValidationException;
 
 /**
- * Пользователь не может удалить задачу
+ * Пользователь не может удалить объявление
  */
 @ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class UserCannotDeleteAdvertisementException extends ValidationException {

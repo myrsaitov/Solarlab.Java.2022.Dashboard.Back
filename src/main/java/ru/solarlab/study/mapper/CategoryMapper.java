@@ -12,6 +12,9 @@ import ru.solarlab.study.entity.Category;
 
 import java.time.OffsetDateTime;
 
+/**
+ * Маппер категорий
+ */
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 

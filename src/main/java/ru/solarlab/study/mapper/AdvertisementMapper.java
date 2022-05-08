@@ -14,6 +14,9 @@ import ru.solarlab.study.entity.Tag;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
+/**
+ * Маппер объявлений
+ */
 @Mapper(componentModel = "spring")
 public interface AdvertisementMapper {
 

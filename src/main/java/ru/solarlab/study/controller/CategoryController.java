@@ -21,6 +21,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * Контроллер категорий
+ */
 @Controller /* Компонент слоя управления */
 @RequestMapping("/v1/categories") /* Задаёт адрес,
     по которому весь контроллер или его метод доступен на клиенте */

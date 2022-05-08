@@ -12,6 +12,9 @@ import ru.solarlab.study.entity.Tag;
 
 import java.time.OffsetDateTime;
 
+/**
+ * Маппер тагов
+ */
 @Mapper(componentModel = "spring")
 public interface TagMapper {
 

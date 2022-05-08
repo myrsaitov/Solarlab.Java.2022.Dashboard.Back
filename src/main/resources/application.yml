@@ -21,11 +21,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/advertisement_db?currentSchema=advertisement_schema
     username: postgres
     password: postgres
-  #jpa.hibernate.ddl-auto: create
   jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 secure:
-  signingKey: oauth-sig-key
+  signingKey: $2a$12$7tlfo74qWmwaNQDzW3B09OA4Okw3m6rsA04aua/v9dg4nfwQ7k5SK
 
 springfox:
   documentation:

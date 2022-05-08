@@ -60,7 +60,7 @@ INSERT INTO oauth_client_details (client_id,
                                   autoapprove)
 
 VALUES ('task-client', -- client-id
-        '$2a$10$ftGBqfb6LCFoQTbGR8OAf.QGV7e97jwLhboX8OB0OIQzuFH8F5cKa', -- hash client secret: 3vKDcTh5C4
+        '$2a$10$GUVsPi4TJHlyuQdX2m9zyeozXjz3/1FsMpYHVtuVPqJkyDoQHMwme', -- hash client secret: fBqa60wNm2
         'password,refresh_token', -- grant types
         'tasks', -- scope
         null,
@@ -72,12 +72,24 @@ VALUES ('task-client', -- client-id
 
 -- users, hash of password: password
 
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c71', 'admin', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- 5k5bsAy2
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c72', 'user1', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- https://bcrypt-generator.com/
-INSERT INTO users (id, username, email, enabled, password) VALUES ('277a8158-fe9f-4c2b-9803-ee7d23927c73', 'user2', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe'); -- 10 rounds
+-- 5k5bsAy2 => $2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe
+-- https://bcrypt-generator.com/ => 10 rounds
 
+-- https://www.guidgenerator.com/
+
+INSERT INTO users (id, username, email, enabled, password) VALUES ('ce8a11ea-39d5-49d3-b860-84989d6ec87a', 'admin', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('4c4e1ddc-d098-4053-b7d7-41c716f7302a', 'user1', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('ece70fa3-2c59-4c8a-9f8c-4d7bd201fa3d', 'user2', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('0c92e1dd-ba0d-479b-a8c6-0262a2b240ac', 'user3', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('c93d5933-458b-46d4-8865-f30c27a6d7a8', 'user4', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('5a57c3ac-1399-4c1e-9967-19e6ca2ab6b9', 'user5', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
+INSERT INTO users (id, username, email, enabled, password) VALUES ('f886166b-d2f9-4c3b-b219-13a37412c9cd', 'user6', null, true, '$2a$10$sbKz.YS/XGgdGn2fXL1tWeTAVM.6XsVoIwT/kBXo8zPBmx05.VFJe');
 
 -- authorities
 INSERT INTO authorities (authority, username) VALUES ('ADMIN', 'admin');
 INSERT INTO authorities (authority, username) VALUES ('USER', 'user1');
 INSERT INTO authorities (authority, username) VALUES ('USER', 'user2');
+INSERT INTO authorities (authority, username) VALUES ('USER', 'user3');
+INSERT INTO authorities (authority, username) VALUES ('USER', 'user4');
+INSERT INTO authorities (authority, username) VALUES ('USER', 'user5');
+INSERT INTO authorities (authority, username) VALUES ('USER', 'user6');

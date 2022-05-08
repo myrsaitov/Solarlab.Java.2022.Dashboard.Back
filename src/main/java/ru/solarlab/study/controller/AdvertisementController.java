@@ -20,6 +20,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
 
+/**
+ * Контроллер объявлений
+ */
 @Controller /* Компонент слоя управления */
 @RequestMapping("/v1/advertisements") /* Задаёт адрес,
     по которому весь контроллер или его метод доступен на клиенте */
@@ -40,6 +43,7 @@ public class AdvertisementController {
     // а состояние объекта изменить можно
     private final AdvertisementService advertisementService;
 
+    //@PreAuthorize("hasRole('USER')")
     @Operation( /* Описывает возможности методов контроллера */
             summary = "Создает объявление",
             description = "Создает новое объявление по данным из DTO")

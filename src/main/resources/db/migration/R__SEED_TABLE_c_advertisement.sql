@@ -4,7 +4,7 @@
 TRUNCATE TABLE advertisement CASCADE;
 
 -- Insert Data into columns
-INSERT INTO advertisement (id, created_at, title, body, price, status) VALUES (1, now(), 'FromMigrationAdvertisement', 'NULL', 0, 0);
+INSERT INTO advertisement (id, created_at, title, body, price, status, owner) VALUES (1, now(), 'FromMigrationAdvertisement', 'NULL', 0, 0, 'OWNER');
 
 
 -- Функция для привязки объявления к категории
@@ -21,7 +21,7 @@ END
 $func$;
 
 -- Сидирование демонстрационных объявлений
-INSERT INTO advertisement (id, title, body, price, created_at, status, category_id)
+INSERT INTO advertisement (id, title, body, price, created_at, status, category_id, owner)
 SELECT
     -- id
     unnest(array[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]),
@@ -88,6 +88,34 @@ SELECT
     -- status
     0,
     -- category_id
-    add_to_category(unnest(array[2,2,3,3,4,4,6,6,7,8,8,8,10,10,10,11,11,11,12,13,14,14,15,16,17]))
+    add_to_category(unnest(array[2,2,3,3,4,4,6,6,7,8,8,8,10,10,10,11,11,11,12,13,14,14,15,16,17])),
+    -- owner
+    unnest(array[
+        'user1',
+        'user2',
+        'user3',
+        'user4',
+        'user5',
+        'user6',
+        'user1',
+        'user2',
+        'user3',
+        'user4',
+        'user5',
+        'user6',
+        'user1',
+        'user2',
+        'user3',
+        'user4',
+        'user5',
+        'user6',
+        'user1',
+        'user2',
+        'user3',
+        'user4',
+        'user5',
+        'user6',
+        'user1'
+        ])
 ;
 
