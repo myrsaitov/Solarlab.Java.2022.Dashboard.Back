@@ -1,10 +1,7 @@
 package ru.solarlab.study.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.solarlab.study.validation.CapitalLetter;
 
 import javax.validation.constraints.NotBlank;
@@ -20,6 +17,9 @@ import javax.validation.constraints.Positive;
            метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
+@Builder /* Annotation produces complex builder APIs for your classes
+            Позволяет удобно создавать объекты классов,
+            не прописывая конструкторы для каждого поля по-отдельности */
 @Schema(description = "DTO создания объявления")
 public class AdvertisementCreateDto {
 

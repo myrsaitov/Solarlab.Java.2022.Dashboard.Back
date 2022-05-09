@@ -48,7 +48,7 @@ public class TagService {
      * @param request DTO для создания тага
      * @return Идентификатор нового тага
      */
-    public Long create(TagCreateDto request) {
+    public TagDto create(TagCreateDto request) {
 
         try {
 
@@ -62,7 +62,8 @@ public class TagService {
             tagRepository.save(tag);
 
             // Возвращает результат
-            return tag.getId();
+            return tagMapper
+                    .tagToTagDto(tag);
 
         }
         catch (Exception ex) {

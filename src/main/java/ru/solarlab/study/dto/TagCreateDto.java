@@ -14,6 +14,9 @@ import javax.validation.constraints.NotBlank;
            метод установки значения */
 @NoArgsConstructor /* Создаёт конструктор по умолчанию */
 @AllArgsConstructor /* Генерирует конструктор для всех полей класса */
+@Builder /* Annotation produces complex builder APIs for your classes.
+            Позволяет удобно создавать объекты классов,
+            не прописывая конструкторы для каждого поля по-отдельности */
 @Schema(description = "DTO создания тага")
 public class TagCreateDto {
 

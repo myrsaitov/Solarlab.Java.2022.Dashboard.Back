@@ -45,7 +45,7 @@ public class CategoryService {
      * @param request DTO для создания категории
      * @return Идентификатор созданного категории
      */
-    public Long create(CategoryCreateDto request) {
+    public CategoryDto create(CategoryCreateDto request) {
 
         try {
 
@@ -66,7 +66,8 @@ public class CategoryService {
             categoryRepository.save(category);
 
             // Возвращает результат
-            return category.getId();
+            return categoryMapper
+                    .categoryToCategoryDto(category);
 
         }
         catch (Exception ex) {

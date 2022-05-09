@@ -49,7 +49,7 @@ public class TagController {
             consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
-    public ResponseEntity<Long> createTag(
+    public ResponseEntity<TagDto> createTag(
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional

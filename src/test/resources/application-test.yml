@@ -1,3 +1,7 @@
 spring:
-  flyway:
-    enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/advertisement_db?currentSchema=advertisement_schema
+    username: postgres
+    password: postgres
+  jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect

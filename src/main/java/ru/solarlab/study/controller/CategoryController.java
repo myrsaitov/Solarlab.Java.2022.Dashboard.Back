@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.CategoryCreateDto;
 import ru.solarlab.study.dto.CategoryDto;
 import ru.solarlab.study.dto.CategoryUpdateDto;
@@ -55,7 +56,7 @@ public class CategoryController {
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Long> createCategory(
+    public ResponseEntity<CategoryDto> createCategory(
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional

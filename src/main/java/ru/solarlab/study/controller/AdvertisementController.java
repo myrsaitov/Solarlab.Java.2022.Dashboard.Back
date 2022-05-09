@@ -53,7 +53,7 @@ public class AdvertisementController {
             consumes = { "application/json" })
     // Здесь "Long", а не "long", потому что
     // "Type argument cannot be of primitive type"
-    public ResponseEntity<Long> createAdvertisement(
+    public ResponseEntity<AdvertisementDto> createAdvertisement(
             @Parameter /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional

@@ -60,7 +60,7 @@ public class AdvertisementService {
      * @param request DTO для создания объявления
      * @return Идентификатор созданного объявления
      */
-    public Long create(AdvertisementCreateDto request) {
+    public AdvertisementDto create(AdvertisementCreateDto request) {
 
         try {
 
@@ -100,7 +100,8 @@ public class AdvertisementService {
             categoryRepository.save(category);
 
             // Возвращает результат
-            return advertisement.getId();
+            return advertisementMapper
+                    .advertisementToAdvertisementDto(advertisement);
 
         }
         catch (Exception ex) {
@@ -381,8 +382,20 @@ public class AdvertisementService {
     private UserDto getCurrentUser() {
 
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        String username = securityContext.getAuthentication().getPrincipal().toString();
-        String role = securityContext.getAuthentication().getAuthorities().stream().findAny().get().getAuthority();
+
+        String username = securityContext
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
+
+        String role = securityContext
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .findAny()
+                .get()
+                .getAuthority();
+
         return new UserDto(username, role);
 
     }
