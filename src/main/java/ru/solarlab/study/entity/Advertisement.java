@@ -193,6 +193,73 @@ public class Advertisement {
 
     }
 
+    /**
+     * Для тестирования: сравнение двух объектов
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+
+        if(!(obj instanceof Advertisement)) {
+
+            return false;
+
+        }
+
+        return compareEquality(this,(Advertisement)obj);
+
+    }
+
+    static boolean compareEquality(Advertisement one, Advertisement two){
+
+        if(one.getId() != two.getId()){
+            return false;
+        }
+
+        if(one.getCreatedAt() != two.getCreatedAt()){
+            return false;
+        }
+
+        if(one.getUpdatedAt() != two.getUpdatedAt()){
+            return false;
+        }
+
+        if(one.getTitle() != two.getTitle()){
+            return false;
+        }
+
+        if(one.getBody() != two.getBody()){
+            return false;
+        }
+
+        if(one.getPrice() != two.getPrice()){
+            return false;
+        }
+
+        if(one.getStatus() != two.getStatus()){
+            return false;
+        }
+
+        if(one.getCategory() != two.getCategory()){
+            return false;
+        }
+
+
+        var tags1 = one.getTags();
+        var tags2 = two.getTags();
+        if(!tags1.equals(tags2)){
+            return false;
+        }
+
+        if(one.getOwner() != two.getOwner()){
+            return false;
+        }
+
+        return true;
+
+    }
+
 }
 
 // https://habr.com/ru/post/254773/ (Нормализация отношений, 6 нормальных форм)

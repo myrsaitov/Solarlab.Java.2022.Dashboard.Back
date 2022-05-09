@@ -12,6 +12,7 @@ import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Tag;
 
 import java.time.OffsetDateTime;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -25,10 +26,22 @@ public interface AdvertisementMapper {
      * @param entity
      * @return
      */
-    @Mapping(target = "tagId", ignore = true)
+    @Mapping(target = "tagId", expression = "java(resolveTagIds(entity.getTags()))")
     @Mapping(source = "entity.category.id", target = "categoryId")
     AdvertisementDto advertisementToAdvertisementDto(
             Advertisement entity);
+
+    default Long[] resolveTagIds(Set<Tag> tags) {
+
+        // Получает список индексов тагов
+        var tagIds = tags
+                .stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
+        return tagIds.toArray(new Long[0]);
+
+    }
 
     @AfterMapping /* Marks a method to be invoked at
         the end of a generated mapping method, right
@@ -39,8 +52,12 @@ public interface AdvertisementMapper {
             Advertisement source) {
 
         // Получает список индексов тагов
-        var tagIds = source.getTags().stream()
-                .map(Tag::getId).collect(Collectors.toList());
+        var tagIds = source
+                .getTags()
+                .stream()
+                .map(Tag::getId)
+                .collect(Collectors.toList());
+
         target.setTagId(tagIds.toArray(new Long[0]));
 
     }

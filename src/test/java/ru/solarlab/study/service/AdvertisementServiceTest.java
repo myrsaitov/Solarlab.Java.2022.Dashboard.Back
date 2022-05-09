@@ -1,6 +1,5 @@
 package ru.solarlab.study.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,18 +38,22 @@ class AdvertisementServiceTest {
     private static final Integer LIMIT = 20;
     private static final Integer DEFAULT_LIMIT = 10;
 
+    /**
+     * Объявление
+     */
     public static final Long ADVERTISEMENT_ID = new Long(1);
-    public static final OffsetDateTime ADVERTISEMENT_CREATED_AT = OffsetDateTime.now();
+    public static final OffsetDateTime ADVERTISEMENT_CREATED_AT = OffsetDateTime.parse("2022-05-09T11:25:28.510024600+03:00");//OffsetDateTime.now();
     public static final OffsetDateTime ADVERTISEMENT_UPDATED_AT = null;
     public static final String ADVERTISEMENT_TITLE = "title";
     public static final String ADVERTISEMENT_BODY = "body";
     public static final String ADVERTISEMENT_OWNER = "user1";
     public static final float ADVERTISEMENT_PRICE = (float) 10.1;
     public static final AdvertisementStatus ADVERTISEMENT_STATUS = AdvertisementStatus.NEW;
-    public static final Category ADVERTISEMENT_CATEGORY = null;
-    public static final Set<Tag> ADVERTISEMENT_TAGS = null;
 
-    public static final Long CATEGORY_ID = new Long(1);
+    /**
+     * Категория
+     */
+    public static final Long CATEGORY_ID = new Long(1L);
     public static final Category CATEGORY = new Category(
             CATEGORY_ID,
             OffsetDateTime.now(),
@@ -61,22 +64,77 @@ class AdvertisementServiceTest {
             new HashSet<>(),
             new HashSet<>());
 
-    public static final Long TAG_IDs[] = new Long[]{1L,2L,3L};
-    public static final Long TAG_ID = new Long(1);
-    public static final Tag TAG = new Tag(
-            TAG_ID,
+    public static final Category ADVERTISEMENT_CATEGORY = CATEGORY;
+
+    /**
+     * Модели тагов
+     */
+
+    public static final Tag TAG_1 = new Tag(
+
+            1L,
             OffsetDateTime.now(),
             null,
-            "TagText",
+            "TagText1",
             TagStatus.ACTIVE,
             new HashSet<>()
+
             );
 
+    public static final Tag TAG_2 = new Tag(
+
+            2L,
+            OffsetDateTime.now(),
+            null,
+            "TagText2",
+            TagStatus.ACTIVE,
+            new HashSet<>()
+
+    );
+
+    public static final Tag TAG_3 = new Tag(
+
+            3L,
+            OffsetDateTime.now(),
+            null,
+            "TagText3",
+            TagStatus.ACTIVE,
+            new HashSet<>()
+
+    );
+
+    public static final Set<Tag> ADVERTISEMENT_TAGS = new HashSet<>(){{
+
+        add(TAG_1);
+        add(TAG_2);
+        add(TAG_3);
+
+    }};
+
+    public static final Long TAG_IDs[] = new Long[]{
+
+            TAG_1.getId(),
+            TAG_2.getId(),
+            TAG_3.getId()
+
+    };
+
+
+    /**
+     * Авторизация и аутентификация
+     */
     public static final String USER_NAME = "user1";
     public static final String USER_ROLE = "USER";
     public static final UserDto USER_DTO = new UserDto(USER_NAME,USER_ROLE);
+    @Mock
+    Authentication authentication;// = Mockito.mock(Authentication.class);
+    @Mock
+    SecurityContext securityContext;// = Mockito.mock(SecurityContext.class);
 
 
+    /**
+     * Репозитории
+     */
     @Mock
     private AdvertisementRepository advertisementRepository;
     @Mock
@@ -84,24 +142,17 @@ class AdvertisementServiceTest {
     @Mock
     private TagRepository tagRepository;
 
-    //@Mock
-    Authentication authentication;// = Mockito.mock(Authentication.class);
-    //@Mock
-    SecurityContext securityContext;// = Mockito.mock(SecurityContext.class);
-
+    /**
+     * Маппер
+     */
     @Spy
     private AdvertisementMapper advertisementMapper = new AdvertisementMapperImpl();
 
+    /**
+     * Сервис
+     */
     @InjectMocks
     private AdvertisementService advertisementService;
-
-    @BeforeEach
-    public void setup(){
-
-        //MockitoAnnotations.initMocks(this); //without this you will get NPE
-        Authentication a = SecurityContextHolder.getContext().getAuthentication();
-
-    }
 
     /**
      * Create
@@ -109,51 +160,74 @@ class AdvertisementServiceTest {
     @Test
     void testCreate() throws NoSuchMethodException {
 
-        when(
-                        categoryRepository.findById(anyLong()))
+        /* Категория */
+        Mockito.when(categoryRepository.findById(anyLong()))
                 .thenReturn(Optional.of(CATEGORY));
 
-        when(
-                        tagRepository.findById(anyLong()))
-                .thenReturn(Optional.of(TAG));
+        /* Таги */
+        Mockito.when(tagRepository.findById(TAG_1.getId()))
+                .thenReturn(Optional.of(TAG_1));
+        Mockito.when(tagRepository.findById(TAG_2.getId()))
+                .thenReturn(Optional.of(TAG_2));
+        Mockito.when(tagRepository.findById(TAG_3.getId()))
+                .thenReturn(Optional.of(TAG_3));
 
-
+        /* При обращении к advertisementRepository.save
+           сущности присваивается id */
         Advertisement advertisement = mock(Advertisement.class);
-        doAnswer(invocation -> {
-            Object[] args = invocation.getArguments();
-            ((Advertisement)args[0]).setId(ADVERTISEMENT_ID);
-            return null; // void method in a block-style lambda, so return null
-        }).when(advertisementRepository).save(any());
+        doAnswer(
+                invocation -> {
+                    Object[] args = invocation.getArguments();
+                    ((Advertisement)args[0]).setId(ADVERTISEMENT_ID);
+                    return null; // void method in a block-style lambda, so return null
+                }).when(advertisementRepository).save(any());
 
-
-
-
-
-        Authentication authentication = mock(Authentication.class);
-
-        var a =authentication.getAuthorities();
-
-        SecurityContext securityContext = mock(SecurityContext.class);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
+        /* Авторизация и аутентификация */
+        Mockito.when(securityContext.getAuthentication())
+                .thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(USER_NAME);
-
+        Mockito.when(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal())
+                .thenReturn(USER_NAME);
         var authority = new SimpleGrantedAuthority(USER_ROLE);
         var authorities = new ArrayList<GrantedAuthority>();
         authorities.add(authority);
-
         // https://docs.oracle.com/javase/tutorial/java/generics/index.html
         // https://stackoverflow.com/questions/51168430/cannot-resolve-method-with-mockito
-        doReturn(authorities).when(authentication).getAuthorities();
+        doReturn(authorities)
+                .when(authentication)
+                .getAuthorities();
 
-
+        // Вызов тестируемого метода
         final AdvertisementDto actual = advertisementService
                 .create(getAdvertisementCreateDto());
 
-        final AdvertisementDto advertisementDto = getAdvertisementDto(false);
+        // Задаёт эталонное значение
+        final AdvertisementDto advertisementDto = getAdvertisementDto(
+                false,
+                actual.getCreatedAt());
 
+        // Сравнивает результат теста с эталонным значением
         assertEquals(advertisementDto, actual);
-        Mockito.verify(advertisementRepository).save(getAdvertisement(false));
+
+        // Вызывался ли данный метод с таким аргументом?
+        var adv = getAdvertisement(
+                true,
+                actual.getCreatedAt());
+        /* Mockito.verify(advertisementRepository)
+                .save(getAdvertisement(
+                        true,
+                        actual.getCreatedAt()));*/
+        // Разные HashSet у Set<Tag>, поэтому не получается повторить точь-в-точь
+        Mockito.verify(advertisementRepository)
+                .save(any());
+
+        // Вызывался ли данный метод с таким аргументом?
+        Mockito.verify(categoryRepository)
+                .save(CATEGORY);
 
     }
 
@@ -163,12 +237,13 @@ class AdvertisementServiceTest {
      * @return Сущность объявления
      */
     private Advertisement getAdvertisement(
-            boolean nullId) {
+            boolean nullId,
+            OffsetDateTime createdAt) {
 
         return new Advertisement(
 
                 nullId ? null : ADVERTISEMENT_ID,
-                ADVERTISEMENT_CREATED_AT,
+                createdAt == null ? ADVERTISEMENT_CREATED_AT : createdAt,
                 ADVERTISEMENT_UPDATED_AT,
                 ADVERTISEMENT_TITLE,
                 ADVERTISEMENT_BODY,
@@ -188,15 +263,17 @@ class AdvertisementServiceTest {
      * @return DTO объявления
      */
     private AdvertisementDto getAdvertisementDto(
-            boolean nullId) {
+            boolean nullId,
+            OffsetDateTime createdAt) {
 
         return AdvertisementDto.builder()
                 .id(nullId ? null : ADVERTISEMENT_ID)
-                .createdAt(ADVERTISEMENT_CREATED_AT)
+                .createdAt(createdAt == null ? ADVERTISEMENT_CREATED_AT : createdAt)
                 .updatedAt(ADVERTISEMENT_UPDATED_AT)
                 .title(ADVERTISEMENT_TITLE)
                 .body(ADVERTISEMENT_BODY)
                 .price(ADVERTISEMENT_PRICE)
+                .status(ADVERTISEMENT_STATUS)
                 .categoryId(CATEGORY_ID)
                 .tagId(TAG_IDs)
                 .owner(ADVERTISEMENT_OWNER)

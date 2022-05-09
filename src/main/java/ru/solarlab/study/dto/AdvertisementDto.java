@@ -8,6 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 
 /**
  * DTO объявления
@@ -89,5 +90,73 @@ public class AdvertisementDto {
      */
     @Schema(description = "Владелец")
     private String owner;
+
+
+    /**
+     * Для тестирования: сравнение двух объектов
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj) {
+
+        if(!(obj instanceof AdvertisementDto)) {
+
+            return false;
+
+        }
+
+        return compareEquality(this,(AdvertisementDto)obj);
+
+    }
+
+    static boolean compareEquality(AdvertisementDto one, AdvertisementDto two){
+
+        if(one.getId() != two.getId()){
+            return false;
+        }
+
+        if(one.getCreatedAt() != two.getCreatedAt()){
+            return false;
+        }
+
+        if(one.getUpdatedAt() != two.getUpdatedAt()){
+            return false;
+        }
+
+        if(one.getTitle() != two.getTitle()){
+            return false;
+        }
+
+        if(one.getBody() != two.getBody()){
+            return false;
+        }
+
+        if(one.getPrice() != two.getPrice()){
+            return false;
+        }
+
+        if(one.getStatus() != two.getStatus()){
+            return false;
+        }
+
+        if(one.getCategoryId() != two.getCategoryId()){
+            return false;
+        }
+
+        // Сначала массивы отсортированы
+        var tagIds1 = Arrays.stream(one.getTagId()).sorted().toArray();
+        var tagIds2 = Arrays.stream(two.getTagId()).sorted().toArray();
+        if(!Arrays.equals(tagIds1, tagIds2)){
+            return false;
+        }
+
+        if(one.getOwner() != two.getOwner()){
+            return false;
+        }
+
+        return true;
+
+    }
 
 }
