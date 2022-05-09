@@ -81,7 +81,8 @@ public class TagController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор тага",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -114,7 +115,8 @@ public class TagController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор тага",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -137,8 +139,9 @@ public class TagController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */        
-                description = "Количество тагов на странице",
-                required = true)
+                    description = "Количество тагов на странице",
+                    required = true,
+                    example = "1000")
             @Min(0) /* Минимальное допустимое значение */
             @Max(1000) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -162,7 +165,8 @@ public class TagController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор тага",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */

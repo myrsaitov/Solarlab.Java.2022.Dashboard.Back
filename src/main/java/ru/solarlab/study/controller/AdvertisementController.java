@@ -79,12 +79,17 @@ public class AdvertisementController {
             produces = { "application/json" },
             consumes = { "application/json" })
     public ResponseEntity updateAdvertisement(
+            /*@ApiParam(
+                    value = "Идентификатор объявления",
+                    required = true,
+                    example = "3")//*/
             @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор объявления",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -117,7 +122,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор объявления",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -140,7 +146,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Номер страницы",
-                    required = true)
+                    required = true,
+                    example = "0")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @PositiveOrZero /* Не меньше нуля */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -151,8 +158,9 @@ public class AdvertisementController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
-                description = "Количество объявлений на странице",
-                 required = true)
+                    description = "Количество объявлений на странице",
+                    required = true,
+                    example = "10")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
@@ -191,7 +199,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Номер страницы",
-                    required = true)
+                    required = true,
+                    example = "0")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @PositiveOrZero /* Не меньше нуля */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -203,7 +212,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Количество объявлений на странице",
-                    required = true)
+                    required = true,
+                    example = "10")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
@@ -226,7 +236,9 @@ public class AdvertisementController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
-                    description = "Идентификатор категории")
+                    description = "Идентификатор категории",
+                    required = true,
+                    example = "2")
             @Positive /* Больше нуля */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -253,7 +265,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Номер страницы",
-                    required = true)
+                    required = true,
+                    example = "0")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @PositiveOrZero /* Не меньше нуля */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -265,7 +278,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Количество объявлений на странице",
-                    required = true)
+                    required = true,
+                    example = "10")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
@@ -288,7 +302,9 @@ public class AdvertisementController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
-                    description = "Идентификатор тага")
+                    description = "Идентификатор тага",
+                    required = true,
+                    example = "2")
             @Positive /* Больше нуля */
             @PathVariable("tagId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -315,7 +331,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Номер страницы",
-                    required = true)
+                    required = true,
+                    example = "0")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @PositiveOrZero /* Не меньше нуля */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -327,7 +344,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Количество объявлений на странице",
-                    required = true)
+                    required = true,
+                    example = "10")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @Min(0) /* Минимальное допустимое значение */
             @Max(20) /* Максимальное допустимое значение */
@@ -350,7 +368,9 @@ public class AdvertisementController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
-                    description = "Идентификатор тага")
+                    description = "Имя пользователя",
+                    required = true,
+                    example = "user2")
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @PathVariable("owner") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -377,7 +397,8 @@ public class AdvertisementController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор объявления",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("advertisementId") /* Извлекает параметр,
                 переданный в адресе запроса */

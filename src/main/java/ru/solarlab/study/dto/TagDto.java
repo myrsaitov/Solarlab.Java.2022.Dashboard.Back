@@ -24,34 +24,39 @@ import java.time.OffsetDateTime;
 public class TagDto {
 
     @Positive
-    @Schema(description = "Идентификатор")
+    @Schema(description = "Идентификатор",
+            defaultValue = "2")
     private Long id;
 
     /**
      * Дата и время создания тага
      */
     @NotBlank
-    @Schema(description = "Дата и время создания тага")
+    @Schema(description = "Дата и время создания тага",
+            defaultValue = "2022-05-08T11:25:28.510024600+03:00")
     private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления тага
      */
-    @Schema(description = "Дата и время обновления тага")
+    @Schema(description = "Дата и время обновления тага",
+            defaultValue = "2022-05-09T11:25:28.510024600+03:00")
     private OffsetDateTime updatedAt;
 
     /**
      * Текст тага
      */
     @NotBlank
-    @Schema(description = "Текст тага")
+    @Schema(description = "Текст тага",
+            defaultValue = "Текст_тага")
     private String text;
 
     /**
      * Статус тага
      */
     @NotNull
-    @Schema(description = "Статус")
+    @Schema(description = "Статус",
+            defaultValue = "ACTIVE")
     private TagStatus status;
 
 }

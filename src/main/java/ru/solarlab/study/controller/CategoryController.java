@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.solarlab.study.dto.AdvertisementDto;
 import ru.solarlab.study.dto.CategoryCreateDto;
 import ru.solarlab.study.dto.CategoryDto;
 import ru.solarlab.study.dto.CategoryUpdateDto;
@@ -88,7 +87,8 @@ public class CategoryController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор категории",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -121,7 +121,8 @@ public class CategoryController {
                 for the operation, and/or to define additional
                 properties for the Parameter */
                     description = "Идентификатор категории",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */
@@ -144,8 +145,9 @@ public class CategoryController {
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
-                description = "Количество категорий на странице",
-                required = true)
+                    description = "Количество категорий на странице",
+                    required = true,
+                    example = "1000")
             @Min(0) /* Минимальное допустимое значение */
             @Max(1000) /* Максимальное допустимое значение */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
@@ -169,7 +171,8 @@ public class CategoryController {
                 for the operation, and/or to define additional
                 properties for the Parameter */            
                     description = "Идентификатор категории",
-                    required = true)
+                    required = true,
+                    example = "2")
             @Positive /* Допустимое значение > 0 */
             @PathVariable("categoryId") /* Извлекает параметр,
                 переданный в адресе запроса */

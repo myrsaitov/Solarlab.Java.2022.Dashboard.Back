@@ -26,69 +26,79 @@ import java.util.Arrays;
 public class AdvertisementDto {
 
     @Positive
-    @Schema(description = "Идентификатор")
-    public Long id;
+    @Schema(description = "Идентификатор",
+            defaultValue = "2")
+    private Long id;
 
     /**
      * Дата и время создания объявления
      */
     @NotBlank
-    @Schema(description = "Дата и время создания объявления")
-    public OffsetDateTime createdAt;
+    @Schema(description = "Дата и время создания объявления",
+            defaultValue = "2022-05-08T11:25:28.510024600+03:00")
+    private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления объявления
      */
-    @Schema(description = "Дата и время обновления объявления")
-    public OffsetDateTime updatedAt;
+    @Schema(description = "Дата и время обновления объявления",
+            defaultValue = "2022-05-09T11:25:28.510024600+03:00")
+    private OffsetDateTime updatedAt;
 
     /**
      * Заголовок объявления
      */
     @NotBlank
     @CapitalLetter
-    @Schema(description = "Заголовок объявления")
-    public String title;
+    @Schema(description = "Заголовок объявления",
+            defaultValue = "Заголовок объявления")
+    private String title;
 
     /**
      * Текст объявления
      */
     @NotBlank
-    @Schema(description = "Текст объявления")
-    public String body;
+    @Schema(description = "Текст объявления",
+            defaultValue = "Текст объявления")
+    private String body;
 
     /**
      * Стоимость
      */
     @NotNull
-    @Schema(description = "Стоимость")
-    public float price;
+    @Schema(description = "Стоимость",
+            defaultValue = "999.99")
+    private float price;
 
     /**
      * Статус объявления
      */
     @NotNull
-    @Schema(description = "Статус")
-    public AdvertisementStatus status;
+    @Schema(description = "Статус",
+            defaultValue = "ACTIVE")
+    private AdvertisementStatus status;
 
     /**
      * Идентификатор категории
      */
     @Positive
-    @Schema(description = "Идентификатор категории")
-    public Long categoryId;
+    @Schema(description = "Идентификатор категории",
+            defaultValue = "12")
+    private Long categoryId;
 
     /**
      * Идентификаторы связанных тагов
      */
     @NotNull
-    @Schema(description = "Идентификаторы связанных тагов")
-    public Long tagId[]; // Long - удобнее с массивами
+    @Schema(description = "Идентификаторы связанных тагов",
+            defaultValue = "[2,3,4,5,6]")
+    private Long tagId[]; // Long - удобнее с массивами
 
     /**
      * Владелец
      */
-    @Schema(description = "Владелец")
+    @Schema(description = "Владелец",
+            defaultValue = "user22")
     private String owner;
 
 

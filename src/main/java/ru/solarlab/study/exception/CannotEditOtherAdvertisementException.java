@@ -12,7 +12,7 @@ import javax.validation.ValidationException;
 public class CannotEditOtherAdvertisementException extends ValidationException {
 
     /** Сообщение об ошибке по умолчанию */
-    private static final String DEFAULT_ERROR_MESSAGE = "Нельзя редактировать объявление других пользователей";
+    private static final String DEFAULT_ERROR_MESSAGE = "Нельзя редактировать объявления других пользователей";
 
     public CannotEditOtherAdvertisementException() {
 

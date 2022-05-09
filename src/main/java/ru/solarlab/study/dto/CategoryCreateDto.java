@@ -27,14 +27,16 @@ public class CategoryCreateDto {
      */
     @NotBlank
     @CapitalLetter
-    @Schema(description = "Имя категории")
+    @Schema(description = "Имя категории",
+            defaultValue = "Имя категории")
     private String name;
 
     /**
      * Идентификатор родительской категории
      */
     @Positive
-    @Schema(description = "Идентификатор родительской категории")
+    @Schema(description = "Идентификатор родительской категории",
+            defaultValue = "12")
     private Long parentCategoryId;
 
 }

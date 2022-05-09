@@ -24,7 +24,8 @@ public class TagCreateDto {
      * Текст тага
      */
     @NotBlank
-    @Schema(description = "Текст тага")
+    @Schema(description = "Текст тага",
+            defaultValue = "Текст_Тага")
     private String text;
 
 }

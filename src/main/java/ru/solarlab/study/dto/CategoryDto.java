@@ -25,20 +25,23 @@ import java.time.OffsetDateTime;
 public class CategoryDto {
 
     @Positive
-    @Schema(description = "Идентификатор")
+    @Schema(description = "Идентификатор",
+            defaultValue = "2")
     private Long id;
 
     /**
      * Дата и время создания категории
      */
     @NotBlank
-    @Schema(description = "Дата и время создания категории")
+    @Schema(description = "Дата и время создания категории",
+            defaultValue = "2022-05-08T11:25:28.510024600+03:00")
     private OffsetDateTime createdAt;
 
     /**
      * Дата и время обновления категории
      */
-    @Schema(description = "Дата и время обновления категории")
+    @Schema(description = "Дата и время обновления категории",
+            defaultValue = "2022-05-09T11:25:28.510024600+03:00")
     private OffsetDateTime updatedAt;
 
     /**
@@ -46,21 +49,24 @@ public class CategoryDto {
      */
     @NotBlank
     @CapitalLetter
-    @Schema(description = "Имя категории")
+    @Schema(description = "Имя категории",
+            defaultValue = "Имя категории")
     private String name;
 
     /**
      * Статус категории
      */
     @NotNull
-    @Schema(description = "Статус")
+    @Schema(description = "Статус",
+            defaultValue = "ACTIVE")
     private CategoryStatus status;
 
     /**
      * Идентификатор родительской категории
      */
     @Positive
-    @Schema(description = "Идентификатор родительской категории")
+    @Schema(description = "Идентификатор родительской категории",
+            defaultValue = "12")
     private Long parentCategoryId;
 
 }

@@ -1,5 +1,6 @@
 package ru.solarlab.study.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,11 +18,13 @@ public class UserDto {
     /**
      * Имя пользователя
      */
+    @Schema(description = "Имя пользователя")
     private String username;
 
     /**
      * Роль пользователя
      */
+    @Schema(description = "Роль пользователя")
     private String role;
 
 }

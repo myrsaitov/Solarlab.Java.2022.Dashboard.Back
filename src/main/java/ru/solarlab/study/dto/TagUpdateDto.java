@@ -25,14 +25,16 @@ public class TagUpdateDto {
      * Текст тага
      */
     @NotBlank
-    @Schema(description = "Текст тага")
+    @Schema(description = "Текст тага",
+            defaultValue = "Текст_Тага")
     private String text;
 
     /**
      * Статус тага
      */
     @NotNull
-    @Schema(description = "Статус")
+    @Schema(description = "Статус",
+            defaultValue = "BLOCKED")
     private TagStatus status;
 
 }
