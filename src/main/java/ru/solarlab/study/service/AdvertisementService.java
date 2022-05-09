@@ -249,15 +249,42 @@ public class AdvertisementService {
             Integer size,
             Sort.Direction direction) {
 
-        return advertisementRepository
-                .findAll(
-                        PageRequest.of(
-                                page == null ? 0 : page,
-                                size == null ? DEFAULT_PAGE_SIZE : size,
-                                Sort.unsorted()))
-                .stream()
-                .map(advertisementMapper::advertisementToAdvertisementDto)
-                .collect(Collectors.toList());
+        try {
+
+            // С любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                return advertisementRepository
+                        .findAll(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()))
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+            }
+            // Только с активным статусом
+            else {
+
+                return advertisementRepository
+                        .findActive(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()))
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -273,17 +300,43 @@ public class AdvertisementService {
             Integer size,
             Sort.Direction direction,
             Long categoryId) {
+        try {
 
-        return advertisementRepository
-                .findAllByCategory(
-                        PageRequest.of(
-                                page == null ? 0 : page,
-                                size == null ? DEFAULT_PAGE_SIZE : size,
-                                Sort.unsorted()),
-                        categoryId)
-                .stream()
-                .map(advertisementMapper::advertisementToAdvertisementDto)
-                .collect(Collectors.toList());
+            // С любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+                return advertisementRepository
+                        .findAllByCategory(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                categoryId)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+            }
+            // Только с активным статусом
+            else {
+
+                return advertisementRepository
+                        .findActiveByCategory(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                categoryId)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -299,17 +352,99 @@ public class AdvertisementService {
             Integer size,
             Sort.Direction direction,
             Long tagId) {
+        try {
 
-        return advertisementRepository
-                .findAllByTag(
-                        PageRequest.of(
-                                page == null ? 0 : page,
-                                size == null ? DEFAULT_PAGE_SIZE : size,
-                                Sort.unsorted()),
-                        tagId)
-                .stream()
-                .map(advertisementMapper::advertisementToAdvertisementDto)
-                .collect(Collectors.toList());
+            // С любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                return advertisementRepository
+                        .findAllByTag(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                tagId)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+            }
+            // Только с активным статусом
+            else {
+
+                return advertisementRepository
+                        .findActiveByTag(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                tagId)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
+
+    }
+
+    /**
+     * Возвращает коллекцию объявлений с пагинацией и фильтром по тагу
+     * @param page Номер страницы
+     * @param size Количество объявлений на странице
+     * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @return Коллекция объявлений
+     */
+    public List<AdvertisementDto> getAdvertisementsByOwner(
+            Integer page,
+            Integer size,
+            Sort.Direction direction,
+            String owner) {
+
+        try {
+
+            // С любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                return advertisementRepository
+                        .findAllByOwner(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                owner)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+
+            }
+            // Только с активным статусом
+            else {
+
+                return advertisementRepository
+                        .findActiveByOwner(
+                                PageRequest.of(
+                                        page == null ? 0 : page,
+                                        size == null ? DEFAULT_PAGE_SIZE : size,
+                                        Sort.unsorted()),
+                                owner)
+                        .stream()
+                        .map(advertisementMapper::advertisementToAdvertisementDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 

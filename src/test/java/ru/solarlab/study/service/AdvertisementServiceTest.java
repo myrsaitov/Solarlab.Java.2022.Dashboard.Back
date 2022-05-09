@@ -48,7 +48,7 @@ class AdvertisementServiceTest {
     public static final String ADVERTISEMENT_BODY = "body";
     public static final String ADVERTISEMENT_OWNER = "user1";
     public static final float ADVERTISEMENT_PRICE = (float) 10.1;
-    public static final AdvertisementStatus ADVERTISEMENT_STATUS = AdvertisementStatus.NEW;
+    public static final AdvertisementStatus ADVERTISEMENT_STATUS = AdvertisementStatus.ACTIVE;
 
     /**
      * Категория

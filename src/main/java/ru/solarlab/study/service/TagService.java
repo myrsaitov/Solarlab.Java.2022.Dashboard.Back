@@ -122,9 +122,9 @@ public class TagService {
 
         try {
 
+            // С любым статусом
             if (getCurrentUser().getRole().equals("ADMIN")) {
 
-                // С любым статусом
                 Tag tag = tagRepository
                         .findById(tagId)
                         .orElseThrow(
@@ -132,9 +132,9 @@ public class TagService {
                 return tagMapper.tagToTagDto(tag);
 
             }
+            // Только с активным статусом
             else {
 
-                // Только с активным статусом
                 Tag tag = tagRepository
                         .findActiveById(tagId)
                         .orElseThrow(

@@ -89,7 +89,7 @@ public interface AdvertisementMapper {
         target.setCreatedAt(OffsetDateTime.now());
 
         // Статус
-        target.setStatus(AdvertisementStatus.NEW);
+        target.setStatus(AdvertisementStatus.ACTIVE);
 
     }
 

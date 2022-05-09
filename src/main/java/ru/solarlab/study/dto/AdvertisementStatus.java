@@ -10,11 +10,12 @@ import lombok.Getter;
            метод получения значения */
 public enum AdvertisementStatus {
 
-    NEW,
-    IN_PROGRESS,
-    COMPLETED,
-    PAUSED,
-    DELETED,
-    BLOCKED
+    ACTIVE, // Активное объявление
+    PAUSED, // Приостановлено - нет в выдаче поиска,
+            // но в ЛК пользователя есть
+    DELETED,// Объявление в корзине
+            // Пользователь удалил, но может восстановить
+    BLOCKED // Заблокировал админ,
+            // пользователь уже не может разблокировать сам
     
 }

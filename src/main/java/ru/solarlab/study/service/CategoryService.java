@@ -136,9 +136,9 @@ public class CategoryService {
 
         try {
 
+            // С любым статусом
             if (getCurrentUser().getRole().equals("ADMIN")) {
 
-                // С любым статусом
                 Category category = categoryRepository
                         .findById(categoryId)
                         .orElseThrow(
@@ -146,9 +146,9 @@ public class CategoryService {
                 return categoryMapper.categoryToCategoryDto(category);
 
             }
+            // Только с активным статусом
             else {
 
-                // Только с активным статусом
                 Category category = categoryRepository
                         .findActiveById(categoryId)
                         .orElseThrow(

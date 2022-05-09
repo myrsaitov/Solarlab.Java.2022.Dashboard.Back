@@ -58,6 +58,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
                         .permitAll()
                     .mvcMatchers(HttpMethod.GET, "v1/advertisements/categories/{categoryId:^[0-9]+$}")
                         .permitAll()
+                    .mvcMatchers(HttpMethod.GET, "v1/advertisements/owners/{owner:^[a-zA-Z0-9_]+$}")
+                        .permitAll()
 
                     // Categories
                     .antMatchers(HttpMethod.GET, "/v1/categories/")

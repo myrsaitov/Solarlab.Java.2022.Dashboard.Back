@@ -242,7 +242,7 @@ public class AdvertisementController {
     }
 
     @Operation( /* Описывает возможности методов контроллера */
-            summary = "Возвращает коллекцию объявлений с фильтром по категории",
+            summary = "Возвращает коллекцию объявлений с фильтром по тагу",
             description = "Возвращает коллекцию объявлений с пагинацией")
     @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
             value = "/tags/{tagId}",
@@ -300,6 +300,68 @@ public class AdvertisementController {
                         size,
                         direction,
                         tagId));
+
+    }
+
+    @Operation( /* Описывает возможности методов контроллера */
+            summary = "Возвращает коллекцию объявлений с фильтром по категории",
+            description = "Возвращает коллекцию объявлений с пагинацией")
+    @GetMapping( /* Говорит, что этот метод должен быть вызван при запросе GET */
+            value = "/owners/{owner}",
+            produces = { "application/json" })
+    public ResponseEntity<List<AdvertisementDto>> getAdvertisementsByOwner(
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Номер страницы",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @PositiveOrZero /* Не меньше нуля */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "page")
+                    int page, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Количество объявлений на странице",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @Min(0) /* Минимальное допустимое значение */
+            @Max(20) /* Максимальное допустимое значение */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "size")
+                    int size, // Integer, т.к. PageRequest требует Integer!
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Направление сортировки (DESC, ASC)",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "direction")
+                    Sort.Direction direction,
+
+            @Parameter( /* The annotation may be used on
+                a method parameter to define it as a parameter
+                for the operation, and/or to define additional
+                properties for the Parameter */
+                    description = "Идентификатор тага")
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @PathVariable("owner") /* Извлекает параметр,
+                переданный в адресе запроса */
+                    String owner) {
+
+        return ResponseEntity.ok(
+                advertisementService.getAdvertisementsByOwner(
+                        page,
+                        size,
+                        direction,
+                        owner));
 
     }
 
