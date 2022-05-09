@@ -2,10 +2,13 @@ package ru.solarlab.study.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.TagCreateDto;
 import ru.solarlab.study.dto.TagDto;
 import ru.solarlab.study.dto.TagUpdateDto;
+import ru.solarlab.study.dto.UserDto;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Tag;
 import ru.solarlab.study.exception.TagNotFoundException;
@@ -41,7 +44,7 @@ public class TagService {
     /**
      * Максимальное количество на странице
      */
-    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final int DEFAULT_PAGE_SIZE = 1000;
 
     /**
      * Создает новый таг по данным из DTO
@@ -86,6 +89,7 @@ public class TagService {
 
         try {
 
+            // С любым статусом
             Tag tag = tagRepository
                     .findById(tagId)
                     .orElseThrow(
@@ -118,11 +122,27 @@ public class TagService {
 
         try {
 
-            Tag tag = tagRepository
-                    .findById(tagId)
-                    .orElseThrow(
-                            () -> new TagNotFoundException(tagId));
-            return tagMapper.tagToTagDto(tag);
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                // С любым статусом
+                Tag tag = tagRepository
+                        .findById(tagId)
+                        .orElseThrow(
+                                () -> new TagNotFoundException(tagId));
+                return tagMapper.tagToTagDto(tag);
+
+            }
+            else {
+
+                // Только с активным статусом
+                Tag tag = tagRepository
+                        .findActiveById(tagId)
+                        .orElseThrow(
+                                () -> new TagNotFoundException(tagId));
+                return tagMapper.tagToTagDto(tag);
+
+            }
+
 
         }
         catch (Exception ex) {
@@ -141,14 +161,41 @@ public class TagService {
     public List<TagDto> getTags(
             Integer limit) {
 
-        return tagRepository
-                .findAll(
-                        PageRequest.of(
-                                0,
-                                limit == null ? DEFAULT_PAGE_SIZE : limit))
-                .stream()
-                .map(tagMapper::tagToTagDto)
-                .collect(Collectors.toList());
+        try {
+
+            // Возвращает таги с любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                return tagRepository
+                        .findAll(
+                                PageRequest.of(
+                                        0,
+                                        limit == null ? DEFAULT_PAGE_SIZE : limit))
+                        .stream()
+                        .map(tagMapper::tagToTagDto)
+                        .collect(Collectors.toList());
+
+            }
+            // Возвращает таги только с активным статусом
+            else {
+
+                return tagRepository
+                        .findActive(
+                                PageRequest.of(
+                                        0,
+                                        limit == null ? DEFAULT_PAGE_SIZE : limit))
+                        .stream()
+                        .map(tagMapper::tagToTagDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
 
     }
 
@@ -160,11 +207,12 @@ public class TagService {
 
         try {
 
-            // Возвращает таг из базы
+            // Возвращает таг с любым статусом
             Tag tag = tagRepository
-                    .findByIdAndFetchAdvertisements(tagId)
-                    .orElseThrow(
-                            () -> new TagNotFoundException(tagId));
+                .findByIdAndFetchAdvertisements(tagId)
+                .orElseThrow(
+                              () -> new TagNotFoundException(tagId));
+
 
             // Открепляет объявления:
 
@@ -190,6 +238,31 @@ public class TagService {
             throw ex;
 
         }
+
+    }
+
+    /**
+     * Возвращает текущего авторизированного пользователя
+     * @return
+     */
+    private UserDto getCurrentUser() {
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        String username = securityContext
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
+
+        String role = securityContext
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .findAny()
+                .get()
+                .getAuthority();
+
+        return new UserDto(username, role);
 
     }
 

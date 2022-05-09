@@ -2,10 +2,13 @@ package ru.solarlab.study.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import ru.solarlab.study.dto.CategoryCreateDto;
 import ru.solarlab.study.dto.CategoryDto;
 import ru.solarlab.study.dto.CategoryUpdateDto;
+import ru.solarlab.study.dto.UserDto;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.CategoryMapper;
@@ -133,11 +136,26 @@ public class CategoryService {
 
         try {
 
-            Category category = categoryRepository
-                    .findById(categoryId)
-                    .orElseThrow(
-                            () -> new CategoryNotFoundException(categoryId));
-            return categoryMapper.categoryToCategoryDto(category);
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                // С любым статусом
+                Category category = categoryRepository
+                        .findById(categoryId)
+                        .orElseThrow(
+                                () -> new CategoryNotFoundException(categoryId));
+                return categoryMapper.categoryToCategoryDto(category);
+
+            }
+            else {
+
+                // Только с активным статусом
+                Category category = categoryRepository
+                        .findActiveById(categoryId)
+                        .orElseThrow(
+                                () -> new CategoryNotFoundException(categoryId));
+                return categoryMapper.categoryToCategoryDto(category);
+
+            }
 
         }
         catch (Exception ex) {
@@ -156,19 +174,46 @@ public class CategoryService {
     public List<CategoryDto> getCategories(
             Integer limit) {
 
-        return categoryRepository
-                .findAll(
-                        PageRequest.of(
-                                0,
-                                limit == null ? DEFAULT_PAGE_SIZE : limit))
-                .stream()
-                .map(categoryMapper::categoryToCategoryDto)
-                .collect(Collectors.toList());
+        try {
 
+            // Возвращает таги с любым статусом
+            if (getCurrentUser().getRole().equals("ADMIN")) {
+
+                return categoryRepository
+                        .findAll(
+                                PageRequest.of(
+                                        0,
+                                        limit == null ? DEFAULT_PAGE_SIZE : limit))
+                        .stream()
+                        .map(categoryMapper::categoryToCategoryDto)
+                        .collect(Collectors.toList());
+
+            }
+            // Возвращает таги только с активным статусом
+            else {
+
+                return categoryRepository
+                        .findActive(
+                                PageRequest.of(
+                                        0,
+                                        limit == null ? DEFAULT_PAGE_SIZE : limit))
+                        .stream()
+                        .map(categoryMapper::categoryToCategoryDto)
+                        .collect(Collectors.toList());
+
+            }
+
+        }
+        catch (Exception ex) {
+
+            throw ex;
+
+        }
     }
 
     /**
-     * Удаляет категорию по идентификатору
+     * Удаляет категорию по идентификатору из БД
+     * При удалении категории из БД удаляются связанные объявления!
      * @param categoryId Идентификатор категории
      */
     public void deleteById(long categoryId){
@@ -197,6 +242,31 @@ public class CategoryService {
             throw ex;
 
         }
+
+    }
+
+    /**
+     * Возвращает текущего авторизированного пользователя
+     * @return
+     */
+    private UserDto getCurrentUser() {
+
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+
+        String username = securityContext
+                .getAuthentication()
+                .getPrincipal()
+                .toString();
+
+        String role = securityContext
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .findAny()
+                .get()
+                .getAuthority();
+
+        return new UserDto(username, role);
 
     }
 

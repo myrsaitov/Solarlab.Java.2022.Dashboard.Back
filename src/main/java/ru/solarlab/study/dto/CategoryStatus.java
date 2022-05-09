@@ -11,7 +11,6 @@ import lombok.Getter;
 public enum CategoryStatus {
 
     ACTIVE,
-    DELETED,
     BLOCKED
 
 }
