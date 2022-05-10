@@ -418,6 +418,70 @@ class AdvertisementServiceTest {
 
     }
 
+
+
+    /**
+     * GetById: OK
+     */
+    @Test
+    void testGetById() {
+
+        /* Объявление */
+        MockitoAdvertisementFindByIdAndFetchCategory(
+                false,
+                null,
+                CATEGORY);
+
+        // Вызов тестируемого метода
+        final AdvertisementDto actual = advertisementService
+                .getById(ADVERTISEMENT_ID);
+
+        // Задаёт эталонное значение
+        final AdvertisementDto advertisementDto = getAdvertisementDto(
+                false,
+                actual.getCreatedAt(),
+                null,
+                null);
+
+        // Сравнивает результат теста с эталонным значением
+        assertEquals(advertisementDto, actual);
+
+    }
+
+    /**
+     * GetById: throws AdvertisementNotFoundException
+     */
+    @Test
+    void testGetByIdThrowsAdvertisementNotFoundException() throws AdvertisementNotFoundException {
+
+        /* Объявление */
+        MockitoAdvertisementFindByIdAndFetchCategoryReturnsEmpty();
+
+        /* Вызов тестируемого метода */
+        Throwable thrown = assertThrows(
+                AdvertisementNotFoundException.class, () -> {
+
+                    final AdvertisementDto actual = advertisementService
+                            .getById(ADVERTISEMENT_ID);
+
+                });
+
+        /* Сравнение результатов */
+        assertEquals(
+                String.format(
+                        "Объявление с advertisementId=%s не найдено.",
+                        ADVERTISEMENT_ID),
+                thrown.getMessage());
+
+    }
+
+
+
+
+
+
+
+
     /**
      * Объявление
      */
@@ -637,6 +701,9 @@ class AdvertisementServiceTest {
 
     }
 
+}
+
+
     /*
     @Test
     void testGetAdvertisementsWithLimit() {
@@ -658,35 +725,9 @@ class AdvertisementServiceTest {
         assertEquals(List.of(taskDto), actual);
     }
 
-    @Test
-    void testGetByNameLike() {
-        final String nameForLike = "name for like";
-        Mockito.when(advertisementRepository.findByNameLike(nameForLike)).thenReturn(List.of(getAdvertisement(false)));
 
-        final List<AdvertisementDto> actual = advertisementService.getByNameLike(nameForLike);
 
-        final AdvertisementDto taskDto = getAdvertisementDto(false);
-        assertEquals(List.of(taskDto), actual);
-    }
 
-    @Test
-    void testGetById() {
-        Mockito.when(advertisementRepository.findById(ADVERTISEMENT_ID)).thenReturn(Optional.of(getTask(false)));
-
-        final AdvertisementDto actual = advertisementService.getById(ADVERTISEMENT_ID);
-
-        final AdvertisementDto taskDto = getAdvertisementDto(false);
-        assertEquals(taskDto, actual);
-    }
-
-    @Test
-    void testUpdate() {
-        final AdvertisementDto actual = advertisementService.update(ADVERTISEMENT_ID, getAdvertisementUpdateDto());
-
-        final AdvertisementDto taskDto = getAdvertisementDto(false);
-        assertEquals(taskDto, actual);
-        Mockito.verify(advertisementRepository).save(getTask(false));
-    }
 
     @Test
     void testDeleteById() {
@@ -710,19 +751,4 @@ class AdvertisementServiceTest {
         return new PageImpl<>(List.of(getAdvertisement(false)));
     }
 
-
-
-
-
-    private AdvertisementUpdateDto getAdvertisementUpdateDto() {
-        return AdvertisementUpdateDto.builder()
-                .name(ADVERTISEMENT_NAME)
-                .startedAt(ADVERTISEMENT_STARTED_AT)
-                .status(ADVERTISEMENT_STATUS)
-                .build();
-    }
-
-
     */
-
-}
