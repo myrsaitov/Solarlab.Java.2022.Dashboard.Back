@@ -26,7 +26,7 @@ public interface AdvertisementMapper {
      * @param entity
      * @return
      */
-    @Mapping(target = "tagId", expression = "java(resolveTagIds(entity.getTags()))")
+    @Mapping(target = "tagIds", expression = "java(resolveTagIds(entity.getTags()))")
     @Mapping(source = "entity.category.id", target = "categoryId")
     AdvertisementDto advertisementToAdvertisementDto(
             Advertisement entity);
@@ -58,7 +58,7 @@ public interface AdvertisementMapper {
                 .map(Tag::getId)
                 .collect(Collectors.toList());
 
-        target.setTagId(tagIds.toArray(new Long[0]));
+        target.setTagIds(tagIds.toArray(new Long[0]));
 
     }
 

@@ -12,3 +12,7 @@ client_id:client_secret
 
 task-client
 fBqa60wNm2
+
+TODO:
+Регистрация пользователя
+ФИО пользователя, регион

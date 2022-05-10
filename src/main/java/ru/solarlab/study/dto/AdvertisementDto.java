@@ -92,7 +92,7 @@ public class AdvertisementDto {
     @NotNull
     @Schema(description = "Идентификаторы связанных тагов",
             defaultValue = "[2,3,4,5,6]")
-    private Long tagId[]; // Long - удобнее с массивами
+    private Long tagIds[]; // Long - удобнее с массивами
 
     /**
      * Владелец
@@ -155,8 +155,8 @@ public class AdvertisementDto {
         }
 
         // Сначала массивы отсортированы
-        var tagIds1 = Arrays.stream(one.getTagId()).sorted().toArray();
-        var tagIds2 = Arrays.stream(two.getTagId()).sorted().toArray();
+        var tagIds1 = Arrays.stream(one.getTagIds()).sorted().toArray();
+        var tagIds2 = Arrays.stream(two.getTagIds()).sorted().toArray();
         if(!Arrays.equals(tagIds1, tagIds2)){
             return false;
         }

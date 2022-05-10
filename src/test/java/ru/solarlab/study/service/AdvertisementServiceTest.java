@@ -16,6 +16,8 @@ import ru.solarlab.study.dto.*;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Tag;
+import ru.solarlab.study.exception.AdvertisementNotFoundException;
+import ru.solarlab.study.exception.CategoryNotFoundException;
 import ru.solarlab.study.mapper.AdvertisementMapper;
 import ru.solarlab.study.mapper.AdvertisementMapperImpl;
 import ru.solarlab.study.repository.AdvertisementRepository;
@@ -29,7 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,9 +55,8 @@ class AdvertisementServiceTest {
     /**
      * Категория
      */
-    public static final Long CATEGORY_ID = new Long(1L);
     public static final Category CATEGORY = new Category(
-            CATEGORY_ID,
+            1L,
             OffsetDateTime.now(),
             null,
             "Category",
@@ -65,6 +66,16 @@ class AdvertisementServiceTest {
             new HashSet<>());
 
     public static final Category ADVERTISEMENT_CATEGORY = CATEGORY;
+
+    public static final Category CATEGORY_NEW = new Category(
+            2L,
+            OffsetDateTime.now(),
+            null,
+            "CategoryNew",
+            CategoryStatus.ACTIVE,
+            null,
+            new HashSet<>(),
+            new HashSet<>());
 
     /**
      * Модели тагов
@@ -123,13 +134,10 @@ class AdvertisementServiceTest {
     /**
      * Авторизация и аутентификация
      */
-    public static final String USER_NAME = "user1";
-    public static final String USER_ROLE = "USER";
-    public static final UserDto USER_DTO = new UserDto(USER_NAME,USER_ROLE);
     @Mock
-    Authentication authentication;// = Mockito.mock(Authentication.class);
+    Authentication authentication;
     @Mock
-    SecurityContext securityContext;// = Mockito.mock(SecurityContext.class);
+    SecurityContext securityContext;
 
 
     /**
@@ -155,51 +163,26 @@ class AdvertisementServiceTest {
     private AdvertisementService advertisementService;
 
     /**
-     * Create
+     * Create: OK
      */
     @Test
-    void testCreate() throws NoSuchMethodException {
+    void testCreate(){
+
+        /* Объявление */
+        MockitoAdvertisementSaveFirstlyAfterCreateAndSetId(
+                ADVERTISEMENT_ID);
 
         /* Категория */
-        Mockito.when(categoryRepository.findById(anyLong()))
-                .thenReturn(Optional.of(CATEGORY));
+        MockitoCategoryFindById(CATEGORY);
 
         /* Таги */
-        Mockito.when(tagRepository.findById(TAG_1.getId()))
-                .thenReturn(Optional.of(TAG_1));
-        Mockito.when(tagRepository.findById(TAG_2.getId()))
-                .thenReturn(Optional.of(TAG_2));
-        Mockito.when(tagRepository.findById(TAG_3.getId()))
-                .thenReturn(Optional.of(TAG_3));
-
-        /* При обращении к advertisementRepository.save
-           сущности присваивается id */
-        Advertisement advertisement = mock(Advertisement.class);
-        doAnswer(
-                invocation -> {
-                    Object[] args = invocation.getArguments();
-                    ((Advertisement)args[0]).setId(ADVERTISEMENT_ID);
-                    return null; // void method in a block-style lambda, so return null
-                }).when(advertisementRepository).save(any());
+        MockitoTagFindById(TAG_1);
+        MockitoTagFindById(TAG_2);
+        MockitoTagFindById(TAG_3);
 
         /* Авторизация и аутентификация */
-        Mockito.when(securityContext.getAuthentication())
-                .thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        Mockito.when(
-                SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal())
-                .thenReturn(USER_NAME);
-        var authority = new SimpleGrantedAuthority(USER_ROLE);
-        var authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(authority);
-        // https://docs.oracle.com/javase/tutorial/java/generics/index.html
-        // https://stackoverflow.com/questions/51168430/cannot-resolve-method-with-mockito
-        doReturn(authorities)
-                .when(authentication)
-                .getAuthorities();
+        MockitoAuth("user1","USER");
+
 
         // Вызов тестируемого метода
         final AdvertisementDto actual = advertisementService
@@ -208,19 +191,18 @@ class AdvertisementServiceTest {
         // Задаёт эталонное значение
         final AdvertisementDto advertisementDto = getAdvertisementDto(
                 false,
-                actual.getCreatedAt());
+                actual.getCreatedAt(),
+                null,
+                null);
 
         // Сравнивает результат теста с эталонным значением
         assertEquals(advertisementDto, actual);
 
-        // Вызывался ли данный метод с таким аргументом?
-        var adv = getAdvertisement(
-                true,
-                actual.getCreatedAt());
+        // Вызывался ли данный метод?
         /* Mockito.verify(advertisementRepository)
                 .save(getAdvertisement(
                         true,
-                        actual.getCreatedAt()));*/
+                        actual.getCreatedAt())); */
         // Разные HashSet у Set<Tag>, поэтому не получается повторить точь-в-точь
         Mockito.verify(advertisementRepository)
                 .save(any());
@@ -228,6 +210,344 @@ class AdvertisementServiceTest {
         // Вызывался ли данный метод с таким аргументом?
         Mockito.verify(categoryRepository)
                 .save(CATEGORY);
+
+    }
+
+    /**
+     * Create: throws CategoryNotFoundException
+     */
+    @Test
+    void testCreateThrowsCategoryNotFoundException() throws CategoryNotFoundException {
+
+        /* Категория не найдена */
+        MockitoCategoryFindByIdReturnsEmpty();
+
+        /* Вызов тестируемого метода */
+        Throwable thrown = assertThrows(
+                CategoryNotFoundException.class, () -> {
+
+                    final AdvertisementDto actual = advertisementService
+                            .create(getAdvertisementCreateDto());
+
+        });
+
+        /* Сравнение результатов */
+        assertEquals(
+                String.format(
+                    "Категория с categoryId=%s не найдена.",
+                    CATEGORY.getId()),
+                thrown.getMessage());
+
+    }
+
+    /**
+     * Update: OK, категория не изменяется
+     */
+    @Test
+    void testUpdateTheSameCategory(){
+
+        /* Объявление */
+        MockitoAdvertisementFindByIdAndFetchCategory(
+                false,
+                null,
+                CATEGORY);
+
+        /* При обращении к advertisementRepository.save
+           сущности присваивается id */
+        MockitoAdvertisementSaveFirstlyAfterCreateAndSetId(
+                ADVERTISEMENT_ID);
+
+        /* Категория */
+        MockitoCategoryFindById(CATEGORY);
+
+        /* Таги */
+        MockitoTagFindById(TAG_1);
+        MockitoTagFindById(TAG_2);
+        MockitoTagFindById(TAG_3);
+
+        /* Авторизация и аутентификация */
+        MockitoAuth("user1","USER");
+
+        // Вызов тестируемого метода
+        final AdvertisementDto actual = advertisementService
+                .update(
+                        ADVERTISEMENT_ID,
+                        getAdvertisementUpdateDto(CATEGORY.getId()));
+
+        // Задаёт эталонное значение
+        final AdvertisementDto advertisementDto = getAdvertisementDto(
+                false,
+                actual.getCreatedAt(),
+                actual.getUpdatedAt(),
+                null);
+
+        // Сравнивает результат теста с эталонным значением
+        assertEquals(advertisementDto, actual);
+
+        // Вызывался ли данный метод?
+        Mockito.verify(advertisementRepository)
+               .save(any());
+
+        // Вызывался ли данный метод с таким аргументом?
+        //Mockito.verify(categoryRepository)
+        //        .save(any());
+
+    }
+
+    /**
+     * Update: OK, категория изменена
+     */
+    @Test
+    void testUpdateChangeCategory(){
+
+        /* Объявление */
+        MockitoAdvertisementFindByIdAndFetchCategory(
+                false,
+                null,
+                CATEGORY);
+
+        /* При обращении к advertisementRepository.save
+           сущности присваивается id */
+        MockitoAdvertisementSaveFirstlyAfterCreateAndSetId(
+                ADVERTISEMENT_ID);
+
+        /* Категория */
+        MockitoCategoryFindById(CATEGORY_NEW);
+
+        /* Таги */
+        MockitoTagFindById(TAG_1);
+        MockitoTagFindById(TAG_2);
+        MockitoTagFindById(TAG_3);
+
+        /* Авторизация и аутентификация */
+        MockitoAuth("user1","USER");
+
+        // Вызов тестируемого метода
+        final AdvertisementDto actual = advertisementService
+                .update(
+                        ADVERTISEMENT_ID,
+                        getAdvertisementUpdateDto(
+                                CATEGORY_NEW.getId()));
+
+        // Задаёт эталонное значение
+        final AdvertisementDto advertisementDto = getAdvertisementDto(
+                false,
+                actual.getCreatedAt(),
+                actual.getUpdatedAt(),
+                CATEGORY_NEW.getId());
+
+        // Сравнивает результат теста с эталонным значением
+        assertEquals(advertisementDto, actual);
+
+        // Вызывался ли данный метод 2 раза?
+        Mockito.verify(advertisementRepository, times(2))
+                .save(any());
+
+        // Вызывался ли данный метод 2 раза?
+        Mockito.verify(categoryRepository, times(2))
+                .save(any());
+
+    }
+
+    /**
+     * Update: throws CategoryNotFoundException
+     */
+    @Test
+    void testUpdateThrowsCategoryNotFoundException() throws CategoryNotFoundException {
+
+        /* Авторизация и аутентификация */
+        MockitoAuth("user1","USER");
+
+        /* Категория не найдена */
+        MockitoCategoryFindByIdReturnsEmpty();
+
+        /* Вызов тестируемого метода */
+        Throwable thrown = assertThrows(
+                CategoryNotFoundException.class, () -> {
+
+                    final AdvertisementDto actual = advertisementService
+                            .update(
+                                    ADVERTISEMENT_ID,
+                                    getAdvertisementUpdateDto(
+                                            CATEGORY_NEW.getId()));
+
+                });
+
+        /* Сравнение результатов */
+        assertEquals(
+                String.format(
+                        "Категория с categoryId=%s не найдена.",
+                        CATEGORY_NEW.getId()),
+                thrown.getMessage());
+
+    }
+
+    /**
+     * Update: throws AdvertisementNotFoundException
+     */
+    @Test
+    void testUpdateThrowsAdvertisementNotFoundException() throws AdvertisementNotFoundException {
+
+        /* Авторизация и аутентификация */
+        MockitoAuth("user1","USER");
+
+        /* Объявление не найдено */
+        MockitoAdvertisementFindByIdAndFetchCategoryReturnsEmpty();
+
+        /* Категория */
+        MockitoCategoryFindById(CATEGORY_NEW);
+
+        /* Вызов тестируемого метода */
+        Throwable thrown = assertThrows(
+                AdvertisementNotFoundException.class, () -> {
+
+                    final AdvertisementDto actual = advertisementService
+                            .update(
+                                    ADVERTISEMENT_ID,
+                                    getAdvertisementUpdateDto(
+                                            CATEGORY_NEW.getId()));
+
+                });
+
+        /* Сравнение результатов */
+        assertEquals(
+                String.format(
+                        "Объявление с advertisementId=%s не найдено.",
+                        ADVERTISEMENT_ID),
+                thrown.getMessage());
+
+    }
+
+    /**
+     * Объявление
+     */
+
+    /** При обращении к advertisementRepository.save
+       сущности присваивается id */
+    private void MockitoAdvertisementSaveFirstlyAfterCreateAndSetId(
+            Long advertisementId) {
+
+        /*
+           Только что созданная сущность объявления,
+           ещё не сохраненная в базе, не имеет идентификатора.
+           Он появляется только после сохранения в базе.
+           Поэтому при мокировании advertisementRepository.save()
+           нужно еще и изменить id.
+           При обращении к advertisementRepository.save
+           сущности присваивается id */
+        doAnswer(
+                invocation -> {
+                    Object[] args = invocation.getArguments();
+                    ((Advertisement)args[0]).setId(advertisementId);
+                    return null; // void method in a block-style lambda, so return null
+                })
+                .when(advertisementRepository)
+                .save(any());
+
+    }
+
+    /** Возвращает объявление с прикрепленными категориями */
+    private void MockitoAdvertisementFindByIdAndFetchCategory(
+            boolean nullId,
+            OffsetDateTime createdAt,
+            Category category) {
+
+        Advertisement advertisement = new Advertisement(
+
+                nullId ? null : ADVERTISEMENT_ID,
+                createdAt == null ? ADVERTISEMENT_CREATED_AT : createdAt,
+                ADVERTISEMENT_UPDATED_AT,
+                ADVERTISEMENT_TITLE,
+                ADVERTISEMENT_BODY,
+                ADVERTISEMENT_OWNER,
+                ADVERTISEMENT_PRICE,
+                ADVERTISEMENT_STATUS,
+                category,
+                ADVERTISEMENT_TAGS
+
+        );
+
+        category.getAdvertisements().add(advertisement);
+
+        Mockito
+                .when(advertisementRepository
+                        .findByIdAndFetchCategory(
+                                advertisement.getId()))
+                .thenReturn(Optional.of(advertisement));
+
+    }
+
+    /** Возвращает объявление с прикрепленными категориями */
+    private void MockitoAdvertisementFindByIdAndFetchCategoryReturnsEmpty() {
+
+        Mockito
+                .when(advertisementRepository
+                        .findByIdAndFetchCategory(
+                                anyLong()))
+                .thenReturn(Optional.empty());
+
+    }
+
+    /**
+     *  Категория
+     */
+    private void MockitoCategoryFindById(
+            Category category) {
+
+        Mockito
+                .when(categoryRepository
+                        .findById(
+                                category.getId()))
+                .thenReturn(Optional.of(category));
+
+    }
+
+    /** Категория не найдена */
+    private void MockitoCategoryFindByIdReturnsEmpty() {
+
+        Mockito
+                .when(categoryRepository
+                        .findById(anyLong()))
+                .thenReturn(Optional.empty());
+
+    }
+
+    /**
+     * Таг
+     */
+    private void MockitoTagFindById(
+            Tag tag) {
+
+        Mockito
+                .when(tagRepository.findById(tag.getId()))
+                .thenReturn(Optional.of(tag));
+
+    }
+
+    /**
+     * Авторизация и аутентификация
+     */
+    private void MockitoAuth(
+            String userName,
+            String userRole) {
+
+        Mockito.when(securityContext.getAuthentication())
+                .thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        Mockito.when(
+                        SecurityContextHolder
+                                .getContext()
+                                .getAuthentication()
+                                .getPrincipal())
+                .thenReturn(userName);
+        var authority = new SimpleGrantedAuthority(userRole);
+        var authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(authority);
+        // https://docs.oracle.com/javase/tutorial/java/generics/index.html
+        // https://stackoverflow.com/questions/51168430/cannot-resolve-method-with-mockito
+        doReturn(authorities)
+                .when(authentication)
+                .getAuthorities();
 
     }
 
@@ -264,18 +584,20 @@ class AdvertisementServiceTest {
      */
     private AdvertisementDto getAdvertisementDto(
             boolean nullId,
-            OffsetDateTime createdAt) {
+            OffsetDateTime createdAt,
+            OffsetDateTime updatedAt,
+            Long categoryId) {
 
         return AdvertisementDto.builder()
                 .id(nullId ? null : ADVERTISEMENT_ID)
                 .createdAt(createdAt == null ? ADVERTISEMENT_CREATED_AT : createdAt)
-                .updatedAt(ADVERTISEMENT_UPDATED_AT)
+                .updatedAt(updatedAt == null ? ADVERTISEMENT_UPDATED_AT : updatedAt)
                 .title(ADVERTISEMENT_TITLE)
                 .body(ADVERTISEMENT_BODY)
                 .price(ADVERTISEMENT_PRICE)
                 .status(ADVERTISEMENT_STATUS)
-                .categoryId(CATEGORY_ID)
-                .tagId(TAG_IDs)
+                .categoryId(categoryId == null ? CATEGORY.getId() : categoryId)
+                .tagIds(TAG_IDs)
                 .owner(ADVERTISEMENT_OWNER)
                 .build();
 
@@ -283,7 +605,7 @@ class AdvertisementServiceTest {
 
     /**
      * Возвращает DTO при создании объявления
-     * @return
+     * @return DTO при создании объявления
      */
     private AdvertisementCreateDto getAdvertisementCreateDto() {
 
@@ -291,12 +613,29 @@ class AdvertisementServiceTest {
                 .title(ADVERTISEMENT_TITLE)
                 .body(ADVERTISEMENT_BODY)
                 .price(ADVERTISEMENT_PRICE)
-                .categoryId(CATEGORY_ID)
-                .tagId(TAG_IDs)
+                .categoryId(CATEGORY.getId())
+                .tagIds(TAG_IDs)
                 .build();
 
     }
 
+    /**
+     * Возвращает DTO при обновлении объявления
+     * @return DTO при обновлении объявления
+     */
+    private AdvertisementUpdateDto getAdvertisementUpdateDto(
+            Long categoryId) {
+
+        return AdvertisementUpdateDto.builder()
+                .title(ADVERTISEMENT_TITLE)
+                .body(ADVERTISEMENT_BODY)
+                .price(ADVERTISEMENT_PRICE)
+                .status(ADVERTISEMENT_STATUS)
+                .categoryId(categoryId)
+                .tagIds(TAG_IDs)
+                .build();
+
+    }
 
     /*
     @Test

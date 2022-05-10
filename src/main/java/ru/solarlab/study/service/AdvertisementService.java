@@ -81,7 +81,7 @@ public class AdvertisementService {
             advertisement.setCategory(category);
 
             // Добавляет таги
-            for (var tagId: request.getTagId())  {
+            for (var tagId: request.getTagIds())  {
 
                 // Возвращает таг по Id и если существует - добавляет
                tagRepository
@@ -160,7 +160,7 @@ public class AdvertisementService {
                     advertisement::removeTag); // Вместо лямбды
 
             // Добавляет таги
-            for (var tagId: request.getTagId())  {
+            for (var tagId: request.getTagIds())  {
 
                 // Возвращает таг по Id и если существует - добавляет
                 tagRepository

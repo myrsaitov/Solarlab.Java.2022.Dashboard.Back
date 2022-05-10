@@ -62,6 +62,6 @@ public class AdvertisementCreateDto {
     @NotNull
     @Schema(description = "Идентификаторы связанных тагов",
             defaultValue = "[2,3,4,5,6]")
-    private Long tagId[];
+    private Long tagIds[];
 
 }
