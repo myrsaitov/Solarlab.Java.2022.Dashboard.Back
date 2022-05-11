@@ -7,6 +7,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,10 +29,7 @@ import ru.solarlab.study.repository.CategoryRepository;
 import ru.solarlab.study.repository.TagRepository;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -418,8 +419,6 @@ class AdvertisementServiceTest {
 
     }
 
-
-
     /**
      * GetById: OK
      */
@@ -475,6 +474,41 @@ class AdvertisementServiceTest {
 
     }
 
+    /**
+     * GetAdvertisements: OK
+     */
+    @Test
+    void testGetAdvertisementsWithLimit() {
+
+        /* Авторизация и аутентификация */
+        MockitoAuth("user1","USER");
+
+        /* Категория */
+        MockitoAdvertisementFindAll();
+        MockitoAdvertisementFindActive();
+
+        /* Страница с объявлениями */
+
+
+        // Вызов тестируемого метода
+        final List<AdvertisementDto> actual = advertisementService
+                .getAdvertisements(
+                        0,
+                        10,
+                        Sort.Direction.ASC,
+                        AdvertisementSortBy.BODY);
+
+        // Задаёт эталонное значение
+        final AdvertisementDto advertisementDto = getAdvertisementDto(
+                false,
+                null,
+                null,
+                null);
+
+        // Сравнивает результат теста с эталонным значением
+        assertEquals(List.of(advertisementDto), actual);
+
+    }
 
 
 
@@ -552,9 +586,37 @@ class AdvertisementServiceTest {
 
     }
 
+    /** FindAll */
+    private void MockitoAdvertisementFindAll() {
+
+        Mockito
+                .when(advertisementRepository
+                        .findAll(
+                                PageRequest.of(
+                                        0,
+                                        LIMIT)))
+                .thenReturn(getPageWithAdvertisements());
+
+    }
+
+    /** FindActive */
+    private void MockitoAdvertisementFindActive() {
+
+        Mockito
+                .when(advertisementRepository
+                        .findAll(
+                                PageRequest.of(
+                                        0,
+                                        LIMIT)))
+                .thenReturn(getPageWithAdvertisements());
+
+    }
+
     /**
      *  Категория
      */
+
+    /** FindById */
     private void MockitoCategoryFindById(
             Category category) {
 
@@ -701,19 +763,24 @@ class AdvertisementServiceTest {
 
     }
 
+    /**
+     * Возвращает страницу с объявлениями
+     */
+    private Page<Advertisement> getPageWithAdvertisements() {
+
+        return new PageImpl<>(
+                List.of(
+                        getAdvertisement(
+                                false,
+                                null)));
+
+    }
+
 }
 
 
     /*
-    @Test
-    void testGetAdvertisementsWithLimit() {
-        Mockito.when(advertisementRepository.findAll(PageRequest.of(0, LIMIT))).thenReturn(getPageWithAdvertisements());
 
-        final List<AdvertisementDto> actual = advertisementService.getAdvertisements(LIMIT);
-
-        final AdvertisementDto advertisementDto = getAdvertisementDto(false);
-        assertEquals(List.of(advertisementDto), actual);
-    }
 
     @Test
     void testGetAdvertisementsWithoutLimit() {

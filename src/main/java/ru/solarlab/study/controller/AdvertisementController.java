@@ -13,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.solarlab.study.dto.AdvertisementCreateDto;
 import ru.solarlab.study.dto.AdvertisementDto;
+import ru.solarlab.study.dto.AdvertisementSortBy;
 import ru.solarlab.study.dto.AdvertisementUpdateDto;
 import ru.solarlab.study.service.AdvertisementService;
 
@@ -177,13 +178,25 @@ public class AdvertisementController {
             @NotNull /* Показывает, что поле или параметр не может быть null */
             @RequestParam( /* Извлекает параметр, переданный в запросе */
                     value = "direction")
-                    Sort.Direction direction) {
+                    Sort.Direction direction,
+
+            @Parameter( /* The annotation may be used on
+            a method parameter to define it as a parameter
+            for the operation, and/or to define additional
+            properties for the Parameter */
+                        description = "Cортировка по ...",
+                        required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "sortBy")
+                    AdvertisementSortBy sortBy) {
 
         return ResponseEntity.ok(
                 advertisementService.getAdvertisements(
                         page,
                         size,
-                        direction));
+                        direction,
+                        sortBy));
 
     }
 
@@ -233,6 +246,17 @@ public class AdvertisementController {
                     Sort.Direction direction,
 
             @Parameter( /* The annotation may be used on
+            a method parameter to define it as a parameter
+            for the operation, and/or to define additional
+            properties for the Parameter */
+                    description = "Cортировка по ...",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "sortBy")
+                    AdvertisementSortBy sortBy,
+
+            @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
@@ -249,6 +273,7 @@ public class AdvertisementController {
                         page,
                         size,
                         direction,
+                        sortBy,
                         categoryId));
 
     }
@@ -299,6 +324,17 @@ public class AdvertisementController {
                     Sort.Direction direction,
 
             @Parameter( /* The annotation may be used on
+            a method parameter to define it as a parameter
+            for the operation, and/or to define additional
+            properties for the Parameter */
+                    description = "Cортировка по ...",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "sortBy")
+                    AdvertisementSortBy sortBy,
+
+            @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
@@ -315,6 +351,7 @@ public class AdvertisementController {
                         page,
                         size,
                         direction,
+                        sortBy,
                         tagId));
 
     }
@@ -365,6 +402,17 @@ public class AdvertisementController {
                     Sort.Direction direction,
 
             @Parameter( /* The annotation may be used on
+            a method parameter to define it as a parameter
+            for the operation, and/or to define additional
+            properties for the Parameter */
+                    description = "Cортировка по ...",
+                    required = true)
+            @NotNull /* Показывает, что поле или параметр не может быть null */
+            @RequestParam( /* Извлекает параметр, переданный в запросе */
+                    value = "sortBy")
+                    AdvertisementSortBy sortBy,
+
+            @Parameter( /* The annotation may be used on
                 a method parameter to define it as a parameter
                 for the operation, and/or to define additional
                 properties for the Parameter */
@@ -381,6 +429,7 @@ public class AdvertisementController {
                         page,
                         size,
                         direction,
+                        sortBy,
                         owner));
 
     }

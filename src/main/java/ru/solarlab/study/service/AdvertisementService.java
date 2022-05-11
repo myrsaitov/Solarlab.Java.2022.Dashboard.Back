@@ -6,10 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import ru.solarlab.study.dto.AdvertisementCreateDto;
-import ru.solarlab.study.dto.AdvertisementDto;
-import ru.solarlab.study.dto.AdvertisementUpdateDto;
-import ru.solarlab.study.dto.UserDto;
+import ru.solarlab.study.dto.*;
 import ru.solarlab.study.entity.Advertisement;
 import ru.solarlab.study.entity.Category;
 import ru.solarlab.study.entity.Tag;
@@ -242,12 +239,14 @@ public class AdvertisementService {
      * @param page Номер страницы
      * @param size Количество объявлений на странице
      * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @param sortBy Параметр, по которому производится сортировка
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisements(
             Integer page,
             Integer size,
-            Sort.Direction direction) {
+            Sort.Direction direction,
+            AdvertisementSortBy sortBy) {
 
         try {
 
@@ -259,7 +258,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()))
+                                        direction,
+                                        sortBy.getName()))
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
                         .collect(Collectors.toList());
@@ -272,7 +272,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()))
+                                        direction,
+                                        sortBy.getName()))
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
                         .collect(Collectors.toList());
@@ -293,12 +294,15 @@ public class AdvertisementService {
      * @param page Номер страницы
      * @param size Количество объявлений на странице
      * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @param sortBy Параметр, по которому производится сортировка
+     * @param categoryId Идентификатор категории
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisementsByCategory(
             Integer page,
             Integer size,
             Sort.Direction direction,
+            AdvertisementSortBy sortBy,
             Long categoryId) {
         try {
 
@@ -309,7 +313,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 categoryId)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
@@ -323,7 +328,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 categoryId)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
@@ -345,12 +351,15 @@ public class AdvertisementService {
      * @param page Номер страницы
      * @param size Количество объявлений на странице
      * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @param sortBy Параметр, по которому производится сортировка
+     * @param tagId Идентификатор тага
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisementsByTag(
             Integer page,
             Integer size,
             Sort.Direction direction,
+            AdvertisementSortBy sortBy,
             Long tagId) {
         try {
 
@@ -362,7 +371,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 tagId)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
@@ -376,7 +386,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 tagId)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
@@ -398,12 +409,15 @@ public class AdvertisementService {
      * @param page Номер страницы
      * @param size Количество объявлений на странице
      * @param direction Порядок сортировки (возрастающий, убывающий)
+     * @param sortBy Параметр, по которому производится сортировка
+     * @param owner Пользователь
      * @return Коллекция объявлений
      */
     public List<AdvertisementDto> getAdvertisementsByOwner(
             Integer page,
             Integer size,
             Sort.Direction direction,
+            AdvertisementSortBy sortBy,
             String owner) {
 
         try {
@@ -416,7 +430,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 owner)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
@@ -431,7 +446,8 @@ public class AdvertisementService {
                                 PageRequest.of(
                                         page == null ? 0 : page,
                                         size == null ? DEFAULT_PAGE_SIZE : size,
-                                        Sort.unsorted()),
+                                        direction,
+                                        sortBy.getName()),
                                 owner)
                         .stream()
                         .map(advertisementMapper::advertisementToAdvertisementDto)
