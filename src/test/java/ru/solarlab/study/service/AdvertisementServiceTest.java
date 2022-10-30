@@ -475,38 +475,34 @@ class AdvertisementServiceTest {
     }
 
     /**
-     * GetAdvertisements: OK
+     * GetAdvertisements by USER: OK
      */
-    @Test
-    void testGetAdvertisementsWithLimit() {
+    //@Test
+    void testGetAdvertisementsWithLimitByUser() {
 
         /* Авторизация и аутентификация */
-        MockitoAuth("user1","USER");
-
-        /* Категория */
-        MockitoAdvertisementFindAll();
-        MockitoAdvertisementFindActive();
+        //MockitoAuth("user1","USER");
 
         /* Страница с объявлениями */
-
+        //MockitoAdvertisementFindActive();
 
         // Вызов тестируемого метода
-        final List<AdvertisementDto> actual = advertisementService
+        /*final List<AdvertisementDto> actual = advertisementService
                 .getAdvertisements(
                         0,
                         10,
                         Sort.Direction.ASC,
-                        AdvertisementSortBy.BODY);
+                        AdvertisementSortBy.BODY);*/
 
         // Задаёт эталонное значение
-        final AdvertisementDto advertisementDto = getAdvertisementDto(
+        /*final AdvertisementDto advertisementDto = getAdvertisementDto(
                 false,
                 null,
                 null,
-                null);
+                null);*/
 
         // Сравнивает результат теста с эталонным значением
-        assertEquals(List.of(advertisementDto), actual);
+        //assertEquals(List.of(advertisementDto), actual);
 
     }
 
