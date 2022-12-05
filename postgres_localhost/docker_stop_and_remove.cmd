@@ -6,4 +6,4 @@ docker rm /java-postgres
 
 docker ps
 
-pause
+PAUSE

@@ -2,4 +2,4 @@ docker run --name java-postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=adv
 
 docker ps
 
-pause
+PAUSE

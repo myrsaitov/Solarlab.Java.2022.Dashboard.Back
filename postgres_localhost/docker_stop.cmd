@@ -4,4 +4,4 @@ docker logs java-postgres
 
 docker ps
 
-pause
+PAUSE

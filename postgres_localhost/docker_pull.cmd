@@ -1,3 +1,3 @@
 docker pull postgres
 
-pause
+PAUSE
